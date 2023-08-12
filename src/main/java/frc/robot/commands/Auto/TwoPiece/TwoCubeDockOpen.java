@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.commands.Engage;
-import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 
@@ -21,7 +20,6 @@ public class TwoCubeDockOpen extends SequentialCommandGroup {
 
   Drivetrain subDrivetrain;
   Intake subIntake;
-  Collector subCollector;
 
   public TwoCubeDockOpen(Drivetrain subDrivetrain, Intake subIntake) {
     this.subDrivetrain = subDrivetrain;

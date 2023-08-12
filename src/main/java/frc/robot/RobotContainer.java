@@ -32,7 +32,6 @@ import frc.robot.commands.Auto.OnePiece.CenterCube;
 import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityCable;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityOpen;
-import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -49,7 +48,6 @@ public class RobotContainer {
   private final Drivetrain subDrivetrain = new Drivetrain();
   private final SuperShuffle subSuperShuffle = new SuperShuffle();
   private final Intake subIntake = new Intake();
-  private final Collector subCollector = new Collector();
   private final Vision subVision = new Vision();
   private final LEDs subLEDs = new LEDs();
 
