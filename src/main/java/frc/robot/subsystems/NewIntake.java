@@ -31,8 +31,9 @@ public class NewIntake extends SubsystemBase {
     insideMotor.configFactoryDefault();
   }
 
+  // will always spin opposite the inside motor
   public void setOutsideMotorSpeed(double speed) {
-    outsideMotor.set(ControlMode.PercentOutput, speed);
+    outsideMotor.set(ControlMode.PercentOutput, -speed);
   }
 
   public void setInsideMotorSpeed(double speed) {
