@@ -13,16 +13,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.mapIntake;
 
 public class Intake extends SubsystemBase {
-  TalonFX outsideMotor;
-  TalonFX insideMotor;
+  TalonFX intakeMotor;
 
   DigitalInput limitSwitch;
 
   TalonFXConfiguration config;
 
   public Intake() {
-    outsideMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
-    insideMotor = new TalonFX(mapIntake.INTAKE_INSIDE_MOTOR_CAN);
+    intakeMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
     limitSwitch = new DigitalInput(mapIntake.INTAKE_LIMIT_SWITCH_DIO);
 
     config = new TalonFXConfiguration();
@@ -31,23 +29,13 @@ public class Intake extends SubsystemBase {
   }
 
   public void configure() {
-    outsideMotor.configFactoryDefault();
-    insideMotor.configFactoryDefault();
-
-    outsideMotor.configAllSettings(config);
-    insideMotor.configAllSettings(config);
-
-    outsideMotor.setInverted(true);
-    insideMotor.setInverted(false);
+    intakeMotor.configFactoryDefault();
+    intakeMotor.configAllSettings(config);
   }
 
   // will always spin opposite the inside motor
-  public void setOutsideMotorSpeed(double speed) {
-    outsideMotor.set(ControlMode.PercentOutput, speed);
-  }
-
-  public void setInsideMotorSpeed(double speed) {
-    insideMotor.set(ControlMode.PercentOutput, speed);
+  public void setIntakeMotorSpeed(double speed) {
+    intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public boolean isGamePieceCollected() {

@@ -29,9 +29,7 @@ public class IntakeCone extends SequentialCommandGroup {
             Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue())),
             Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue()))),
 
-        Commands.parallel(
-            Commands.runOnce(() -> subIntake.setInsideMotorSpeed(prefIntake.intakeIntakeSpeed.getValue())),
-            Commands.runOnce(() -> subIntake.setOutsideMotorSpeed(prefIntake.intakeIntakeSpeed.getValue())))
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeIntakeSpeed.getValue()))
             .until(() -> subIntake.isGamePieceCollected()),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())));
