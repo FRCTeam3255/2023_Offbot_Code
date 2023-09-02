@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,10 +18,14 @@ public class Intake extends SubsystemBase {
 
   DigitalInput limitSwitch;
 
+  TalonFXConfiguration config;
+
   public Intake() {
     outsideMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
     insideMotor = new TalonFX(mapIntake.INTAKE_INSIDE_MOTOR_CAN);
     limitSwitch = new DigitalInput(mapIntake.INTAKE_LIMIT_SWITCH_DIO);
+
+    config = new TalonFXConfiguration();
 
     configure();
   }
@@ -28,11 +33,17 @@ public class Intake extends SubsystemBase {
   public void configure() {
     outsideMotor.configFactoryDefault();
     insideMotor.configFactoryDefault();
+
+    outsideMotor.configAllSettings(config);
+    insideMotor.configAllSettings(config);
+
+    outsideMotor.setInverted(true);
+    insideMotor.setInverted(false);
   }
 
   // will always spin opposite the inside motor
   public void setOutsideMotorSpeed(double speed) {
-    outsideMotor.set(ControlMode.PercentOutput, -speed);
+    outsideMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public void setInsideMotorSpeed(double speed) {
