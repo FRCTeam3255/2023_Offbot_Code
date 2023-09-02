@@ -10,16 +10,16 @@ import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.NewIntake;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Wrist;
 
 public class IntakeCone extends SequentialCommandGroup {
 
   Wrist subWrist;
-  NewIntake subIntake;
+  Intake subIntake;
   Elevator subElevator;
 
-  public IntakeCone(Wrist subWrist, NewIntake subIntake, Elevator subElevator) {
+  public IntakeCone(Wrist subWrist, Intake subIntake, Elevator subElevator) {
 
     this.subWrist = subWrist;
     this.subIntake = subIntake;

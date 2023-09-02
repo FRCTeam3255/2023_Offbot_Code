@@ -11,17 +11,16 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.mapIntake;
 
-public class NewIntake extends SubsystemBase {
-  /** Creates a new NewIntake. */
+public class Intake extends SubsystemBase {
   TalonFX outsideMotor;
   TalonFX insideMotor;
 
   DigitalInput limitSwitch;
 
-  public NewIntake() {
+  public Intake() {
     outsideMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
     insideMotor = new TalonFX(mapIntake.INTAKE_INSIDE_MOTOR_CAN);
-    limitSwitch = new DigitalInput(mapIntake.NEW_INTAKE_LIMIT_SWITCH_DIO);
+    limitSwitch = new DigitalInput(mapIntake.INTAKE_LIMIT_SWITCH_DIO);
 
     configure();
   }

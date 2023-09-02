@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDs;
-import frc.robot.subsystems.NewIntake;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SuperShuffle;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Wrist;
@@ -50,7 +50,7 @@ public class RobotContainer {
   private final Drivetrain subDrivetrain = new Drivetrain();
   private final SuperShuffle subSuperShuffle = new SuperShuffle();
   private final Elevator subElevator = new Elevator();
-  private final NewIntake subNewIntake = new NewIntake();
+  private final Intake subIntake = new Intake();
   private final Wrist subWrist = new Wrist();
   private final Vision subVision = new Vision();
   private final LEDs subLEDs = new LEDs();
@@ -115,7 +115,7 @@ public class RobotContainer {
     // Operator
 
     // Intake Cube (RB)
-    conOperator.btn_RightBumper.onTrue(new IntakeCone(subWrist, subNewIntake, subElevator));
+    conOperator.btn_RightBumper.onTrue(new IntakeCone(subWrist, subIntake, subElevator));
 
     // teleopTrigger.onTrue(new SetRumble(conDriver, conOperator, subIntake));
   }

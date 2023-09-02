@@ -36,13 +36,9 @@ public class RobotMap {
   }
 
   public static final class mapIntake {
-    public static final int INTAKE_LEFT_MOTOR_CAN = 20;
-    public static final int INTAKE_RIGHT_MOTOR_CAN = 21;
-    public static final int INTAKE_LIMIT_SWITCH_DIO = 4;
-
     public static final int INTAKE_OUTSIDE_MOTOR_CAN = 35;
     public static final int INTAKE_INSIDE_MOTOR_CAN = 36;
-    public static final int NEW_INTAKE_LIMIT_SWITCH_DIO = 5;
+    public static final int INTAKE_LIMIT_SWITCH_DIO = 5;
   }
 
   public static final class mapElevator {
