@@ -14,12 +14,10 @@ import frc.robot.Constants.constLEDs;
 import frc.robot.RobotPreferences.prefLEDs;
 import frc.robot.RobotPreferences.prefVision;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 
 public class SetLEDs extends CommandBase {
   LEDs subLEDs;
-  Intake subIntake;
   Drivetrain subDrivetrain;
 
   PatternType desiredPattern;
@@ -31,9 +29,8 @@ public class SetLEDs extends CommandBase {
 
   int desiredColumn;
 
-  public SetLEDs(LEDs subLEDs, Intake subIntake, Drivetrain subDrivetrain) {
+  public SetLEDs(LEDs subLEDs, Drivetrain subDrivetrain) {
     this.subLEDs = subLEDs;
-    this.subIntake = subIntake;
     this.subDrivetrain = subDrivetrain;
 
     chargeStationCenterX = prefVision.chargeStationCenterX.getValue();
@@ -52,11 +49,11 @@ public class SetLEDs extends CommandBase {
   public void execute() {
     Double[] coordinates = {};
 
-    if (subIntake.isGamePieceCollected()) {
-      desiredPattern = constLEDs.HAS_GAME_PIECE_COLOR;
-    } else {
-      desiredPattern = constLEDs.DEFAULT_COLOR;
-    }
+    // if (subIntake.isGamePieceCollected()) {
+    // desiredPattern = constLEDs.HAS_GAME_PIECE_COLOR;
+    // } else {
+    // desiredPattern = constLEDs.DEFAULT_COLOR;
+    // }
 
     if (Timer.getMatchTime() < prefLEDs.timeChargeStationLEDsOn.getValue()) {
       if (Math.abs(subDrivetrain.getPose().getX() - chargeStationCenterX) < chargeStationCenterToleranceX

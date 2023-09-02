@@ -6,35 +6,21 @@ package frc.robot.commands.Auto.OnePiece;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CubeThenMobilityOpen extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
-  Intake subIntake;
 
-  public CubeThenMobilityOpen(Drivetrain subDrivetrain, Intake subIntake) {
+  public CubeThenMobilityOpen(Drivetrain subDrivetrain) {
     this.subDrivetrain = subDrivetrain;
-    this.subIntake = subIntake;
 
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.scoreToCubeOpen.getInitialHolonomicPose().getRotation().getDegrees())),
-
-        Commands.run(() -> subIntake.setMotorSpeed(prefIntake.intakeIntakeSpeed), subIntake)
-            .until(() -> subIntake.isGamePieceCollected()).withTimeout(5),
-
-        Commands.waitSeconds(0.5),
-
-        Commands.run(() -> subIntake.setMotorSpeedShoot(prefIntake.intakeReleaseSpeed.getValue()), subIntake)
-            .withTimeout(prefIntake.intakeReleaseDelay.getValue()),
-
-        Commands.runOnce(() -> subIntake.setMotorSpeed(prefIntake.intakeHoldSpeed), subIntake),
 
         subDrivetrain.swerveAutoBuilder.fullAuto(subDrivetrain.scoreToCubeOpen));
   }
