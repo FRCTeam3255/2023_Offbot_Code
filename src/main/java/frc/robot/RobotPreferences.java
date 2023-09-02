@@ -154,6 +154,9 @@ public class RobotPreferences {
 
     public static final SN_DoublePreference WristMaxPos = new SN_DoublePreference("WristMaxPos", 10);
     public static final SN_DoublePreference WristMinPos = new SN_DoublePreference("WristMinPos", 0);
+
+    public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("WristIntakingAngle", 90);
+    public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("WristStowAngle", 0);
   }
 
   public static final class prefVision {
