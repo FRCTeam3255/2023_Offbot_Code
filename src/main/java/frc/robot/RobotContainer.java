@@ -36,6 +36,7 @@ import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityCable;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityOpen;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -50,6 +51,7 @@ public class RobotContainer {
 
   private final Drivetrain subDrivetrain = new Drivetrain();
   private final SuperShuffle subSuperShuffle = new SuperShuffle();
+  private final Elevator subElevator = new Elevator();
   private final Intake subIntake = new Intake();
   private final NewIntake subNewIntake = new NewIntake();
   private final Wrist subWrist = new Wrist();
@@ -118,7 +120,7 @@ public class RobotContainer {
     // Operator
 
     // Intake Cube (RB)
-    conOperator.btn_RightBumper.onTrue(new IntakeCone(subWrist, subNewIntake));
+    conOperator.btn_RightBumper.onTrue(new IntakeCone(subWrist, subNewIntake, subElevator));
 
     // Place Cube (LT)
     conOperator.btn_LeftTrigger.whileTrue(subIntake.releaseCommand());

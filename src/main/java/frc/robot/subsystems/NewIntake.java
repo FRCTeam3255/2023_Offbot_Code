@@ -21,7 +21,7 @@ public class NewIntake extends SubsystemBase {
   public NewIntake() {
     outsideMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
     insideMotor = new TalonFX(mapIntake.INTAKE_INSIDE_MOTOR_CAN);
-    limitSwitch = new DigitalInput(mapIntake.INTAKE_LIMIT_SWITCH_DIO);
+    limitSwitch = new DigitalInput(mapIntake.NEW_INTAKE_LIMIT_SWITCH_DIO);
 
     configure();
   }
