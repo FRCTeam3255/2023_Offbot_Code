@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.mapIntake;
 
@@ -15,9 +16,12 @@ public class NewIntake extends SubsystemBase {
   TalonFX outsideMotor;
   TalonFX insideMotor;
 
+  DigitalInput limitSwitch;
+
   public NewIntake() {
     outsideMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
     insideMotor = new TalonFX(mapIntake.INTAKE_INSIDE_MOTOR_CAN);
+    limitSwitch = new DigitalInput(mapIntake.INTAKE_LIMIT_SWITCH_DIO);
 
     configure();
   }
@@ -33,6 +37,10 @@ public class NewIntake extends SubsystemBase {
 
   public void setInsideMotorSpeed(double speed) {
     insideMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public boolean isGamePieceCollected() {
+    return limitSwitch.get();
   }
 
   @Override
