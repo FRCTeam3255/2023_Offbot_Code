@@ -140,6 +140,8 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorMaxPos = new SN_DoublePreference("elevatorMaxPos", 10);
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0);
 
+    public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorIntakingPos", 2);
+
     // stole this value from 2022 drivetrain preferences, will need to change after
     // we get more information on the new design
     public static final SN_DoublePreference elevatorEncoderCountsPerFoot = new SN_DoublePreference(
@@ -154,6 +156,9 @@ public class RobotPreferences {
 
     public static final SN_DoublePreference WristMaxPos = new SN_DoublePreference("WristMaxPos", 10);
     public static final SN_DoublePreference WristMinPos = new SN_DoublePreference("WristMinPos", 0);
+
+    public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("WristIntakingAngle", 90);
+    public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("WristStowAngle", 0);
   }
 
   public static final class prefVision {

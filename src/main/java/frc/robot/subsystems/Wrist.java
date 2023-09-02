@@ -21,6 +21,7 @@ public class Wrist extends SubsystemBase {
 
   public Wrist() {
     wristMotor = new TalonFX(mapWrist.WRIST_MOTOR_CAN);
+    config = new TalonFXConfiguration();
 
     configure();
   }

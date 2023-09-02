@@ -25,6 +25,7 @@ public class Elevator extends SubsystemBase {
   public Elevator() {
     leftMotor = new TalonFX(mapElevator.LEFT_MOTOR_CAN);
     rightMotor = new TalonFX(mapElevator.RIGHT_MOTOR_CAN);
+    config = new TalonFXConfiguration();
 
     configure();
   }

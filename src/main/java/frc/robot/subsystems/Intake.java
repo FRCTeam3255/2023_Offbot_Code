@@ -6,37 +6,36 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.mapIntake;
 
-public class NewIntake extends SubsystemBase {
-  /** Creates a new NewIntake. */
-  TalonFX outsideMotor;
-  TalonFX insideMotor;
+public class Intake extends SubsystemBase {
+  TalonFX intakeMotor;
 
   DigitalInput limitSwitch;
 
-  public NewIntake() {
-    outsideMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
-    insideMotor = new TalonFX(mapIntake.INTAKE_INSIDE_MOTOR_CAN);
+  TalonFXConfiguration config;
+
+  public Intake() {
+    intakeMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
     limitSwitch = new DigitalInput(mapIntake.INTAKE_LIMIT_SWITCH_DIO);
+
+    config = new TalonFXConfiguration();
 
     configure();
   }
 
   public void configure() {
-    outsideMotor.configFactoryDefault();
-    insideMotor.configFactoryDefault();
+    intakeMotor.configFactoryDefault();
+    intakeMotor.configAllSettings(config);
   }
 
-  public void setOutsideMotorSpeed(double speed) {
-    outsideMotor.set(ControlMode.PercentOutput, speed);
-  }
-
-  public void setInsideMotorSpeed(double speed) {
-    insideMotor.set(ControlMode.PercentOutput, speed);
+  // will always spin opposite the inside motor
+  public void setIntakeMotorSpeed(double speed) {
+    intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public boolean isGamePieceCollected() {

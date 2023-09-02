@@ -18,19 +18,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SuperShuffle;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Wrist;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constLEDs;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
+import frc.robot.commands.IntakeCone;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Auto.OnePiece.CenterCube;
 import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityCable;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityOpen;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -45,6 +49,9 @@ public class RobotContainer {
 
   private final Drivetrain subDrivetrain = new Drivetrain();
   private final SuperShuffle subSuperShuffle = new SuperShuffle();
+  private final Elevator subElevator = new Elevator();
+  private final Intake subIntake = new Intake();
+  private final Wrist subWrist = new Wrist();
   private final Vision subVision = new Vision();
   private final LEDs subLEDs = new LEDs();
 
@@ -106,6 +113,9 @@ public class RobotContainer {
         .whileTrue(Commands.run(() -> subLEDs.setLEDPattern(constLEDs.DEFENSE_MODE_COLOR)));
 
     // Operator
+
+    // Intake Cube (RB)
+    conOperator.btn_RightBumper.onTrue(new IntakeCone(subWrist, subIntake, subElevator));
 
     // teleopTrigger.onTrue(new SetRumble(conDriver, conOperator, subIntake));
   }
