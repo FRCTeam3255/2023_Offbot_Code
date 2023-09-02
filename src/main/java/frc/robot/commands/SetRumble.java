@@ -10,13 +10,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotPreferences.prefControllers;
-import frc.robot.subsystems.Intake;
 
 public class SetRumble extends CommandBase {
   SN_XboxController conDriver;
   SN_XboxController conOperator;
-
-  Intake subIntake;
 
   Boolean hadGamePiece;
 
@@ -24,11 +21,9 @@ public class SetRumble extends CommandBase {
 
   Double timeGamePieceLeft;
 
-  public SetRumble(SN_XboxController conDriver, SN_XboxController conOperator, Intake subIntake) {
+  public SetRumble(SN_XboxController conDriver, SN_XboxController conOperator) {
     this.conDriver = conDriver;
     this.conOperator = conOperator;
-
-    this.subIntake = subIntake;
 
     hadGamePiece = false;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -45,13 +40,13 @@ public class SetRumble extends CommandBase {
   @Override
   public void execute() {
 
-    if (!hadGamePiece && subIntake.getLimitSwitch()) {
-      hadGamePiece = true;
-    } else if (hadGamePiece && !subIntake.getLimitSwitch()) {
-      hadGamePiece = false;
-      timeGamePieceLeft = Timer.getFPGATimestamp();
-      rumbleOutput = prefControllers.rumbleOutput.getValue();
-    }
+    // if (!hadGamePiece && subIntake.getLimitSwitch()) {
+    // hadGamePiece = true;
+    // } else if (hadGamePiece && !subIntake.getLimitSwitch()) {
+    // hadGamePiece = false;
+    // timeGamePieceLeft = Timer.getFPGATimestamp();
+    // rumbleOutput = prefControllers.rumbleOutput.getValue();
+    // }
 
     if (Timer.getFPGATimestamp() > timeGamePieceLeft + prefControllers.rumbleDelay.getValue()) {
       rumbleOutput = 0.0;
