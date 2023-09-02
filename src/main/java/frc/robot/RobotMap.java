@@ -35,15 +35,6 @@ public class RobotMap {
     public static final String CAN_BUS = "Swerve";
   }
 
-  public static final class mapArm {
-
-    public static final int SHOULDER_CAN = 10;
-    public static final int ELBOW_CAN = 11;
-
-    public static final int SHOULDER_ABSOLUTE_ENCODER_DIO = 2;
-    public static final int ELBOW_ABSOLUTE_ENCODER_DIO = 3;
-  }
-
   public static final class mapIntake {
     public static final int INTAKE_LEFT_MOTOR_CAN = 20;
     public static final int INTAKE_RIGHT_MOTOR_CAN = 21;
@@ -51,13 +42,6 @@ public class RobotMap {
     public static final int INTAKE_OUTSIDE_MOTOR_CAN = 35;
     public static final int INTAKE_INSIDE_MOTOR_CAN = 36;
     public static final int INTAKE_LIMIT_SWITCH_DIO = 4;
-  }
-
-  public static final class mapCollector {
-    public static final int PIVOT_MOTOR_CAN = 30;
-    public static final int ROLLER_MOTOR_CAN = 31;
-
-    // public static final int PIVOT_ABSOLUTE_ENCODER_DIO = 1;
   }
 
   public static final class mapElevator {
