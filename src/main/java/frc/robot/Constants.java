@@ -90,7 +90,6 @@ public final class Constants {
   public static final double BACK_LEFT_ABSOLUTE_ENCODER_OFFSET = 87.36328125;
   public static final double BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET = 332.9296875;
 
-
   // module positions follow the WPILib robot coordinate system
   // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/coordinate-systems.html#robot-coordinate-system
   public static final SN_SwerveModuleConstants MODULE_0 = new SN_SwerveModuleConstants(
@@ -199,80 +198,6 @@ public final class Constants {
 
   // end drivetrain section
 
-  public static final class constArm {
-    public static final boolean SHOULDER_MOTOR_INVERT = true;
-    public static final boolean ELBOW_MOTOR_INVERT = false;
-
-    public static final double SHOULDER_GEAR_RATIO = 200.0;
-    public static final double ELBOW_GEAR_RATIO = 200.0;
-
-    public static final boolean SHOULDER_ABSOLUTE_ENCODER_INVERT = false;
-    public static final boolean ELBOW_ABSOLUTE_ENCODER_INVERT = true;
-
-    public static final NeutralMode SHOULDER_MOTOR_BREAK = NeutralMode.Brake;
-    public static final NeutralMode ELBOW_MOTOR_BREAK = NeutralMode.Brake;
-
-    // offsets are when both joints are facing to the right (0 degrees on unit
-    // circle is at (1, 0))
-
-    // mini-arm offsets
-    // public static final double SHOULDER_ABSOLUTE_ENCODER_OFFSET =
-    // Units.rotationsToRadians(0.397309);
-    // public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET =
-    // Units.rotationsToRadians(0.142530);
-
-    public static final double SHOULDER_ABSOLUTE_ENCODER_OFFSET = Units.rotationsToRadians(0.417364);
-    public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = Units.rotationsToRadians(0.716671);
-
-    public static final double PRAC_SHOULDER_ABSOLUTE_ENCODER_OFFSET = Units.rotationsToRadians(0.75);
-    public static final double PRAC_ELBOW_ABSOLUTE_ENCODER_OFFSET = Units.rotationsToRadians(0.59875);
-
-    public static final double SHOULDER_LENGTH = Units.inchesToMeters(30.0);
-    public static final double ELBOW_LENGTH = Units.inchesToMeters(34.0);
-
-    public static final double SHOULDER_FORWARD_LIMIT = Units.degreesToRadians(90.0);
-    public static final double SHOULDER_REVERSE_LIMIT = Units.degreesToRadians(-135.0);
-
-    public static final double ELBOW_FORWARD_LIMIT = Units.degreesToRadians(70);
-    public static final double ELBOW_REVERSE_LIMIT = Units.degreesToRadians(-100);
-
-    public enum ArmHeight {
-      NONE, LOW, MID, HIGH
-    }
-
-    public enum ArmState {
-      NONE(Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
-      HIGH_STOWED(Rotation2d.fromDegrees(-90), Rotation2d.fromDegrees(66)),
-      LOW_STOWED(Rotation2d.fromDegrees(-128), Rotation2d.fromDegrees(-22)),
-      MID_STOWED(Rotation2d.fromDegrees(-128), Rotation2d.fromDegrees(0)),
-      FLOOR_INTAKE(Rotation2d.fromDegrees(-90), Rotation2d.fromDegrees(-21)),
-      FLOOR_INTAKE_TRANSITION(Rotation2d.fromDegrees(-128), Rotation2d.fromDegrees(20)),
-      SHELF_INTAKE(Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
-      CUBE_SCORE_LOW_TRANSITION(Rotation2d.fromDegrees(-100), Rotation2d.fromDegrees(50)),
-      CONE_SCORE_LOW_TRANSITION(Rotation2d.fromDegrees(-61), Rotation2d.fromDegrees(69)),
-      HIGH_CONE_SCORE_TRANSITION(Rotation2d.fromDegrees(-10), Rotation2d.fromDegrees(69)),
-      COLLECTOR_MOVING(Rotation2d.fromDegrees(-97), Rotation2d.fromDegrees(35)),
-      COLLECTOR_COLLECTING(Rotation2d.fromDegrees(-97), Rotation2d.fromDegrees(-14)),
-      HIGH_CONE_SCORE(Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(30)),
-      HIGH_CONE_SCORE_LOWERED(Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(1)),
-      MID_CONE_SCORE(Rotation2d.fromDegrees(-51), Rotation2d.fromDegrees(55)),
-      MID_CONE_SCORE_LOWERED(Rotation2d.fromDegrees(-51), Rotation2d.fromDegrees(35)),
-      HIGH_CUBE_SCORE_PLACE(Rotation2d.fromDegrees(-55), Rotation2d.fromDegrees(50)),
-      HIGH_CUBE_SCORE_SHOOT(Rotation2d.fromDegrees(-99), Rotation2d.fromDegrees(32)),
-      MID_CUBE_SCORE(Rotation2d.fromDegrees(-90), Rotation2d.fromDegrees(40)),
-      HYBRID_SCORE(Rotation2d.fromDegrees(-128), Rotation2d.fromDegrees(0)),
-      CHARGE_STATION(Rotation2d.fromDegrees(-90), Rotation2d.fromDegrees(0));
-
-      public Rotation2d shoulderAngle;
-      public Rotation2d elbowAngle;
-
-      private ArmState(Rotation2d shoulderAngle, Rotation2d elbowAngle) {
-        this.shoulderAngle = shoulderAngle;
-        this.elbowAngle = elbowAngle;
-      }
-    }
-  }
-
   public static final class constIntake {
     public static final boolean LEFT_MOTOR_INVERTED = false;
     public static final boolean RIGHT_MOTOR_INVERTED = !LEFT_MOTOR_INVERTED;
@@ -280,25 +205,6 @@ public final class Constants {
     public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
 
     public static final boolean LIMIT_SWITCH_INVERTED = true;
-  }
-
-  public static final class constCollector {
-    public static final double GEAR_RATIO = 40;
-
-    public static final Rotation2d PIVOT_FORWARD_LIMIT_VALUE = Rotation2d.fromDegrees(135);
-    public static final Rotation2d PIVOT_REVERSE_LIMIT_VALUE = Rotation2d.fromDegrees(0);
-
-    public static final boolean PIVOT_MOTOR_INVERT = false;
-    public static final boolean ROLLER_MOTOR_INVERT = true;
-    // public static final boolean ABSOLUTE_ENCODER_INVERT = true;
-
-    public static final NeutralMode PIVOT_MOTOR_NEUTRAL_MODE = NeutralMode.Brake;
-    public static final IdleMode ROLLER_MOTOR_NEUTRAL_MODE = IdleMode.kCoast;
-
-    // public static final double ABSOLUTE_ENCODER_OFFSET =
-    // Units.rotationsToRadians(0.981843);
-    // public static final double PRAC_ABSOLUTE_ENCODER_OFFSET =
-    // Units.rotationsToRadians(0.481616);
   }
 
   public static final class constVision {
