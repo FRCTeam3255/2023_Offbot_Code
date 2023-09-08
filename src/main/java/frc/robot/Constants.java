@@ -207,6 +207,12 @@ public final class Constants {
     public static final boolean LIMIT_SWITCH_INVERTED = true;
   }
 
+  public static final class constElevator {
+    public static final double CURRENT_LIMIT_TO_AMPS = 5;
+    public static final double CURRENT_LIMIT_AT_AMPS = 25;
+    public static final double CURRENT_LIMIT_AFTER_MS = 1.0;
+  }
+
   public static final class constVision {
     public static final String LIFECAM_PHOTON_NAME = "Microsoft_LifeCam_HD-3000";
     public static final String AR_PHOTON_NAME = "Global_Shutter_Camera";
