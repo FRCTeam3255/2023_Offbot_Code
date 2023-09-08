@@ -7,8 +7,6 @@ package frc.robot;
 import com.frcteam3255.joystick.SN_XboxController;
 import com.frcteam3255.joystick.SN_SwitchboardStick;
 
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
@@ -44,8 +42,6 @@ public class RobotContainer {
 
   private final SN_XboxController conDriver = new SN_XboxController(mapControllers.DRIVER_USB);
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
-  private final SN_SwitchboardStick conSwitchboard = new SN_SwitchboardStick(mapControllers.SWITCHBOARD_USB);
-  private final SN_SwitchboardStick conNumpad = new SN_SwitchboardStick(mapControllers.NUMPAD_USB);
 
   private final Drivetrain subDrivetrain = new Drivetrain();
   private final SuperShuffle subSuperShuffle = new SuperShuffle();
@@ -90,7 +86,6 @@ public class RobotContainer {
    */
   public void resetToAbsolutePositions() {
     subDrivetrain.resetSteerMotorEncodersToAbsolute();
-    // subCollector.resetPivotMotorToAbsolute();
   }
 
   private void configureBindings() {
@@ -132,11 +127,6 @@ public class RobotContainer {
     autoChooser.addOption("Score Cube Then Engage Center", new CubeThenEngageCenter(subDrivetrain));
     autoChooser.addOption("Score Cube Center (NO DOCK)", new CenterCube(subDrivetrain));
     autoChooser.addOption("Score Cube Then Mobility Open", new CubeThenMobilityOpen(subDrivetrain));
-    // autoChooser.addOption("Score Cube Then Engage Open", new
-    // CubeThenEngageOpen(subDrivetrain, subIntake, subArm));
-
-    // autoChooser.addOption("Score TWO Cubes Then Engage Open - DO NOT USE",
-    // new TwoCubeDockOpen(subDrivetrain, subIntake, subArm));
 
     SmartDashboard.putData(autoChooser);
 

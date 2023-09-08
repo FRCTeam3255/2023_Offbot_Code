@@ -7,7 +7,6 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.frcteam3255.components.SN_Blinkin;
 import com.frcteam3255.components.SN_Blinkin.PatternType;
-import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
