@@ -7,7 +7,6 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.frcteam3255.components.SN_Blinkin;
 import com.frcteam3255.components.SN_Blinkin.PatternType;
-import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -22,30 +21,17 @@ public final class Constants {
 
   public static final boolean OUTPUT_DEBUG_VALUES = true;
 
-  // order of subsystems (and adjacent classes) shall be:
-  // controllers, drivetrain, arm, intake, collector, charger (if it exists),
-  // vision, leds
+  // Order of Subsystems: The order that the robots inputs go, starting from
+  // controllers
 
   public static final class constControllers {
     public static final double DRIVER_LEFT_STICK_X_DEADBAND = 0.05;
-    // public static final double DRIVER_LEFT_STICK_Y_DEADBAND = 0.1;
-    // public static final double DRIVER_RIGHT_STICK_X_DEADBAND = 0.1;
-    // public static final double DRIVER_RIGHT_STICK_Y_DEADBAND = 0.1;
-    // public static final double DRIVER_LEFT_TRIGGER_DEADBAND = 0.0;
-    // public static final double DRIVER_RIGHT_TRIGGER_DEADBAND = 0.0;
-
-    // public static final double OPERATOR_LEFT_STICK_X_DEADBAND = 0.1;
-    // public static final double OPERATOR_LEFT_STICK_Y_DEADBAND = 0.1;
-    // public static final double OPERATOR_RIGHT_STICK_X_DEADBAND = 0.1;
-    // public static final double OPERATOR_RIGHT_STICK_Y_DEADBAND = 0.1;
-    // public static final double OPERATOR_LEFT_TRIGGER_DEADBAND = 0.0;
-    // public static final double OPERATOR_RIGHT_TRIGGER_DEADBAND = 0.0;
   }
 
   // Drivetrain (no subclass)
 
   // note: these were physically measured center to center of the wheel on a
-  // 29"x29" drivetrain with MK4i's. Ideally these are
+  // 29"x29" drivetrain with MK4i's.
   public static final double TRACK_WIDTH = Units.inchesToMeters(23.75);
   public static final double WHEELBASE = Units.inchesToMeters(23.75);
 
@@ -61,9 +47,6 @@ public final class Constants {
    * 
    * 0 1
    * 2 3
-   *
-   * Like reading
-   * four words
    */
 
   // tread is 11 inches long
