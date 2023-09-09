@@ -141,7 +141,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorMaxPos = new SN_DoublePreference("elevatorMaxPos", 10);
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0);
 
-    public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorConeIntakingPos",
+    public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorIntakingPos",
         2);
 
     // stole this value from 2022 drivetrain preferences, will need to change after
