@@ -88,6 +88,7 @@ public class Elevator extends SubsystemBase {
   /**
    * Returns if the elevator is within the tolerance of a given position.
    * 
+   * @param position The position (in encoder ticks) to check
    * @return If it is at that position
    * 
    */
