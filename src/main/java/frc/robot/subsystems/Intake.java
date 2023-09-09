@@ -5,11 +5,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.constIntake;
 import frc.robot.RobotMap.mapIntake;
 
 public class Intake extends SubsystemBase {
@@ -18,6 +20,7 @@ public class Intake extends SubsystemBase {
   DigitalInput limitSwitch;
 
   TalonFXConfiguration config;
+  StatorCurrentLimitConfiguration currentLimitConfig;
 
   public Intake() {
     intakeMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
@@ -31,6 +34,12 @@ public class Intake extends SubsystemBase {
   public void configure() {
     intakeMotor.configFactoryDefault();
     intakeMotor.configAllSettings(config);
+
+    // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
+    currentLimitConfig = new StatorCurrentLimitConfiguration(true, constIntake.CURRENT_LIMIT_TO_AMPS,
+        constIntake.CURRENT_LIMIT_AT_AMPS, constIntake.CURRENT_LIMIT_AFTER_MS);
+
+    intakeMotor.configStatorCurrentLimit(currentLimitConfig);
   }
 
   // will always spin opposite the inside motor
