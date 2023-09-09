@@ -182,16 +182,13 @@ public final class Constants {
   // end drivetrain section
 
   public static final class constIntake {
-    public static final boolean LEFT_MOTOR_INVERTED = false;
-    public static final boolean RIGHT_MOTOR_INVERTED = !LEFT_MOTOR_INVERTED;
+    public static final boolean MOTOR_INVERTED = true;
 
     public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
 
-    public static final boolean LIMIT_SWITCH_INVERTED = true;
-
-    public static final double CURRENT_LIMIT_TO_AMPS = 5;
-    public static final double CURRENT_LIMIT_AT_AMPS = 25;
-    public static final double CURRENT_LIMIT_AFTER_MS = 1.0;
+    public static final double CURRENT_LIMIT_FLOOR_AMPS = 13;
+    public static final double CURRENT_LIMIT_CEILING_AMPS = 25;
+    public static final double CURRENT_LIMIT_AFTER_SEC = 10;
   }
 
   public static final class constVision {

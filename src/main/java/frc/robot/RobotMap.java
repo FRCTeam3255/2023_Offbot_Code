@@ -36,8 +36,7 @@ public class RobotMap {
   }
 
   public static final class mapIntake {
-    public static final int INTAKE_OUTSIDE_MOTOR_CAN = 35;
-    public static final int INTAKE_INSIDE_MOTOR_CAN = 36;
+    public static final int INTAKE_MOTOR_CAN = 35;
   }
 
   public static final class mapElevator {

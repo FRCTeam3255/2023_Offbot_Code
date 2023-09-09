@@ -5,7 +5,6 @@
 package frc.robot;
 
 import com.frcteam3255.joystick.SN_XboxController;
-import com.frcteam3255.joystick.SN_SwitchboardStick;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotState;
@@ -72,7 +71,7 @@ public class RobotContainer {
             conDriver.btn_X));
     subVision.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
         subVision));
-    subLEDs.setDefaultCommand(new SetLEDs(subLEDs, subDrivetrain));
+    subLEDs.setDefaultCommand(new SetLEDs(subLEDs, subDrivetrain, subIntake));
 
     configureBindings();
     configureAutoSelector();

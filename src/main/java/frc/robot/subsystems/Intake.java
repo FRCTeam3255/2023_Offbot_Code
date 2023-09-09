@@ -5,10 +5,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.GamePiece;
 import frc.robot.Constants.constIntake;
@@ -18,13 +20,13 @@ public class Intake extends SubsystemBase {
   TalonFX intakeMotor;
 
   TalonFXConfiguration config;
-  SupplyCurrentLimitConfiguration currentLimitConfig;
+  StatorCurrentLimitConfiguration statorLimit;
 
-  private boolean isGamePieceCollected;
+  boolean isGamePieceCollected;
   GamePiece currentGamePiece;
 
   public Intake() {
-    intakeMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
+    intakeMotor = new TalonFX(mapIntake.INTAKE_MOTOR_CAN);
     config = new TalonFXConfiguration();
 
     configure();
@@ -33,12 +35,14 @@ public class Intake extends SubsystemBase {
   public void configure() {
     intakeMotor.configFactoryDefault();
     intakeMotor.configAllSettings(config);
+    intakeMotor.setInverted(constIntake.MOTOR_INVERTED);
+    intakeMotor.setNeutralMode(NeutralMode.Brake);
 
     // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
-    currentLimitConfig = new SupplyCurrentLimitConfiguration(true, constIntake.CURRENT_LIMIT_TO_AMPS,
-        constIntake.CURRENT_LIMIT_AT_AMPS, constIntake.CURRENT_LIMIT_AFTER_MS);
+    statorLimit = new StatorCurrentLimitConfiguration(true, constIntake.CURRENT_LIMIT_FLOOR_AMPS,
+        constIntake.CURRENT_LIMIT_CEILING_AMPS, constIntake.CURRENT_LIMIT_AFTER_SEC);
 
-    intakeMotor.configSupplyCurrentLimit(currentLimitConfig);
+    intakeMotor.configStatorCurrentLimit(statorLimit);
   }
 
   /**
@@ -57,11 +61,12 @@ public class Intake extends SubsystemBase {
    * is collected. Should be run periodically.
    */
   private void setGamePieceCollected() {
-    if (intakeMotor.getSupplyCurrent() > constIntake.CURRENT_LIMIT_AT_AMPS) {
+    double current = intakeMotor.getStatorCurrent();
+    if (current > 10) {
       isGamePieceCollected = true;
-      return;
+    } else if (current < 9) {
+      isGamePieceCollected = false;
     }
-    isGamePieceCollected = false;
   }
 
   /**
@@ -91,5 +96,7 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     setGamePieceCollected();
+    SmartDashboard.putBoolean("Is Game Piece Collected", isGamePieceCollected());
+    SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
   }
 }

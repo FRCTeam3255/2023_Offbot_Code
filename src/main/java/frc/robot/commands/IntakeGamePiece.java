@@ -29,6 +29,8 @@ public class IntakeGamePiece extends SequentialCommandGroup {
     this.subElevator = subElevator;
     this.gamepiece = gamepiece;
 
+    addRequirements(subWrist, subIntake, subElevator);
+
     // Assume its a cone if there is no value (fallback condition, should never
     // happen)
     if (gamepiece == GamePiece.CUBE) {
@@ -39,16 +41,24 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
     addCommands(
 
-        Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue())),
+        // Commands.runOnce(() ->
+        // subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue())),
 
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue()) == true),
+        // Commands.waitUntil(() ->
+        // subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue())
+        // == true),
 
-        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue())),
+        // Commands.runOnce(() ->
+        // subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue())),
 
-        Commands.run(() -> subIntake.setIntakeMotorSpeed(intakeSpeed)).until(() -> subIntake.isGamePieceCollected()),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(intakeSpeed)),
 
-        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+        Commands.waitUntil(() -> subIntake.isGamePieceCollected()),
+
+        // Commands.runOnce(() ->
+        // subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subIntake.setCurrentGamePiece(gamepiece)));
+
   }
 }
