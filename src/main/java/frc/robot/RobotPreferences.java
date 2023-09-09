@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.frcteam3255.preferences.SN_BooleanPreference;
 import com.frcteam3255.preferences.SN_DoublePreference;
-import com.frcteam3255.preferences.SN_ZeroDoublePreference;
 
 import edu.wpi.first.math.util.Units;
 
@@ -10,9 +9,8 @@ public class RobotPreferences {
 
   public static final boolean useNetworkTables = false;
 
-  // order of subsystems (and adjacent classes) shall be:
-  // controllers, drivetrain, arm, intake, collector, charger (if it exists),
-  // vision, leds
+  // Order of Subsystems: The order that the robots inputs go, starting from
+  // controllers
 
   public static final class prefControllers {
     public static final SN_DoublePreference rumbleOutput = new SN_DoublePreference("rumbleOutput", 0.2);
@@ -46,7 +44,6 @@ public class RobotPreferences {
     // down.
     public static final SN_DoublePreference triggerValue = new SN_DoublePreference("triggerValue", .2);
 
-    // TODO: Create PID values and other values
     public static final SN_DoublePreference autoThetaP = new SN_DoublePreference("autoThetaP", 0.5);
     public static final SN_DoublePreference autoThetaI = new SN_DoublePreference("autoThetaI", 0.0);
     public static final SN_DoublePreference autoThetaD = new SN_DoublePreference("autoThetaD", 0.0);
