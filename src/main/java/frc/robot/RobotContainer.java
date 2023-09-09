@@ -114,7 +114,7 @@ public class RobotContainer {
     conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE));
 
     // Intake Cube (LB)
-    conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE));
+    conOperator.btn_LeftBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE));
 
     // teleopTrigger.onTrue(new SetRumble(conDriver, conOperator, subIntake));
   }

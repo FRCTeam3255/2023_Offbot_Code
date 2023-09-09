@@ -29,10 +29,12 @@ public class IntakeGamePiece extends SequentialCommandGroup {
     this.subElevator = subElevator;
     this.gamepiece = gamepiece;
 
-    if (gamepiece == GamePiece.CONE) {
-      intakeSpeed = prefIntake.intakeConeSpeed.getValue();
-    } else if (gamepiece == GamePiece.CUBE) {
+    // Assume its a cone if there is no value (fallback condition, should never
+    // happen)
+    if (gamepiece == GamePiece.CUBE) {
       intakeSpeed = prefIntake.intakeCubeSpeed.getValue();
+    } else {
+      intakeSpeed = prefIntake.intakeConeSpeed.getValue();
     }
 
     addCommands(
@@ -40,8 +42,8 @@ public class IntakeGamePiece extends SequentialCommandGroup {
             Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue())),
             Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue()))),
 
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(intakeSpeed))
-            .until(() -> subIntake.isGamePieceCollected()),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(intakeSpeed)),
+        // .until(() -> subIntake.isGamePieceCollected()),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())));
   }

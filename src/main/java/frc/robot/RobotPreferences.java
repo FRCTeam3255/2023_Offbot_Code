@@ -114,19 +114,13 @@ public class RobotPreferences {
   }
 
   public static final class prefIntake {
-    public static final SN_DoublePreference intakeLeftMotorMultiplier = new SN_DoublePreference(
-        "intakeLeftMotorMultiplier", 1.3);
-
+    // Percent Output
     public static final SN_DoublePreference intakeConeSpeed = new SN_DoublePreference("intakeConeSpeed", 0.5);
     public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -0.5);
     public static final SN_DoublePreference intakeHoldSpeed = new SN_DoublePreference("intakeHoldSpeed", 0.1);
     public static final SN_DoublePreference intakeReleaseSpeed = new SN_DoublePreference("intakeReleaseSpeed", -0.25);
-    public static final SN_DoublePreference intakeReleaseDelay = new SN_DoublePreference("intakeReleaseDelay", 1);
-
     public static final SN_DoublePreference intakeShootSpeedHigh = new SN_DoublePreference("intakeShootSpeedHigh",
         -0.65);
-    public static final SN_DoublePreference intakeShootSpeedChargeStation = new SN_DoublePreference(
-        "intakeShootSpeedChargeStation", -1);
   }
 
   public static final class prefElevator {
@@ -135,14 +129,15 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorI = new SN_DoublePreference("elevatorI", 0);
     public static final SN_DoublePreference elevatorD = new SN_DoublePreference("elevatorD", 0);
 
+    // In Encoder Ticks
     public static final SN_DoublePreference elevatorMaxPos = new SN_DoublePreference("elevatorMaxPos", 10);
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0);
-
     public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorIntakingPos",
         2);
 
     // stole this value from 2022 drivetrain preferences, will need to change after
     // we get more information on the new design
+    // TODO: Change this to real values
     public static final SN_DoublePreference elevatorEncoderCountsPerFoot = new SN_DoublePreference(
         "elevatorEncoderCountsPerFoot", 11734);
   }
@@ -153,8 +148,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference wristI = new SN_DoublePreference("wristI", 0);
     public static final SN_DoublePreference wristD = new SN_DoublePreference("wristD", 0);
 
-    public static final SN_DoublePreference WristMaxPos = new SN_DoublePreference("WristMaxPos", 10);
-    public static final SN_DoublePreference WristMinPos = new SN_DoublePreference("WristMinPos", 0);
+    // In Encoder Ticks
+    public static final SN_DoublePreference wristMaxPos = new SN_DoublePreference("WristMaxPos", 10);
+    public static final SN_DoublePreference wristMinPos = new SN_DoublePreference("WristMinPos", 0);
 
     public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("WristIntakingAngle", 90);
     public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("WristStowAngle", 0);

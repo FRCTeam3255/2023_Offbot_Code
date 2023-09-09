@@ -8,21 +8,16 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.mapIntake;
 
 public class Intake extends SubsystemBase {
   TalonFX intakeMotor;
 
-  DigitalInput limitSwitch;
-
   TalonFXConfiguration config;
 
   public Intake() {
     intakeMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
-    limitSwitch = new DigitalInput(mapIntake.INTAKE_LIMIT_SWITCH_DIO);
-
     config = new TalonFXConfiguration();
 
     configure();
@@ -33,13 +28,15 @@ public class Intake extends SubsystemBase {
     intakeMotor.configAllSettings(config);
   }
 
-  // will always spin opposite the inside motor
+  /**
+   * Set the speed of the rollers.
+   * 
+   * @param speed Desired speed to set the motor to, as a PercentOutput
+   *              (-1.0 to 1.0)
+   * 
+   */
   public void setIntakeMotorSpeed(double speed) {
     intakeMotor.set(ControlMode.PercentOutput, speed);
-  }
-
-  public boolean isGamePieceCollected() {
-    return limitSwitch.get();
   }
 
   @Override

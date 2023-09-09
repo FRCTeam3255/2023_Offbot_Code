@@ -40,9 +40,16 @@ public class Wrist extends SubsystemBase {
     wristMotor.set(ControlMode.PercentOutput, speed);
   }
 
+  /**
+   * Set the angle of the wrist. Includes safeties/soft stops.
+   * 
+   * @param position Desired angle to set the motor to, in Encoder
+   *                 ticks
+   * 
+   */
   public void setWristAngle(double angle) {
-    angle = MathUtil.clamp(angle, prefWrist.WristMinPos.getValue(),
-        prefWrist.WristMaxPos.getValue());
+    angle = MathUtil.clamp(angle, prefWrist.wristMinPos.getValue(),
+        prefWrist.wristMaxPos.getValue());
 
     wristMotor.set(ControlMode.Position, angle);
   }

@@ -48,14 +48,21 @@ public class Elevator extends SubsystemBase {
     leftMotor.follow(rightMotor);
   }
 
+  /**
+   * Set the speed of the Elevator. Includes safeties/soft stops.
+   * 
+   * @param speed Desired speed to set both of the motors to, as a PercentOutput
+   *              (-1.0 to 1.0)
+   * 
+   */
   public void setElevatorSpeed(double speed) {
     // don't go past the max position
-    if (getElevatorDistanceFeet() > prefElevator.elevatorMaxPos.getValue() && speed > 0) {
+    if (getElevatorPositionFeet() > prefElevator.elevatorMaxPos.getValue() && speed > 0) {
       speed = 0;
     }
 
     // don't go past the min position
-    if (getElevatorDistanceFeet() < prefElevator.elevatorMinPos.getValue() && speed > 0) {
+    if (getElevatorPositionFeet() < prefElevator.elevatorMinPos.getValue() && speed < 0) {
       speed = 0;
     }
 
@@ -63,6 +70,13 @@ public class Elevator extends SubsystemBase {
     rightMotor.set(ControlMode.PercentOutput, speed);
   }
 
+  /**
+   * Set the position of the Elevator. Includes safeties/soft stops.
+   * 
+   * @param position Desired position to set both of the motors to, in Encoder
+   *                 ticks
+   * 
+   */
   public void setElevatorPosition(double position) {
     position = MathUtil.clamp(position, prefElevator.elevatorMinPos.getValue(),
         prefElevator.elevatorMaxPos.getValue());
@@ -71,11 +85,24 @@ public class Elevator extends SubsystemBase {
     rightMotor.set(ControlMode.Position, position);
   }
 
+  /**
+   * Returns the encoder counts of one motor on the elevator. (They should have
+   * the same reading)
+   * 
+   * @return Elevator encoder counts
+   * 
+   */
   public double getElevatorEncoderCounts() {
     return rightMotor.getSelectedSensorPosition();
   }
 
-  public double getElevatorDistanceFeet() {
+  /**
+   * Returns the position of the elevator, relative to itself, in feet.
+   * 
+   * @return Elevator position
+   * 
+   */
+  public double getElevatorPositionFeet() {
     return getElevatorEncoderCounts() / prefElevator.elevatorEncoderCountsPerFoot.getValue();
   }
 
@@ -83,6 +110,6 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Elevator Encoder Counts", getElevatorEncoderCounts());
-    SmartDashboard.putNumber("Elevator Distance Feet", getElevatorDistanceFeet());
+    SmartDashboard.putNumber("Elevator Distance Feet", getElevatorPositionFeet());
   }
 }
