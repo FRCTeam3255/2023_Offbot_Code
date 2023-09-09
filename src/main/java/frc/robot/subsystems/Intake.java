@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
@@ -17,7 +17,9 @@ public class Intake extends SubsystemBase {
   TalonFX intakeMotor;
 
   TalonFXConfiguration config;
-  StatorCurrentLimitConfiguration currentLimitConfig;
+  SupplyCurrentLimitConfiguration currentLimitConfig;
+
+  private boolean isGamePieceCollected;
 
   public Intake() {
     intakeMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
@@ -31,10 +33,10 @@ public class Intake extends SubsystemBase {
     intakeMotor.configAllSettings(config);
 
     // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
-    currentLimitConfig = new StatorCurrentLimitConfiguration(true, constIntake.CURRENT_LIMIT_TO_AMPS,
+    currentLimitConfig = new SupplyCurrentLimitConfiguration(true, constIntake.CURRENT_LIMIT_TO_AMPS,
         constIntake.CURRENT_LIMIT_AT_AMPS, constIntake.CURRENT_LIMIT_AFTER_MS);
 
-    intakeMotor.configStatorCurrentLimit(currentLimitConfig);
+    intakeMotor.configSupplyCurrentLimit(currentLimitConfig);
   }
 
   /**
@@ -48,8 +50,30 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
+  /**
+   * Uses the intake motor's draw (input bus voltage) to determine if a game piece
+   * is collected. Should be run periodically.
+   */
+  private void setGamePieceCollected() {
+    if (intakeMotor.getSupplyCurrent() > constIntake.CURRENT_LIMIT_AT_AMPS) {
+      isGamePieceCollected = true;
+      return;
+    }
+    isGamePieceCollected = false;
+  }
+
+  /**
+   * Return if the current game piece is collected
+   * 
+   * @return If the current game piece is collected
+   */
+  public boolean isGamePieceCollected() {
+    return isGamePieceCollected;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    setGamePieceCollected();
   }
 }

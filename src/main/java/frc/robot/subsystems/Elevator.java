@@ -86,6 +86,19 @@ public class Elevator extends SubsystemBase {
   }
 
   /**
+   * Returns if the elevator is within the tolerance of a given position.
+   * 
+   * @return If it is at that position
+   * 
+   */
+  public boolean isElevatorAtPosition(double position) {
+    position = MathUtil.clamp(position, prefElevator.elevatorMinPos.getValue(),
+        prefElevator.elevatorMaxPos.getValue());
+
+    return prefElevator.elevatorPositionTolerance.getValue() > Math.abs(getElevatorEncoderCounts() - position);
+  }
+
+  /**
    * Returns the encoder counts of one motor on the elevator. (They should have
    * the same reading)
    * 
