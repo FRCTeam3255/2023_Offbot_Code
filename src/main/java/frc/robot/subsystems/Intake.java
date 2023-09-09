@@ -67,6 +67,8 @@ public class Intake extends SubsystemBase {
   /**
    * Used to set the current game piece collected. Will check if we have a
    * gamepiece before setting the gamepiece.
+   * 
+   * @param gamepiece Desired collected game piece
    */
   public void setCurrentGamePiece(GamePiece gamepiece) {
     if (isGamePieceCollected) {
