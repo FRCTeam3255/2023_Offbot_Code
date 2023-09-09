@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.GamePiece;
 import frc.robot.Constants.constIntake;
 import frc.robot.RobotMap.mapIntake;
 
@@ -20,6 +21,7 @@ public class Intake extends SubsystemBase {
   SupplyCurrentLimitConfiguration currentLimitConfig;
 
   private boolean isGamePieceCollected;
+  GamePiece currentGamePiece;
 
   public Intake() {
     intakeMotor = new TalonFX(mapIntake.INTAKE_OUTSIDE_MOTOR_CAN);
@@ -60,6 +62,18 @@ public class Intake extends SubsystemBase {
       return;
     }
     isGamePieceCollected = false;
+  }
+
+  /**
+   * Used to set the current game piece collected. Will check if we have a
+   * gamepiece before setting the gamepiece.
+   */
+  public void setCurrentGamePiece(GamePiece gamepiece) {
+    if (isGamePieceCollected) {
+      currentGamePiece = gamepiece;
+      return;
+    }
+    currentGamePiece = GamePiece.NONE;
   }
 
   /**

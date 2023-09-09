@@ -47,6 +47,8 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
         Commands.run(() -> subIntake.setIntakeMotorSpeed(intakeSpeed)).until(() -> subIntake.isGamePieceCollected()),
 
-        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())));
+        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+
+        Commands.runOnce(() -> subIntake.setCurrentGamePiece(gamepiece)));
   }
 }
