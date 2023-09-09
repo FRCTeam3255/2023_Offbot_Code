@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.GamePiece;
 import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
@@ -13,23 +14,33 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Wrist;
 
-public class IntakeCone extends SequentialCommandGroup {
-
+public class IntakeGamePiece extends SequentialCommandGroup {
   Wrist subWrist;
   Intake subIntake;
   Elevator subElevator;
+  GamePiece gamepiece;
 
-  public IntakeCone(Wrist subWrist, Intake subIntake, Elevator subElevator) {
+  double intakeSpeed;
+
+  public IntakeGamePiece(Wrist subWrist, Intake subIntake, Elevator subElevator, GamePiece gamepiece) {
 
     this.subWrist = subWrist;
     this.subIntake = subIntake;
+    this.subElevator = subElevator;
+    this.gamepiece = gamepiece;
+
+    if (gamepiece == GamePiece.CONE) {
+      intakeSpeed = prefIntake.intakeConeSpeed.getValue();
+    } else if (gamepiece == GamePiece.CUBE) {
+      intakeSpeed = prefIntake.intakeCubeSpeed.getValue();
+    }
 
     addCommands(
         Commands.parallel(
             Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue())),
             Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue()))),
 
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeIntakeSpeed.getValue()))
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(intakeSpeed))
             .until(() -> subIntake.isGamePieceCollected()),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())));

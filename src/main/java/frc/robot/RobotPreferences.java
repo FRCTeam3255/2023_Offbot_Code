@@ -120,7 +120,8 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakeLeftMotorMultiplier = new SN_DoublePreference(
         "intakeLeftMotorMultiplier", 1.3);
 
-    public static final SN_DoublePreference intakeIntakeSpeed = new SN_DoublePreference("intakeIntakeSpeed", 0.5);
+    public static final SN_DoublePreference intakeConeSpeed = new SN_DoublePreference("intakeConeSpeed", 0.5);
+    public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -0.5);
     public static final SN_DoublePreference intakeHoldSpeed = new SN_DoublePreference("intakeHoldSpeed", 0.1);
     public static final SN_DoublePreference intakeReleaseSpeed = new SN_DoublePreference("intakeReleaseSpeed", -0.25);
     public static final SN_DoublePreference intakeReleaseDelay = new SN_DoublePreference("intakeReleaseDelay", 1);
@@ -140,7 +141,8 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorMaxPos = new SN_DoublePreference("elevatorMaxPos", 10);
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0);
 
-    public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorIntakingPos", 2);
+    public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorConeIntakingPos",
+        2);
 
     // stole this value from 2022 drivetrain preferences, will need to change after
     // we get more information on the new design

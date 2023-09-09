@@ -22,12 +22,13 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SuperShuffle;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Wrist;
+import frc.robot.Constants.GamePiece;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constLEDs;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
-import frc.robot.commands.IntakeCone;
+import frc.robot.commands.IntakeGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Auto.OnePiece.CenterCube;
 import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
@@ -114,8 +115,11 @@ public class RobotContainer {
 
     // Operator
 
-    // Intake Cube (RB)
-    conOperator.btn_RightBumper.onTrue(new IntakeCone(subWrist, subIntake, subElevator));
+    // Intake Cone (RB)
+    conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE));
+
+    // Intake Cube (LB)
+    conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE));
 
     // teleopTrigger.onTrue(new SetRumble(conDriver, conOperator, subIntake));
   }
