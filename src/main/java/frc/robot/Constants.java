@@ -54,8 +54,8 @@ public final class Constants {
   public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
   // https://www.swervedrivespecialties.com/products/mk4i-swerve-module
-  // L2 gearing, Falcon drive motor
-  public static final double DRIVE_GEAR_RATIO = 6.75;
+  // L3 gearing, Falcon drive motor
+  public static final double DRIVE_GEAR_RATIO = 6.12;
   public static final double STEER_GEAR_RATIO = 150.0 / 7.0;
   public static final double MAX_MODULE_SPEED = Units.feetToMeters(16.3);
 
