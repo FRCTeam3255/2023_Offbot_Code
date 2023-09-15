@@ -41,22 +41,17 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
     addCommands(
 
-        // Commands.runOnce(() ->
-        // subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue())),
+        Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue())),
 
-        // Commands.waitUntil(() ->
-        // subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue())
-        // == true),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue()) == true),
 
-        // Commands.runOnce(() ->
-        // subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue())),
+        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue())),
 
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(intakeSpeed)),
 
         Commands.waitUntil(() -> subIntake.isGamePieceCollected()),
 
-        // Commands.runOnce(() ->
-        // subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subIntake.setCurrentGamePiece(gamepiece)));
 
