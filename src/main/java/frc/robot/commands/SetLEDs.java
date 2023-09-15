@@ -14,11 +14,13 @@ import frc.robot.Constants.constLEDs;
 import frc.robot.RobotPreferences.prefLEDs;
 import frc.robot.RobotPreferences.prefVision;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 
 public class SetLEDs extends CommandBase {
   LEDs subLEDs;
   Drivetrain subDrivetrain;
+  Intake subIntake;
 
   PatternType desiredPattern;
 
@@ -29,14 +31,17 @@ public class SetLEDs extends CommandBase {
 
   int desiredColumn;
 
-  public SetLEDs(LEDs subLEDs, Drivetrain subDrivetrain) {
+  public SetLEDs(LEDs subLEDs, Drivetrain subDrivetrain, Intake subIntake) {
     this.subLEDs = subLEDs;
     this.subDrivetrain = subDrivetrain;
+    this.subIntake = subIntake;
 
     chargeStationCenterX = prefVision.chargeStationCenterX.getValue();
     chargeStationCenterToleranceX = prefVision.chargeStationCenterToleranceX.getValue();
     chargeStationCenterY = prefVision.chargeStationCenterY.getValue();
     chargeStationCenterToleranceY = prefVision.chargeStationCenterToleranceY.getValue();
+
+    desiredPattern = PatternType.Black;
 
     addRequirements(subLEDs);
   }
@@ -49,11 +54,11 @@ public class SetLEDs extends CommandBase {
   public void execute() {
     Double[] coordinates = {};
 
-    // if (subIntake.isGamePieceCollected()) {
-    // desiredPattern = constLEDs.HAS_GAME_PIECE_COLOR;
-    // } else {
-    // desiredPattern = constLEDs.DEFAULT_COLOR;
-    // }
+    if (subIntake.isGamePieceCollected()) {
+      desiredPattern = constLEDs.HAS_GAME_PIECE_COLOR;
+    } else {
+      desiredPattern = constLEDs.DEFAULT_COLOR;
+    }
 
     if (Timer.getMatchTime() < prefLEDs.timeChargeStationLEDsOn.getValue()) {
       if (Math.abs(subDrivetrain.getPose().getX() - chargeStationCenterX) < chargeStationCenterToleranceX
@@ -80,7 +85,7 @@ public class SetLEDs extends CommandBase {
       }
     }
 
-    subLEDs.setLEDPattern(desiredPattern);
+    // subLEDs.setLEDPattern(desiredPattern);
   }
 
   @Override
