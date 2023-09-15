@@ -195,9 +195,9 @@ public final class Constants {
   }
 
   public static final class constElevator {
-    public static final double CURRENT_LIMIT_TO_AMPS = 5;
-    public static final double CURRENT_LIMIT_AT_AMPS = 25;
-    public static final double CURRENT_LIMIT_AFTER_MS = 1.0;
+    public static final double CURRENT_LIMIT_FLOOR_AMPS = 13; // Floor: what we limit it to
+    public static final double CURRENT_LIMIT_CEILING_AMPS = 25; // Ceiling: when we begin limiting
+    public static final double CURRENT_LIMIT_AFTER_SEC = 10;
   }
 
   public static final class constVision {
