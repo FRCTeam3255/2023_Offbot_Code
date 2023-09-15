@@ -22,7 +22,7 @@ public class Elevator extends SubsystemBase {
   TalonFX rightMotor;
 
   TalonFXConfiguration config;
-  SatorCurrentLimitConfiguration statorLimit;
+  StatorCurrentLimitConfiguration statorLimit;
 
   public Elevator() {
     leftMotor = new TalonFX(mapElevator.LEFT_MOTOR_CAN);
