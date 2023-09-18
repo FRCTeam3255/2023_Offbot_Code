@@ -28,20 +28,30 @@ public class PrepGamePiece extends SequentialCommandGroup {
     this.subIntake = subIntake;
 
     if (subIntake.getCurrentGamePiece() == GamePiece.CUBE) {
-      if (subElevator.getDesiredHeight() == DesiredHeight.HYBRID) {
-        desiredPosition = prefElevator.hybridScore.getValue();
-      } else if (subElevator.getDesiredHeight() == DesiredHeight.MID) {
-        desiredPosition = prefElevator.midCubeScore.getValue();
-      } else {
-        desiredPosition = prefElevator.highCubeScore.getValue();
+      switch (subElevator.getDesiredHeight()) {
+        case HYBRID:
+          desiredPosition = prefElevator.hybridScore.getValue();
+          break;
+        case MID:
+          desiredPosition = prefElevator.midCubeScore.getValue();
+          break;
+        case HIGH:
+          desiredPosition = prefElevator.highCubeScore.getValue();
+          break;
+        // Do we want to default to something when desiredHeight == NONE?
       }
     } else {
-      if (subElevator.getDesiredHeight() == DesiredHeight.HYBRID) {
-        desiredPosition = prefElevator.hybridScore.getValue();
-      } else if (subElevator.getDesiredHeight() == DesiredHeight.MID) {
-        desiredPosition = prefElevator.midConeScore.getValue();
-      } else {
-        desiredPosition = prefElevator.highConeScore.getValue();
+      switch (subElevator.getDesiredHeight()) {
+        case HYBRID:
+          desiredPosition = prefElevator.hybridScore.getValue();
+          break;
+        case MID:
+          desiredPosition = prefElevator.midConeScore.getValue();
+          break;
+        case HIGH:
+          desiredPosition = prefElevator.highConeScore.getValue();
+          break;
+        // Do we want to default to something when desiredHeight == NONE?
       }
     }
 
