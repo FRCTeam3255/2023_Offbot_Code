@@ -49,16 +49,13 @@ public final class Constants {
    * 2 3
    */
 
-  // tread is 11 inches long
-  // 11 / 3.14 = 3.50 inch wheel (w/o tread) diameter
-  // tread is 0.3 inches thick
-  // 3.5 + 0.3 = 3.8 inch wheel (w/ tread) diameter
-  private static final double WHEEL_DIAMETER = Units.inchesToMeters(3.8);
+  // Colson Wheels
+  private static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
   public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
   // https://www.swervedrivespecialties.com/products/mk4i-swerve-module
-  // L2 gearing, Falcon drive motor
-  public static final double DRIVE_GEAR_RATIO = 6.75;
+  // L3 gearing, Falcon drive motor
+  public static final double DRIVE_GEAR_RATIO = 6.12;
   public static final double STEER_GEAR_RATIO = 150.0 / 7.0;
   public static final double MAX_MODULE_SPEED = Units.feetToMeters(16.3);
 
