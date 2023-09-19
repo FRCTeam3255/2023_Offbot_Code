@@ -83,6 +83,10 @@ public class Intake extends SubsystemBase {
     currentGamePiece = GamePiece.NONE;
   }
 
+  public GamePiece getCurrentGamePiece() {
+    return currentGamePiece;
+  }
+
   /**
    * Return if the current game piece is collected
    * 

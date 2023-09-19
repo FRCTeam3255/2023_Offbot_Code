@@ -130,12 +130,19 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorD = new SN_DoublePreference("elevatorD", 0);
 
     // In Encoder Ticks
+    // TODO: Find actual values please
     public static final SN_DoublePreference elevatorMaxPos = new SN_DoublePreference("elevatorMaxPos", 10);
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0);
     public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorIntakingPos",
         2);
     public static final SN_DoublePreference elevatorPositionTolerance = new SN_DoublePreference(
         "elevatorPositionTolerance", 1);
+    public static final SN_DoublePreference hybridScore = new SN_DoublePreference("hybridConeScore",
+        0);
+    public static final SN_DoublePreference midConeScore = new SN_DoublePreference("midConeScore", 1);
+    public static final SN_DoublePreference highConeScore = new SN_DoublePreference("highConeScore", 2);
+    public static final SN_DoublePreference midCubeScore = new SN_DoublePreference("midCubeScore", 1);
+    public static final SN_DoublePreference highCubeScore = new SN_DoublePreference("highCubeScore", 2);
 
     // stole this value from 2022 drivetrain preferences, will need to change after
     // we get more information on the new design
@@ -156,6 +163,7 @@ public class RobotPreferences {
 
     public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("WristIntakingAngle", 90);
     public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("WristStowAngle", 0);
+    public static final SN_DoublePreference wristScoringAngle = new SN_DoublePreference("wristScoringAngle", 0);
   }
 
   public static final class prefVision {

@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DesiredHeight;
 import frc.robot.RobotMap.mapElevator;
 import frc.robot.RobotPreferences.prefElevator;
 
@@ -21,10 +22,15 @@ public class Elevator extends SubsystemBase {
 
   TalonFXConfiguration config;
 
+  DesiredHeight desiredHeight;
+  double desiredPosition;
+
   public Elevator() {
     leftMotor = new TalonFX(mapElevator.LEFT_MOTOR_CAN);
     rightMotor = new TalonFX(mapElevator.RIGHT_MOTOR_CAN);
     config = new TalonFXConfiguration();
+
+    desiredHeight = DesiredHeight.NONE;
 
     configure();
   }
@@ -118,6 +124,14 @@ public class Elevator extends SubsystemBase {
    */
   public double getElevatorPositionFeet() {
     return getElevatorEncoderCounts() / prefElevator.elevatorEncoderCountsPerFoot.getValue();
+  }
+
+  public void setDesiredHeight(DesiredHeight height) {
+    height = desiredHeight;
+  }
+
+  public DesiredHeight getDesiredHeight() {
+    return desiredHeight;
   }
 
   @Override

@@ -219,4 +219,8 @@ public final class Constants {
   public enum GamePiece {
     NONE, CUBE, CONE, HUH
   }
+
+  public enum DesiredHeight {
+    NONE, HYBRID, MID, HIGH
+  }
 }
