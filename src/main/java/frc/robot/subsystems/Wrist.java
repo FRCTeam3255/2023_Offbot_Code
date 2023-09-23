@@ -40,24 +40,40 @@ public class Wrist extends SubsystemBase {
   }
 
   public void configure() {
+    // Absolute Encoder
     if (absoluteEncoder.getAbsolutePosition() > constWrist.ABSOLUTE_ENCODER_ROLLOVER_OFFSET) {
       absoluteEncoder.setPositionOffset(1);
     }
 
+    // Wrist
     wristMotor.configFactoryDefault();
 
     wristMotor.setNeutralMode(NeutralMode.Brake);
-    wristMotor.configForwardSoftLimitThreshold(
-        SN_Math.degreesToFalcon(prefWrist.wristMaxPos.getValue(), constWrist.GEAR_RATIO));
-    wristMotor.configReverseSoftLimitThreshold(
-        SN_Math.degreesToFalcon(prefWrist.wristMinPos.getValue(), constWrist.GEAR_RATIO));
 
-    config.slot0.kF = prefWrist.wristF.getValue();
+    // PID & Motion Magic
     config.slot0.kP = prefWrist.wristP.getValue();
     config.slot0.kI = prefWrist.wristI.getValue();
     config.slot0.kD = prefWrist.wristD.getValue();
-    config.peakOutputForward = 0.2;
-    config.peakOutputReverse = -0.2;
+
+    config.motionCruiseVelocity = SN_Math.degreesToFalcon(prefWrist.wristMaxVelocity.getValue(), constWrist.GEAR_RATIO);
+    config.motionAcceleration = SN_Math.degreesToFalcon(prefWrist.wristMaxAccel.getValue(), constWrist.GEAR_RATIO);
+
+    config.slot0.allowableClosedloopError = SN_Math.degreesToFalcon(
+        prefWrist.wristTolerance.getValue(),
+        constWrist.GEAR_RATIO);
+
+    config.slot0.closedLoopPeakOutput = prefWrist.wristClosedLoopPeakOutput.getValue();
+
+    config.peakOutputForward = 1;
+    config.peakOutputReverse = -1;
+
+    // Soft Limits
+    config.forwardSoftLimitThreshold = SN_Math
+        .degreesToFalcon(constWrist.FORWARD_LIMIT, constWrist.GEAR_RATIO);
+    config.reverseSoftLimitThreshold = SN_Math
+        .degreesToFalcon(constWrist.REVERSE_LIMIT, constWrist.GEAR_RATIO);
+    config.forwardSoftLimitEnable = true;
+    config.reverseSoftLimitEnable = true;
 
     wristMotor.configAllSettings(config);
   }
@@ -69,15 +85,14 @@ public class Wrist extends SubsystemBase {
   /**
    * Set the angle of the wrist. Includes safeties/soft stops.
    * 
-   * @param angle Desired angle to set the motor to, in Encoder
-   *              ticks
+   * @param angle Desired angle to set the motor to, in degrees
    * 
    */
   public void setWristAngle(double angle) {
-    angle = MathUtil.clamp(angle, prefWrist.wristMinPos.getValue(),
-        prefWrist.wristMaxPos.getValue());
+    angle = MathUtil.clamp(angle, constWrist.REVERSE_LIMIT,
+        constWrist.FORWARD_LIMIT);
 
-    wristMotor.set(ControlMode.Position, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
+    wristMotor.set(ControlMode.MotionMagic, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
   }
 
   /**
@@ -116,11 +131,14 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Abs Encoder Raw", absoluteEncoder.get());
-    SmartDashboard.putNumber("Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Abs Encoder Get", getWristAbsoluteEncoder());
+    SmartDashboard.putNumber("Wrist Abs Encoder Raw", absoluteEncoder.get());
+    SmartDashboard.putNumber("Wrist Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Wrist Abs Encoder Get", getWristAbsoluteEncoder());
 
     SmartDashboard.putNumber("Wrist Motor Degrees", getWristAngle().getDegrees());
+    SmartDashboard.putNumber("Wrist Velocity", wristMotor.getSelectedSensorVelocity());
+
+    SmartDashboard.putNumber("Wrist Current", wristMotor.getStatorCurrent());
 
   }
 }

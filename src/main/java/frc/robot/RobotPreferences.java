@@ -2,8 +2,10 @@ package frc.robot;
 
 import com.frcteam3255.preferences.SN_BooleanPreference;
 import com.frcteam3255.preferences.SN_DoublePreference;
+import com.frcteam3255.utils.SN_Math;
 
 import edu.wpi.first.math.util.Units;
+import frc.robot.Constants.constWrist;
 
 public class RobotPreferences {
 
@@ -156,14 +158,23 @@ public class RobotPreferences {
   }
 
   public static final class prefWrist {
-    public static final SN_DoublePreference wristF = new SN_DoublePreference("wristF", 0);
-    public static final SN_DoublePreference wristP = new SN_DoublePreference("wristP", 1);
+    // PID & Motion Magic
+    public static final SN_DoublePreference wristP = new SN_DoublePreference("wristP", 0.5);
     public static final SN_DoublePreference wristI = new SN_DoublePreference("wristI", 0);
     public static final SN_DoublePreference wristD = new SN_DoublePreference("wristD", 0);
 
     // In Degrees
-    public static final SN_DoublePreference wristMaxPos = new SN_DoublePreference("wristMaxPos", 238);
-    public static final SN_DoublePreference wristMinPos = new SN_DoublePreference("wristMinPos", 2);
+    public static final SN_DoublePreference wristTolerance = new SN_DoublePreference("wristTolerance", 0.5);
+
+    // 0 to 1
+    public static final SN_DoublePreference wristClosedLoopPeakOutput = new SN_DoublePreference(
+        "wristClosedLoopPeakOutput",
+        1);
+
+    // Degrees per second
+    public static final SN_DoublePreference wristMaxVelocity = new SN_DoublePreference("wristMaxVelocity", 2000);
+
+    public static final SN_DoublePreference wristMaxAccel = new SN_DoublePreference("wristMaxAccel", 5);
 
     public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("wristIntakingAngle", 90);
     public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("wristStowAngle", 0);

@@ -191,10 +191,15 @@ public final class Constants {
   public static final class constWrist {
     public static final double ABSOLUTE_ENCODER_OFFSET = 0.333;
     // The value in which the Raw Absolute Encoder value rolls over from 0 to 1
-    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.667530; 
+    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.667530;
     public static final boolean ABSOLUTE_ENCODER_INVERT = true;
 
     public static final double GEAR_RATIO = 40.09;
+    public static final double CIRCUMFRENCE = 0.686249499228; // In Meters
+
+    public static final double FORWARD_LIMIT = 238;
+    public static final double REVERSE_LIMIT = 1;
+
   }
 
   public static final class constVision {

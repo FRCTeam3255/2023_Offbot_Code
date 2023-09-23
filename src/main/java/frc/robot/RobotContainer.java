@@ -127,6 +127,10 @@ public class RobotContainer {
     // Set desiredHeight to High (North)
     conOperator.btn_North.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
 
+    conOperator.btn_Y.onTrue(Commands.runOnce(() -> subWrist.setWristAngle(15)));
+    conOperator.btn_B.onTrue(Commands.runOnce(() -> subWrist.setWristAngle(90)));
+    conOperator.btn_A.onTrue(Commands.runOnce(() -> subWrist.setWristAngle(180)));
+
     // teleopTrigger.onTrue(new SetRumble(conDriver, conOperator, subIntake));
   }
 
