@@ -215,6 +215,8 @@ public final class Constants {
   public static final class constLEDs {
     public static final PatternType HAS_CUBE_COLOR = SN_Blinkin.PatternType.Violet;
     public static final PatternType HAS_CONE_COLOR = SN_Blinkin.PatternType.Yellow;
+    public static final PatternType INTAKING_CUBE_COLOR = SN_Blinkin.PatternType.ColorWavesOceanPalette;
+    public static final PatternType INTAKING_CONE_COLOR = SN_Blinkin.PatternType.ColorWavesLavaPalette;
 
     public static final PatternType FAILURE_COLOR = PatternType.Red;
 

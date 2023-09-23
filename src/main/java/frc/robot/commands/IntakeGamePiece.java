@@ -4,23 +4,29 @@
 
 package frc.robot.commands;
 
+import com.frcteam3255.components.SN_Blinkin.PatternType;
+
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.constLEDs;
 import frc.robot.Constants.GamePiece;
 import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
 public class IntakeGamePiece extends SequentialCommandGroup {
   Wrist subWrist;
   Intake subIntake;
   Elevator subElevator;
+  LEDs subLEDs;
   GamePiece gamepiece;
 
   double intakeSpeed;
+  PatternType pattern;
 
   public IntakeGamePiece(Wrist subWrist, Intake subIntake, Elevator subElevator, GamePiece gamepiece) {
 
@@ -35,13 +41,16 @@ public class IntakeGamePiece extends SequentialCommandGroup {
     // happen)
     if (gamepiece == GamePiece.CUBE) {
       intakeSpeed = prefIntake.intakeCubeSpeed.getValue();
+      pattern = constLEDs.INTAKING_CUBE_COLOR;
     } else {
       intakeSpeed = prefIntake.intakeConeSpeed.getValue();
+      pattern = constLEDs.INTAKING_CONE_COLOR;
     }
 
     addCommands(
-
-        Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue())),
+        Commands.parallel(
+            Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue())),
+            Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
 
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue()) == true),
 
