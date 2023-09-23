@@ -55,7 +55,12 @@ public class SetLEDs extends CommandBase {
     Double[] coordinates = {};
 
     if (subIntake.isGamePieceCollected()) {
-      desiredPattern = constLEDs.HAS_GAME_PIECE_COLOR;
+      switch (subIntake.getCurrentGamePiece()) {
+        case CUBE:
+          desiredPattern = constLEDs.HAS_CUBE_COLOR;
+        case CONE:
+          desiredPattern = constLEDs.HAS_CONE_COLOR;
+      }
     } else {
       desiredPattern = constLEDs.DEFAULT_COLOR;
     }
@@ -85,7 +90,7 @@ public class SetLEDs extends CommandBase {
       }
     }
 
-    // subLEDs.setLEDPattern(desiredPattern);
+    subLEDs.setLEDPattern(desiredPattern);
   }
 
   @Override
