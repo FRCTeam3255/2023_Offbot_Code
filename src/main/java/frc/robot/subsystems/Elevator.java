@@ -7,12 +7,14 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.constElevator;
 import frc.robot.Constants.DesiredHeight;
 import frc.robot.RobotMap.mapElevator;
 import frc.robot.RobotPreferences.prefElevator;
@@ -23,6 +25,7 @@ public class Elevator extends SubsystemBase {
   TalonFX rightMotor;
 
   TalonFXConfiguration config;
+  StatorCurrentLimitConfiguration statorLimit;
 
   DesiredHeight desiredHeight;
   double desiredPosition;
@@ -53,6 +56,13 @@ public class Elevator extends SubsystemBase {
 
     leftMotor.setInverted(true);
     rightMotor.setInverted(false);
+
+    // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
+    statorLimit = new StatorCurrentLimitConfiguration(true, constElevator.CURRENT_LIMIT_FLOOR_AMPS,
+        constElevator.CURRENT_LIMIT_CEILING_AMPS, constElevator.CURRENT_LIMIT_AFTER_SEC);
+
+    rightMotor.configStatorCurrentLimit(statorLimit);
+    leftMotor.configStatorCurrentLimit(statorLimit);
 
     leftMotor.follow(rightMotor);
   }
