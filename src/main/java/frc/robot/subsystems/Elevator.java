@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -24,6 +26,7 @@ public class Elevator extends SubsystemBase {
 
   DesiredHeight desiredHeight;
   double desiredPosition;
+  boolean isPrepped;
 
   public Elevator() {
     leftMotor = new TalonFX(mapElevator.LEFT_MOTOR_CAN);
@@ -132,6 +135,14 @@ public class Elevator extends SubsystemBase {
 
   public DesiredHeight getDesiredHeight() {
     return desiredHeight;
+  }
+
+  public void setIsPrepped(boolean prepped) {
+    prepped = isPrepped;
+  }
+
+  public boolean isPrepped() {
+    return isPrepped;
   }
 
   @Override

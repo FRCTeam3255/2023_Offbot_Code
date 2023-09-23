@@ -118,7 +118,10 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakeConeSpeed = new SN_DoublePreference("intakeConeSpeed", 0.5);
     public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -0.5);
     public static final SN_DoublePreference intakeHoldSpeed = new SN_DoublePreference("intakeHoldSpeed", 0.1);
-    public static final SN_DoublePreference intakeReleaseSpeed = new SN_DoublePreference("intakeReleaseSpeed", -0.25);
+    public static final SN_DoublePreference intakePlaceConeSpeed = new SN_DoublePreference("intakePlaceConeSpeed",
+        -0.25);
+    public static final SN_DoublePreference intakePlaceCubeSpeed = new SN_DoublePreference("intakePlaceCubeSpeed",
+        0.25);
     public static final SN_DoublePreference intakeShootSpeedHigh = new SN_DoublePreference("intakeShootSpeedHigh",
         -0.65);
   }
@@ -135,6 +138,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0);
     public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorIntakingPos",
         2);
+    public static final SN_DoublePreference elevatorStow = new SN_DoublePreference("elevatorStow", 0);
     public static final SN_DoublePreference elevatorPositionTolerance = new SN_DoublePreference(
         "elevatorPositionTolerance", 1);
     public static final SN_DoublePreference hybridScore = new SN_DoublePreference("hybridConeScore",
