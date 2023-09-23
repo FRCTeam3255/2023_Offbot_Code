@@ -146,16 +146,16 @@ public class RobotPreferences {
 
   public static final class prefWrist {
     public static final SN_DoublePreference wristF = new SN_DoublePreference("wristF", 0);
-    public static final SN_DoublePreference wristP = new SN_DoublePreference("wristP", 0);
+    public static final SN_DoublePreference wristP = new SN_DoublePreference("wristP", 1);
     public static final SN_DoublePreference wristI = new SN_DoublePreference("wristI", 0);
     public static final SN_DoublePreference wristD = new SN_DoublePreference("wristD", 0);
 
-    // In Encoder Ticks
-    public static final SN_DoublePreference wristMaxPos = new SN_DoublePreference("WristMaxPos", 10);
-    public static final SN_DoublePreference wristMinPos = new SN_DoublePreference("WristMinPos", 0);
+    // In Degrees
+    public static final SN_DoublePreference wristMaxPos = new SN_DoublePreference("wristMaxPos", 238);
+    public static final SN_DoublePreference wristMinPos = new SN_DoublePreference("wristMinPos", 2);
 
-    public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("WristIntakingAngle", 90);
-    public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("WristStowAngle", 0);
+    public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("wristIntakingAngle", 90);
+    public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("wristStowAngle", 0);
   }
 
   public static final class prefVision {
