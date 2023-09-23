@@ -49,16 +49,13 @@ public final class Constants {
    * 2 3
    */
 
-  // tread is 11 inches long
-  // 11 / 3.14 = 3.50 inch wheel (w/o tread) diameter
-  // tread is 0.3 inches thick
-  // 3.5 + 0.3 = 3.8 inch wheel (w/ tread) diameter
-  private static final double WHEEL_DIAMETER = Units.inchesToMeters(3.8);
+  // Colson Wheels
+  private static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
   public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
   // https://www.swervedrivespecialties.com/products/mk4i-swerve-module
-  // L2 gearing, Falcon drive motor
-  public static final double DRIVE_GEAR_RATIO = 6.75;
+  // L3 gearing, Falcon drive motor
+  public static final double DRIVE_GEAR_RATIO = 6.12;
   public static final double STEER_GEAR_RATIO = 150.0 / 7.0;
   public static final double MAX_MODULE_SPEED = Units.feetToMeters(16.3);
 
@@ -182,16 +179,22 @@ public final class Constants {
   // end drivetrain section
 
   public static final class constIntake {
-    public static final boolean LEFT_MOTOR_INVERTED = false;
-    public static final boolean RIGHT_MOTOR_INVERTED = !LEFT_MOTOR_INVERTED;
+    public static final boolean MOTOR_INVERTED = true;
 
     public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
 
-    public static final boolean LIMIT_SWITCH_INVERTED = true;
+    public static final double CURRENT_LIMIT_FLOOR_AMPS = 13; // Floor: what we limit it to
+    public static final double CURRENT_LIMIT_CEILING_AMPS = 25; // Ceiling: when we begin limiting
+    public static final double CURRENT_LIMIT_AFTER_SEC = 10;
+  }
 
-    public static final double CURRENT_LIMIT_TO_AMPS = 5;
-    public static final double CURRENT_LIMIT_AT_AMPS = 25;
-    public static final double CURRENT_LIMIT_AFTER_MS = 1.0;
+  public static final class constWrist {
+    public static final double ABSOLUTE_ENCODER_OFFSET = 0.333;
+    // The value in which the Raw Absolute Encoder value rolls over from 0 to 1
+    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.667530; 
+    public static final boolean ABSOLUTE_ENCODER_INVERT = true;
+
+    public static final double GEAR_RATIO = 40.09;
   }
 
   public static final class constElevator {
@@ -230,5 +233,9 @@ public final class Constants {
 
   public enum GamePiece {
     NONE, CUBE, CONE, HUH
+  }
+
+  public enum DesiredHeight {
+    NONE, HYBRID, MID, HIGH
   }
 }
