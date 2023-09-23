@@ -191,7 +191,7 @@ public final class Constants {
   public static final class constWrist {
     public static final double ABSOLUTE_ENCODER_OFFSET = 0.333;
     // The value in which the Raw Absolute Encoder value rolls over from 0 to 1
-    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.667530; 
+    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.667530;
     public static final boolean ABSOLUTE_ENCODER_INVERT = true;
 
     public static final double GEAR_RATIO = 40.09;
@@ -219,7 +219,10 @@ public final class Constants {
   }
 
   public static final class constLEDs {
-    public static final PatternType HAS_GAME_PIECE_COLOR = SN_Blinkin.PatternType.Green;
+    public static final PatternType HAS_CUBE_COLOR = SN_Blinkin.PatternType.Violet;
+    public static final PatternType HAS_CONE_COLOR = SN_Blinkin.PatternType.Yellow;
+    public static final PatternType INTAKING_CUBE_COLOR = SN_Blinkin.PatternType.ColorWavesOceanPalette;
+    public static final PatternType INTAKING_CONE_COLOR = SN_Blinkin.PatternType.ColorWavesLavaPalette;
 
     public static final PatternType FAILURE_COLOR = PatternType.Red;
 
