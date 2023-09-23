@@ -188,6 +188,15 @@ public final class Constants {
     public static final double CURRENT_LIMIT_AFTER_SEC = 10;
   }
 
+  public static final class constWrist {
+    public static final double ABSOLUTE_ENCODER_OFFSET = 0.333;
+    // The value in which the Raw Absolute Encoder value rolls over from 0 to 1
+    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.667530; 
+    public static final boolean ABSOLUTE_ENCODER_INVERT = true;
+
+    public static final double GEAR_RATIO = 40.09;
+  }
+
   public static final class constVision {
     public static final String LIFECAM_PHOTON_NAME = "Microsoft_LifeCam_HD-3000";
     public static final String AR_PHOTON_NAME = "Global_Shutter_Camera";

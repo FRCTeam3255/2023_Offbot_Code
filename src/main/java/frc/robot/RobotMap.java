@@ -46,6 +46,7 @@ public class RobotMap {
 
   public static final class mapWrist {
     public static final int WRIST_MOTOR_CAN = 50;
+    public static final int WRIST_ABSOLUTE_ENCODER_DIO = 0;
   }
 
   public static final class mapLEDs {
