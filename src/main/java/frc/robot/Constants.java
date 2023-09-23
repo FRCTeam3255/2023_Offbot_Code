@@ -197,6 +197,12 @@ public final class Constants {
     public static final double GEAR_RATIO = 40.09;
   }
 
+  public static final class constElevator {
+    public static final double CURRENT_LIMIT_FLOOR_AMPS = 13; // Floor: what we limit it to
+    public static final double CURRENT_LIMIT_CEILING_AMPS = 25; // Ceiling: when we begin limiting
+    public static final double CURRENT_LIMIT_AFTER_SEC = 10;
+  }
+
   public static final class constVision {
     public static final String LIFECAM_PHOTON_NAME = "Microsoft_LifeCam_HD-3000";
     public static final String AR_PHOTON_NAME = "Global_Shutter_Camera";
