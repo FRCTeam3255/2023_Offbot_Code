@@ -40,7 +40,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public void configure() {
-    if (absoluteEncoder.getAbsolutePosition() > 0.667530) {
+    if (absoluteEncoder.getAbsolutePosition() > constWrist.ABSOLUTE_ENCODER_ROLLOVER_OFFSET) {
       absoluteEncoder.setPositionOffset(1);
     }
 
@@ -80,6 +80,9 @@ public class Wrist extends SubsystemBase {
     wristMotor.set(ControlMode.Position, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
   }
 
+  /**
+   * @return The angle of the wrist motor, as a Rotation2d
+   */
   public Rotation2d getWristAngle() {
     return Rotation2d
         .fromDegrees(SN_Math.falconToDegrees(wristMotor.getSelectedSensorPosition(), constWrist.GEAR_RATIO));
@@ -91,7 +94,6 @@ public class Wrist extends SubsystemBase {
    * @return Wrist absolute encoder reading in rotations
    */
   private double getWristAbsoluteEncoder() {
-
     double rotations = absoluteEncoder.get();
     rotations -= absoluteEncoderOffset;
 
@@ -102,6 +104,9 @@ public class Wrist extends SubsystemBase {
     }
   }
 
+  /**
+   * Reset the wrist motor to the offset value of the absolute encoder.
+   */
   public void resetEncoderToAbsolute() {
     wristMotor.setSelectedSensorPosition(
         SN_Math.degreesToFalcon(Units.rotationsToDegrees(getWristAbsoluteEncoder()),
