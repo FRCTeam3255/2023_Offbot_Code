@@ -128,6 +128,10 @@ public class RobotContainer {
     conOperator.btn_North.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
 
     // teleopTrigger.onTrue(new SetRumble(conDriver, conOperator, subIntake));
+
+    conOperator.btn_Y.onTrue(Commands.runOnce(() -> subElevator.setElevatorSpeed(0.2)));
+    conOperator.btn_A.onTrue(Commands.runOnce(() -> subElevator.setElevatorSpeed(-0.2)));
+
   }
 
   public static boolean isPracticeBot() {
