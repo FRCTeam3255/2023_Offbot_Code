@@ -23,7 +23,7 @@ public class Intake extends SubsystemBase {
   StatorCurrentLimitConfiguration statorLimit;
 
   boolean isGamePieceCollected;
-  GamePiece currentGamePiece;
+  GamePiece currentGamePiece = GamePiece.NONE;
 
   public Intake() {
     intakeMotor = new TalonFX(mapIntake.INTAKE_MOTOR_CAN);
@@ -87,6 +87,14 @@ public class Intake extends SubsystemBase {
     return currentGamePiece;
   }
 
+  public void setCurrentLimiting(boolean status) {
+    // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
+
+    intakeMotor
+        .configStatorCurrentLimit(new StatorCurrentLimitConfiguration(status, constIntake.CURRENT_LIMIT_FLOOR_AMPS,
+            constIntake.CURRENT_LIMIT_CEILING_AMPS, constIntake.CURRENT_LIMIT_AFTER_SEC));
+  }
+
   /**
    * Return if the current game piece is collected
    * 
@@ -101,6 +109,7 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     setGamePieceCollected();
     SmartDashboard.putBoolean("Is Game Piece Collected", isGamePieceCollected());
+    SmartDashboard.putString("Current Game Piece", getCurrentGamePiece().toString());
     SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
   }
 }

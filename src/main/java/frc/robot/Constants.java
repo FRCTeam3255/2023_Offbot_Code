@@ -120,7 +120,7 @@ public final class Constants {
 
   public static final double PRAC_FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET = 114.345703;
   public static final double PRAC_FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET = 339.873047;
-  public static final double PRAC_BACK_LEFT_ABSOLUTE_ENCODER_OFFSET = 152.490234;
+  public static final double PRAC_BACK_LEFT_ABSOLUTE_ENCODER_OFFSET = 288.457031;
   public static final double PRAC_BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET = 246.09375;
 
   // module positions follow the WPILib robot coordinate system
@@ -198,9 +198,14 @@ public final class Constants {
   }
 
   public static final class constElevator {
-    public static final double CURRENT_LIMIT_FLOOR_AMPS = 13; // Floor: what we limit it to
-    public static final double CURRENT_LIMIT_CEILING_AMPS = 25; // Ceiling: when we begin limiting
+    public static final double CURRENT_LIMIT_FLOOR_AMPS = 10; // Floor: what we limit it to
+    public static final double CURRENT_LIMIT_CEILING_AMPS = 1000; // Ceiling: when we begin limiting
     public static final double CURRENT_LIMIT_AFTER_SEC = 10;
+
+    public static final boolean INVERT_LEFT_MOTOR = true;
+
+    public static final double CIRCUMFRENCE = 0.13972;
+    public static final double GEAR_RATIO = 2.5;
   }
 
   public static final class constVision {

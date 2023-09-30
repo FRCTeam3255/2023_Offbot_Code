@@ -22,13 +22,16 @@ public class PrepGamePiece extends SequentialCommandGroup {
   DesiredHeight desiredHeight;
   double desiredPosition;
 
-  public PrepGamePiece(Elevator subElevator, Wrist subWrist, Intake subIntake) {
+  public PrepGamePiece(Elevator subElevator, Wrist subWrist, Intake subIntake, DesiredHeight desiredHeight) {
     this.subElevator = subElevator;
     this.subWrist = subWrist;
     this.subIntake = subIntake;
+    this.desiredHeight = desiredHeight;
+
+    addRequirements(subElevator, subWrist, subIntake);
 
     if (subIntake.getCurrentGamePiece() == GamePiece.CUBE) {
-      switch (subElevator.getDesiredHeight()) {
+      switch (desiredHeight) {
         case HYBRID:
           desiredPosition = prefElevator.hybridScore.getValue();
           break;
@@ -38,10 +41,11 @@ public class PrepGamePiece extends SequentialCommandGroup {
         case HIGH:
           desiredPosition = prefElevator.highCubeScore.getValue();
           break;
-        // Do we want to default to something when desiredHeight == NONE?
+        default:
+          desiredPosition = subElevator.getElevatorPositionMeters();
       }
     } else {
-      switch (subElevator.getDesiredHeight()) {
+      switch (desiredHeight) {
         case HYBRID:
           desiredPosition = prefElevator.hybridScore.getValue();
           break;
@@ -51,14 +55,18 @@ public class PrepGamePiece extends SequentialCommandGroup {
         case HIGH:
           desiredPosition = prefElevator.highConeScore.getValue();
           break;
-        // Do we want to default to something when desiredHeight == NONE?
+        default:
+          desiredPosition = subElevator.getElevatorPositionMeters();
       }
     }
 
     addCommands(
+        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+
         Commands.runOnce(() -> subElevator.setElevatorPosition(desiredPosition)),
 
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(desiredPosition) == true),
+        // Commands.waitUntil(() -> subElevator.isElevatorAtPosition(desiredPosition) ==
+        // true),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristScoringAngle.getValue())),
 
