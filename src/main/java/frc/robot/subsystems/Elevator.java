@@ -173,10 +173,5 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Elevator Encoder Counts", getElevatorEncoderCounts());
     SmartDashboard.putNumber("Elevator Position Meters", getElevatorPositionMeters());
-    SmartDashboard.putNumber("Elevator Velocity", SN_Math.falconToMeters(rightMotor.getSelectedSensorVelocity(0),
-        constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO));
-    SmartDashboard.putNumber("Elevator Sator Amps", rightMotor.getStatorCurrent());
-    SmartDashboard.putString("TEST Elevator desired height",
-        getDesiredHeight().toString());
   }
 }

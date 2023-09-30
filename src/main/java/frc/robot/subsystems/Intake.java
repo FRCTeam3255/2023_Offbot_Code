@@ -109,7 +109,7 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     setGamePieceCollected();
     SmartDashboard.putBoolean("Is Game Piece Collected", isGamePieceCollected());
-    SmartDashboard.putString("game piece", getCurrentGamePiece().toString());
+    SmartDashboard.putString("Current Game Piece", getCurrentGamePiece().toString());
     SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
   }
 }
