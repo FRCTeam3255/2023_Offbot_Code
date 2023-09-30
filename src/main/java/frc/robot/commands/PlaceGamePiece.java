@@ -29,22 +29,28 @@ public class PlaceGamePiece extends SequentialCommandGroup {
     this.subWrist = subWrist;
     this.subElevator = subElevator;
 
-    if (subIntake.getCurrentGamePiece() == GamePiece.CUBE) {
-      speed = prefIntake.intakePlaceCubeSpeed.getValue();
-    } else if (subIntake.getCurrentGamePiece() == GamePiece.CONE) {
-      speed = prefIntake.intakePlaceConeSpeed.getValue();
-    }
-
     addCommands(
-        Commands.runOnce(() -> new PrepGamePiece(subElevator, subWrist, subIntake))
+        Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
+
+        Commands.runOnce(() -> new PrepGamePiece(subElevator, subWrist, subIntake, subElevator.getDesiredHeight()))
             .unless(() -> subElevator.isPrepped()),
 
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(speed)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakePlaceCubeSpeed.getValue()))
+            .unless(() -> !subIntake.getCurrentGamePiece().equals(GamePiece.CUBE)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakePlaceConeSpeed.getValue()))
+            .unless(() -> subIntake.getCurrentGamePiece().equals(GamePiece.CUBE)),
+
+        Commands.waitUntil(() -> !subIntake.isGamePieceCollected()),
+        Commands.waitSeconds(prefIntake.intakePlaceDelay.getValue()),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())),
 
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)),
+
+        Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
         Commands.runOnce(() -> subElevator.setIsPrepped(false)));
+
   }
 }
