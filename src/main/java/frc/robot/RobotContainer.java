@@ -138,29 +138,6 @@ public class RobotContainer {
     conOperator.btn_North.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
 
     conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
-
-    // teleopTrigger.onTrue(new SetRumble(conDriver, conOperator, subIntake));
-
-    conOperator.btn_Y.onTrue(
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()), subIntake));
-
-    conOperator.btn_A.onTrue(Commands
-        .runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingConePos.getValue()), subElevator));
-
-    conOperator.btn_Start.onTrue(Commands
-        .runOnce(() -> subElevator.setElevatorPosition(0.5), subElevator));
-
-    conOperator.btn_Back.onTrue(
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0), subIntake));
-
-    conOperator.btn_X
-        .onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue()), subWrist));
-    conOperator.btn_B.onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue()), subWrist));
-
-    // start with START
-    // then A X Y B
-    // BACK to stop wheels
-
   }
 
   public static boolean isPracticeBot() {

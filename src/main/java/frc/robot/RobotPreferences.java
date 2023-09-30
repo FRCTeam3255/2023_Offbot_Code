@@ -134,6 +134,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorI = new SN_DoublePreference("elevatorI", 0);
     public static final SN_DoublePreference elevatorD = new SN_DoublePreference("elevatorD", 0);
 
+    // Meters per second
     public static final SN_DoublePreference elevatorMaxVelocity = new SN_DoublePreference("elevatorMaxVelocity", 1);
     public static final SN_DoublePreference elevatorMaxAccel = new SN_DoublePreference("elevatorMaxAccel", 0.5);
 
@@ -162,7 +163,6 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorEncoderCountsPerMeter = new SN_DoublePreference(
         "elevatorEncoderCountsPerMeter", 36644.718);
 
-    public static final SN_DoublePreference elevatorPeakOutput = new SN_DoublePreference("elevatorPeakOutput", 0.5);
   }
 
   public static final class prefWrist {
@@ -177,12 +177,15 @@ public class RobotPreferences {
 
     public static final SN_DoublePreference wristPositionTolerance = new SN_DoublePreference("wristPositionTolerance",
         1);
-    public static final SN_DoublePreference wristMaxVelocity = new SN_DoublePreference("wristMaxVelocity", 75);
-    public static final SN_DoublePreference wristMaxAccel = new SN_DoublePreference("wristMaxAccel", 75);
 
     public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("wristIntakingAngle", 150);
     public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("wristStowAngle", 44);
     public static final SN_DoublePreference wristScoringAngle = new SN_DoublePreference("wristScoringAngle", 150);
+
+    // Degrees Per Second
+    public static final SN_DoublePreference wristMaxVelocity = new SN_DoublePreference("wristMaxVelocity", 75);
+    public static final SN_DoublePreference wristMaxAccel = new SN_DoublePreference("wristMaxAccel", 75);
+
   }
 
   public static final class prefVision {
