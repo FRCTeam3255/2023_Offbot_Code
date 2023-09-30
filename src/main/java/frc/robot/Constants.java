@@ -201,6 +201,11 @@ public final class Constants {
     public static final double CURRENT_LIMIT_FLOOR_AMPS = 13; // Floor: what we limit it to
     public static final double CURRENT_LIMIT_CEILING_AMPS = 25; // Ceiling: when we begin limiting
     public static final double CURRENT_LIMIT_AFTER_SEC = 10;
+
+    public static final double ABSOLUTE_ENCODER_OFFSET = 0.333;
+    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.667530;
+    public static final boolean ABSOLUTE_ENCODER_INVERT = true;
+    public static final double GEAR_RATIO = 2.5;
   }
 
   public static final class constVision {
