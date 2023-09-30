@@ -70,8 +70,6 @@ public class PrepGamePiece extends SequentialCommandGroup {
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristScoringAngle.getValue())),
 
-        // TODO REMOVE TIS TEST THING
-        Commands.waitSeconds(2),
         Commands.runOnce(() -> subElevator.setIsPrepped(true)));
   }
 }
