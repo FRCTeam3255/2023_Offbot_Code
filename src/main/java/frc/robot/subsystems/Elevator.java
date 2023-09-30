@@ -84,8 +84,6 @@ public class Elevator extends SubsystemBase {
 
     // rightMotor.configStatorCurrentLimit(statorLimit);
     // leftMotor.configStatorCurrentLimit(statorLimit);
-
-    leftMotor.follow(rightMotor);
   }
 
   /**
@@ -118,12 +116,12 @@ public class Elevator extends SubsystemBase {
   /**
    * Returns if the elevator is within its positional tolerance.
    * 
+   * @param desiredPosition Desired position, in meters
    * @return If it is at that position
    * 
    */
-  public boolean isElevatorAtPosition() {
-    return SN_Math.metersToFalcon(prefElevator.elevatorPositionTolerance.getValue(), constElevator.CIRCUMFRENCE,
-        constElevator.GEAR_RATIO) >= Math.abs(rightMotor.getClosedLoopError());
+  public boolean isElevatorAtPosition(double desiredPosition) {
+    return prefElevator.elevatorPositionTolerance.getValue() >= Math.abs(getElevatorPositionMeters() - desiredPosition);
   }
 
   /**

@@ -20,6 +20,7 @@ public class PrepGamePiece extends SequentialCommandGroup {
   Intake subIntake;
 
   DesiredHeight desiredHeight;
+  double desiredWristAngle = prefWrist.wristScoreHighAngle.getValue();
   double desiredPosition;
 
   public PrepGamePiece(Elevator subElevator, Wrist subWrist, Intake subIntake, DesiredHeight desiredHeight) {
@@ -51,6 +52,7 @@ public class PrepGamePiece extends SequentialCommandGroup {
           break;
         case MID:
           desiredPosition = prefElevator.midConeScore.getValue();
+          desiredWristAngle = prefWrist.wristScoreMidAngle.getValue();
           break;
         case HIGH:
           desiredPosition = prefElevator.highConeScore.getValue();
@@ -62,13 +64,13 @@ public class PrepGamePiece extends SequentialCommandGroup {
 
     addCommands(
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+        Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(desiredPosition)),
 
-        // Commands.waitUntil(() -> subElevator.isElevatorAtPosition(desiredPosition) ==
-        // true),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(desiredPosition)),
 
-        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristScoringAngle.getValue())),
+        Commands.runOnce(() -> subWrist.setWristAngle(desiredWristAngle)),
 
         Commands.runOnce(() -> subElevator.setIsPrepped(true)));
   }

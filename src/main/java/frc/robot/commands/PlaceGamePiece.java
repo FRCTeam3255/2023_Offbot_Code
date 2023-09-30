@@ -44,6 +44,7 @@ public class PlaceGamePiece extends SequentialCommandGroup {
         Commands.waitSeconds(prefIntake.intakePlaceDelay.getValue()),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+        Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())),
 
