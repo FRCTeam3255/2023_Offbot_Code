@@ -48,11 +48,11 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    m_robotContainer.resetToAbsolutePositions();
   }
 
   @Override
   public void disabledPeriodic() {
-    m_robotContainer.resetToAbsolutePositions();
   }
 
   /**

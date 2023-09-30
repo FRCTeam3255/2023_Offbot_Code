@@ -163,7 +163,7 @@ public class Elevator extends SubsystemBase {
   public void resetElevatorEncoderToAbsolute() {
     rightMotor.setSelectedSensorPosition(
         SN_Math.degreesToFalcon(Units.rotationsToDegrees(getElevatorAbsoluteEncoder()),
-            constElevator.GEAR_RATIO));
+            constElevator.GEAR_RATIO)*2);
   }
 
   /**
