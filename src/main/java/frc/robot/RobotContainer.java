@@ -30,6 +30,8 @@ import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IntakeGamePiece;
+import frc.robot.commands.PlaceGamePiece;
+import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Auto.OnePiece.CenterCube;
 import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
@@ -50,7 +52,7 @@ public class RobotContainer {
   private final Drivetrain subDrivetrain = new Drivetrain();
   private final SuperShuffle subSuperShuffle = new SuperShuffle();
   public static Elevator subElevator = new Elevator();
-  private final Intake subIntake = new Intake();
+  public static Intake subIntake = new Intake();
   public static Wrist subWrist = new Wrist();
   private final Vision subVision = new Vision();
   private final LEDs subLEDs = new LEDs();
@@ -121,20 +123,26 @@ public class RobotContainer {
     conOperator.btn_LeftBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE));
 
     // Set desiredHeight to Hybrid (South)
+    conOperator.btn_South.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.HYBRID));
     conOperator.btn_South.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HYBRID)));
 
     // Set desiredHeight to Mid (East or West)
+    conOperator.btn_East.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.MID));
     conOperator.btn_East.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
+
+    conOperator.btn_West.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.MID));
     conOperator.btn_West.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
 
     // Set desiredHeight to High (North)
+    conOperator.btn_North.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.HIGH));
     conOperator.btn_North.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
+
+    conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
 
     // teleopTrigger.onTrue(new SetRumble(conDriver, conOperator, subIntake));
 
     conOperator.btn_Y.onTrue(
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()), subIntake));
-    conOperator.btn_Y.onTrue(Commands.runOnce(() -> subIntake.setCurrentGamePiece(GamePiece.CONE)));
 
     conOperator.btn_A.onTrue(Commands
         .runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue()), subElevator));
@@ -143,7 +151,7 @@ public class RobotContainer {
         .runOnce(() -> subElevator.setElevatorPosition(0.5), subElevator));
 
     conOperator.btn_Back.onTrue(
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(-prefIntake.intakeConeSpeed.getValue()), subIntake));
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0), subIntake));
 
     conOperator.btn_X
         .onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue()), subWrist));

@@ -84,6 +84,8 @@ public class Robot extends TimedRobot {
 
     RobotContainer.subElevator.neutralElevatorOutputs();
     RobotContainer.subWrist.neutralElevatorOutputs();
+    RobotContainer.subIntake.setCurrentLimiting(true);
+
   }
 
   /** This function is called periodically during operator control. */

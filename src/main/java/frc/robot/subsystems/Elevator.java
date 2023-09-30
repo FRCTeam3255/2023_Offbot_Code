@@ -51,7 +51,7 @@ public class Elevator extends SubsystemBase {
     config.slot0.kI = prefElevator.elevatorI.getValue();
     config.slot0.kD = prefElevator.elevatorD.getValue();
 
-    config.slot0.allowableClosedloopError = SN_Math.metersToFalcon(prefElevator.elevatorPositionTolerance.getValue(),
+    config.slot0.allowableClosedloopError = SN_Math.metersToFalcon(prefElevator.elevatorPIDTolerance.getValue(),
         constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
     config.motionCruiseVelocity = SN_Math.metersToFalcon(prefElevator.elevatorMaxVelocity.getValue(),
         constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
@@ -116,18 +116,14 @@ public class Elevator extends SubsystemBase {
   }
 
   /**
-   * Returns if the elevator is within the tolerance of a given position.
+   * Returns if the elevator is within its positional tolerance.
    * 
-   * @param position The position (in meters) to check
    * @return If it is at that position
    * 
    */
-  public boolean isElevatorAtPosition(double position) {
-    position = MathUtil.clamp(SN_Math.metersToFalcon(position, constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO),
-        prefElevator.elevatorMinPos.getValue(),
-        prefElevator.elevatorMaxPos.getValue());
-
-    return prefElevator.elevatorPositionTolerance.getValue() > Math.abs(getElevatorEncoderCounts() - position);
+  public boolean isElevatorAtPosition() {
+    return SN_Math.metersToFalcon(prefElevator.elevatorPositionTolerance.getValue(), constElevator.CIRCUMFRENCE,
+        constElevator.GEAR_RATIO) >= Math.abs(rightMotor.getClosedLoopError());
   }
 
   /**
@@ -157,7 +153,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setDesiredHeight(DesiredHeight height) {
-    height = desiredHeight;
+    desiredHeight = height;
   }
 
   public DesiredHeight getDesiredHeight() {
@@ -177,8 +173,10 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Elevator Encoder Counts", getElevatorEncoderCounts());
     SmartDashboard.putNumber("Elevator Position Meters", getElevatorPositionMeters());
-    SmartDashboard.putNumber("Elevator Velocity", SN_Math.falconToMeters(leftMotor.getSelectedSensorVelocity(0),
+    SmartDashboard.putNumber("Elevator Velocity", SN_Math.falconToMeters(rightMotor.getSelectedSensorVelocity(0),
         constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO));
-    SmartDashboard.putNumber("Elevator Sator Amps", leftMotor.getStatorCurrent());
+    SmartDashboard.putNumber("Elevator Sator Amps", rightMotor.getStatorCurrent());
+    SmartDashboard.putString("TEST Elevator desired height",
+        getDesiredHeight().toString());
   }
 }

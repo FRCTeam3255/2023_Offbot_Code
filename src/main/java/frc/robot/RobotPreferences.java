@@ -119,11 +119,14 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -0.5);
     public static final SN_DoublePreference intakeHoldSpeed = new SN_DoublePreference("intakeHoldSpeed", 0.1);
     public static final SN_DoublePreference intakePlaceConeSpeed = new SN_DoublePreference("intakePlaceConeSpeed",
-        -0.25);
+        -0.5);
     public static final SN_DoublePreference intakePlaceCubeSpeed = new SN_DoublePreference("intakePlaceCubeSpeed",
-        0.25);
+        0.5);
     public static final SN_DoublePreference intakeShootSpeedHigh = new SN_DoublePreference("intakeShootSpeedHigh",
         -0.65);
+
+    // Seconds
+    public static final SN_DoublePreference intakePlaceDelay = new SN_DoublePreference("intakePlaceDelay", 0.5);
   }
 
   public static final class prefElevator {
@@ -137,17 +140,21 @@ public class RobotPreferences {
     // In meters
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0.0);
     public static final SN_DoublePreference elevatorMaxPos = new SN_DoublePreference("elevatorMaxPos", 1.28);
-    public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorIntakingPos", 0.1);
+    public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorIntakingPos", 0.13);
     public static final SN_DoublePreference elevatorStow = new SN_DoublePreference("elevatorStow", 0.15);
 
+    public static final SN_DoublePreference elevatorPIDTolerance = new SN_DoublePreference(
+        "elevatorPIDTolerance", 0.01);
+
     public static final SN_DoublePreference elevatorPositionTolerance = new SN_DoublePreference(
-        "elevatorPositionTolerance", 0.01);
+        "elevatorPositionTolerance", 0.05);
+
     public static final SN_DoublePreference hybridScore = new SN_DoublePreference("hybridConeScore",
-        1);
-    public static final SN_DoublePreference midConeScore = new SN_DoublePreference("midConeScore", 1);
-    public static final SN_DoublePreference highConeScore = new SN_DoublePreference("highConeScore", 1);
-    public static final SN_DoublePreference midCubeScore = new SN_DoublePreference("midCubeScore", 1);
-    public static final SN_DoublePreference highCubeScore = new SN_DoublePreference("highCubeScore", 1);
+        0.1);
+    public static final SN_DoublePreference midConeScore = new SN_DoublePreference("midConeScore", 0.86);
+    public static final SN_DoublePreference highConeScore = new SN_DoublePreference("highConeScore", 1.17);
+    public static final SN_DoublePreference midCubeScore = new SN_DoublePreference("midCubeScore", 0.86);
+    public static final SN_DoublePreference highCubeScore = new SN_DoublePreference("highCubeScore", 1.17);
 
     public static final SN_DoublePreference elevatorEncoderCountsPerMeter = new SN_DoublePreference(
         "elevatorEncoderCountsPerMeter", 36644.718);
@@ -172,7 +179,7 @@ public class RobotPreferences {
 
     public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("wristIntakingAngle", 150);
     public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("wristStowAngle", 44);
-    public static final SN_DoublePreference wristScoringAngle = new SN_DoublePreference("wristScoringAngle", 160);
+    public static final SN_DoublePreference wristScoringAngle = new SN_DoublePreference("wristScoringAngle", 150);
   }
 
   public static final class prefVision {

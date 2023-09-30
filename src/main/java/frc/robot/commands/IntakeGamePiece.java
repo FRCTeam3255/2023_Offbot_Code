@@ -52,7 +52,9 @@ public class IntakeGamePiece extends SequentialCommandGroup {
             Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue()))),
         // Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
 
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue()) == true),
+        // Commands.waitUntil(() ->
+        // subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue())
+        // == true),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue())),
 

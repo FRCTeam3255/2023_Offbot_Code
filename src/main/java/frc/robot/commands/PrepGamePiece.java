@@ -22,13 +22,16 @@ public class PrepGamePiece extends SequentialCommandGroup {
   DesiredHeight desiredHeight;
   double desiredPosition;
 
-  public PrepGamePiece(Elevator subElevator, Wrist subWrist, Intake subIntake) {
+  public PrepGamePiece(Elevator subElevator, Wrist subWrist, Intake subIntake, DesiredHeight desiredHeight) {
     this.subElevator = subElevator;
     this.subWrist = subWrist;
     this.subIntake = subIntake;
+    this.desiredHeight = desiredHeight;
+
+    addRequirements(subElevator, subWrist, subIntake);
 
     if (subIntake.getCurrentGamePiece() == GamePiece.CUBE) {
-      switch (subElevator.getDesiredHeight()) {
+      switch (desiredHeight) {
         case HYBRID:
           desiredPosition = prefElevator.hybridScore.getValue();
           break;
@@ -42,7 +45,7 @@ public class PrepGamePiece extends SequentialCommandGroup {
           desiredPosition = subElevator.getElevatorPositionMeters();
       }
     } else {
-      switch (subElevator.getDesiredHeight()) {
+      switch (desiredHeight) {
         case HYBRID:
           desiredPosition = prefElevator.hybridScore.getValue();
           break;
@@ -60,10 +63,13 @@ public class PrepGamePiece extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subElevator.setElevatorPosition(desiredPosition)),
 
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(desiredPosition) == true),
+        // Commands.waitUntil(() -> subElevator.isElevatorAtPosition(desiredPosition) ==
+        // true),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristScoringAngle.getValue())),
 
+        // TODO REMOVE TIS TEST THING
+        Commands.waitSeconds(2),
         Commands.runOnce(() -> subElevator.setIsPrepped(true)));
   }
 }
