@@ -56,8 +56,8 @@ public class Wrist extends SubsystemBase {
     config.slot0.kP = prefWrist.wristP.getValue();
     config.slot0.kI = prefWrist.wristI.getValue();
     config.slot0.kD = prefWrist.wristD.getValue();
-    config.peakOutputForward = 0.2;
-    config.peakOutputReverse = -0.2;
+    config.peakOutputForward = 0.4;
+    config.peakOutputReverse = -0.4;
 
     wristMotor.configAllSettings(config);
   }

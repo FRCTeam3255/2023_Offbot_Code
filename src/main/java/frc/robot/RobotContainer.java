@@ -24,6 +24,9 @@ import frc.robot.Constants.GamePiece;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constLEDs;
 import frc.robot.RobotMap.mapControllers;
+import frc.robot.RobotPreferences.prefElevator;
+import frc.robot.RobotPreferences.prefIntake;
+import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IntakeGamePiece;
@@ -46,7 +49,7 @@ public class RobotContainer {
 
   private final Drivetrain subDrivetrain = new Drivetrain();
   private final SuperShuffle subSuperShuffle = new SuperShuffle();
-  private final Elevator subElevator = new Elevator();
+  public static Elevator subElevator = new Elevator();
   private final Intake subIntake = new Intake();
   private final Wrist subWrist = new Wrist();
   private final Vision subVision = new Vision();
@@ -129,8 +132,26 @@ public class RobotContainer {
 
     // teleopTrigger.onTrue(new SetRumble(conDriver, conOperator, subIntake));
 
-    conOperator.btn_Y.onTrue(Commands.runOnce(() -> subElevator.setElevatorSpeed(0.2)));
-    conOperator.btn_A.onTrue(Commands.runOnce(() -> subElevator.setElevatorSpeed(-0.2)));
+    conOperator.btn_Y.onTrue(
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()), subIntake));
+    conOperator.btn_Y.onTrue(Commands.runOnce(() -> subIntake.setCurrentGamePiece(GamePiece.CONE)));
+
+    conOperator.btn_A.onTrue(Commands
+        .runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue()), subElevator));
+
+    conOperator.btn_Start.onTrue(Commands
+        .runOnce(() -> subElevator.setElevatorPosition(0.5), subElevator));
+
+    conOperator.btn_Back.onTrue(
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(-prefIntake.intakeConeSpeed.getValue()), subIntake));
+
+    conOperator.btn_X
+        .onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue()), subWrist));
+    conOperator.btn_B.onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue()), subWrist));
+
+    // start with START
+    // then A X Y B
+    // BACK to stop wheels
 
   }
 

@@ -23,7 +23,7 @@ public class Intake extends SubsystemBase {
   StatorCurrentLimitConfiguration statorLimit;
 
   boolean isGamePieceCollected;
-  GamePiece currentGamePiece;
+  GamePiece currentGamePiece = GamePiece.NONE;
 
   public Intake() {
     intakeMotor = new TalonFX(mapIntake.INTAKE_MOTOR_CAN);

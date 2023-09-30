@@ -49,8 +49,8 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
     addCommands(
         Commands.parallel(
-            Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue())),
-            Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
+            Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue()))),
+        // Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
 
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue()) == true),
 

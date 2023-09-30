@@ -44,14 +44,19 @@ public class Elevator extends SubsystemBase {
   }
 
   public void configure() {
-
     leftMotor.configFactoryDefault();
     rightMotor.configFactoryDefault();
 
-    config.slot0.kF = prefElevator.elevatorF.getValue();
     config.slot0.kP = prefElevator.elevatorP.getValue();
     config.slot0.kI = prefElevator.elevatorI.getValue();
     config.slot0.kD = prefElevator.elevatorD.getValue();
+
+    config.slot0.allowableClosedloopError = SN_Math.metersToFalcon(prefElevator.elevatorPositionTolerance.getValue(),
+        constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
+    config.motionCruiseVelocity = SN_Math.metersToFalcon(prefElevator.elevatorMaxVelocity.getValue(),
+        constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
+    config.motionAcceleration = SN_Math.metersToFalcon(prefElevator.elevatorMaxAccel.getValue(),
+        constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
 
     leftMotor.setInverted(constElevator.INVERT_LEFT_MOTOR);
     rightMotor.setInverted(!constElevator.INVERT_LEFT_MOTOR);
@@ -69,12 +74,14 @@ public class Elevator extends SubsystemBase {
     config.forwardSoftLimitEnable = true;
     config.reverseSoftLimitEnable = true;
 
-    config.peakOutputForward = prefElevator.elevatorPeakOutput.getValue();
-    config.peakOutputReverse = -prefElevator.elevatorPeakOutput.getValue();
+    // config.peakOutputForward = prefElevator.elevatorPeakOutput.getValue();
+    // config.peakOutputReverse = -prefElevator.elevatorPeakOutput.getValue();
 
+    // //
     // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
-    statorLimit = new StatorCurrentLimitConfiguration(true, constElevator.CURRENT_LIMIT_FLOOR_AMPS,
-        constElevator.CURRENT_LIMIT_CEILING_AMPS, constElevator.CURRENT_LIMIT_AFTER_SEC);
+    // statorLimit = new StatorCurrentLimitConfiguration(true,
+    // constElevator.CURRENT_LIMIT_FLOOR_AMPS,
+    // 1000, constElevator.CURRENT_LIMIT_AFTER_SEC);
 
     leftMotor.configAllSettings(config);
     rightMotor.configAllSettings(config);
@@ -104,12 +111,12 @@ public class Elevator extends SubsystemBase {
    * 
    */
   public void setElevatorPosition(double position) {
-    position = MathUtil.clamp(SN_Math.metersToFalcon(position, constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO),
+    position = SN_Math.metersToFalcon(MathUtil.clamp(position,
         prefElevator.elevatorMinPos.getValue(),
-        prefElevator.elevatorMaxPos.getValue());
+        prefElevator.elevatorMaxPos.getValue()), constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
 
-    leftMotor.set(ControlMode.Position, position);
-    rightMotor.set(ControlMode.Position, position);
+    leftMotor.set(ControlMode.MotionMagic, position);
+    rightMotor.set(ControlMode.MotionMagic, position);
   }
 
   /**
@@ -148,6 +155,11 @@ public class Elevator extends SubsystemBase {
     return getElevatorEncoderCounts() / prefElevator.elevatorEncoderCountsPerMeter.getValue();
   }
 
+  public void neutralElevatorOutputs() {
+    leftMotor.neutralOutput();
+    rightMotor.neutralOutput();
+  }
+
   public void setDesiredHeight(DesiredHeight height) {
     height = desiredHeight;
   }
@@ -168,6 +180,9 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Elevator Encoder Counts", getElevatorEncoderCounts());
-    SmartDashboard.putNumber("Elevator Distance Meters", getElevatorPositionMeters());
+    SmartDashboard.putNumber("Elevator Position Meters", getElevatorPositionMeters());
+    SmartDashboard.putNumber("Elevator Velocity", SN_Math.falconToMeters(leftMotor.getSelectedSensorVelocity(0),
+        constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO));
+    SmartDashboard.putNumber("Elevator Sator Amps", leftMotor.getStatorCurrent());
   }
 }

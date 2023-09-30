@@ -38,7 +38,8 @@ public class PrepGamePiece extends SequentialCommandGroup {
         case HIGH:
           desiredPosition = prefElevator.highCubeScore.getValue();
           break;
-        // Do we want to default to something when desiredHeight == NONE?
+        default:
+          desiredPosition = subElevator.getElevatorPositionMeters();
       }
     } else {
       switch (subElevator.getDesiredHeight()) {
@@ -51,7 +52,8 @@ public class PrepGamePiece extends SequentialCommandGroup {
         case HIGH:
           desiredPosition = prefElevator.highConeScore.getValue();
           break;
-        // Do we want to default to something when desiredHeight == NONE?
+        default:
+          desiredPosition = subElevator.getElevatorPositionMeters();
       }
     }
 
