@@ -49,7 +49,11 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
     addCommands(
         Commands.parallel(
-            Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue()))),
+            Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingCubePos.getValue()))
+                .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
+            Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingConePos.getValue()))
+                .unless(() -> gamepiece.equals(GamePiece.CUBE))),
+
         // Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
 
         // Commands.waitUntil(() ->

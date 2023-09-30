@@ -140,7 +140,10 @@ public class RobotPreferences {
     // In meters
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0.0);
     public static final SN_DoublePreference elevatorMaxPos = new SN_DoublePreference("elevatorMaxPos", 1.28);
-    public static final SN_DoublePreference elevatorIntakingPos = new SN_DoublePreference("elevatorIntakingPos", 0.13);
+    public static final SN_DoublePreference elevatorIntakingConePos = new SN_DoublePreference("elevatorIntakingConePos",
+        0.13);
+    public static final SN_DoublePreference elevatorIntakingCubePos = new SN_DoublePreference("elevatorIntakingCubePos",
+        0.1);
     public static final SN_DoublePreference elevatorStow = new SN_DoublePreference("elevatorStow", 0.15);
 
     public static final SN_DoublePreference elevatorPIDTolerance = new SN_DoublePreference(

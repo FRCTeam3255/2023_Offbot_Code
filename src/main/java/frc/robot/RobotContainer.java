@@ -145,7 +145,7 @@ public class RobotContainer {
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()), subIntake));
 
     conOperator.btn_A.onTrue(Commands
-        .runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue()), subElevator));
+        .runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingConePos.getValue()), subElevator));
 
     conOperator.btn_Start.onTrue(Commands
         .runOnce(() -> subElevator.setElevatorPosition(0.5), subElevator));
