@@ -74,10 +74,6 @@ public class Elevator extends SubsystemBase {
     config.forwardSoftLimitEnable = true;
     config.reverseSoftLimitEnable = true;
 
-    // config.peakOutputForward = prefElevator.elevatorPeakOutput.getValue();
-    // config.peakOutputReverse = -prefElevator.elevatorPeakOutput.getValue();
-
-    // //
     // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
     // statorLimit = new StatorCurrentLimitConfiguration(true,
     // constElevator.CURRENT_LIMIT_FLOOR_AMPS,

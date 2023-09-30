@@ -143,11 +143,11 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorPositionTolerance = new SN_DoublePreference(
         "elevatorPositionTolerance", 0.01);
     public static final SN_DoublePreference hybridScore = new SN_DoublePreference("hybridConeScore",
-        0);
+        1);
     public static final SN_DoublePreference midConeScore = new SN_DoublePreference("midConeScore", 1);
-    public static final SN_DoublePreference highConeScore = new SN_DoublePreference("highConeScore", 2);
+    public static final SN_DoublePreference highConeScore = new SN_DoublePreference("highConeScore", 1);
     public static final SN_DoublePreference midCubeScore = new SN_DoublePreference("midCubeScore", 1);
-    public static final SN_DoublePreference highCubeScore = new SN_DoublePreference("highCubeScore", 2);
+    public static final SN_DoublePreference highCubeScore = new SN_DoublePreference("highCubeScore", 1);
 
     public static final SN_DoublePreference elevatorEncoderCountsPerMeter = new SN_DoublePreference(
         "elevatorEncoderCountsPerMeter", 36644.718);
@@ -157,13 +157,18 @@ public class RobotPreferences {
 
   public static final class prefWrist {
     public static final SN_DoublePreference wristF = new SN_DoublePreference("wristF", 0);
-    public static final SN_DoublePreference wristP = new SN_DoublePreference("wristP", 1);
+    public static final SN_DoublePreference wristP = new SN_DoublePreference("wristP", 0.1);
     public static final SN_DoublePreference wristI = new SN_DoublePreference("wristI", 0);
     public static final SN_DoublePreference wristD = new SN_DoublePreference("wristD", 0);
 
     // In Degrees
     public static final SN_DoublePreference wristMaxPos = new SN_DoublePreference("wristMaxPos", 238);
     public static final SN_DoublePreference wristMinPos = new SN_DoublePreference("wristMinPos", 2);
+
+    public static final SN_DoublePreference wristPositionTolerance = new SN_DoublePreference("wristPositionTolerance",
+        1);
+    public static final SN_DoublePreference wristMaxVelocity = new SN_DoublePreference("wristMaxVelocity", 75);
+    public static final SN_DoublePreference wristMaxAccel = new SN_DoublePreference("wristMaxAccel", 75);
 
     public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("wristIntakingAngle", 150);
     public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("wristStowAngle", 44);

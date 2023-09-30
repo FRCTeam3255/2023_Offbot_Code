@@ -47,17 +47,26 @@ public class Wrist extends SubsystemBase {
     wristMotor.configFactoryDefault();
 
     wristMotor.setNeutralMode(NeutralMode.Brake);
-    wristMotor.configForwardSoftLimitThreshold(
-        SN_Math.degreesToFalcon(prefWrist.wristMaxPos.getValue(), constWrist.GEAR_RATIO));
-    wristMotor.configReverseSoftLimitThreshold(
-        SN_Math.degreesToFalcon(prefWrist.wristMinPos.getValue(), constWrist.GEAR_RATIO));
+
+    config.forwardSoftLimitThreshold = SN_Math.degreesToFalcon(prefWrist.wristMaxPos.getValue(),
+        constWrist.GEAR_RATIO);
+    config.reverseSoftLimitThreshold = SN_Math.degreesToFalcon(prefWrist.wristMinPos.getValue(),
+        constWrist.GEAR_RATIO);
+
+    config.forwardSoftLimitEnable = true;
+    config.reverseSoftLimitEnable = true;
+
+    config.slot0.allowableClosedloopError = SN_Math.degreesToFalcon(prefWrist.wristPositionTolerance.getValue(),
+        constWrist.GEAR_RATIO);
+    config.motionCruiseVelocity = SN_Math.degreesToFalcon(prefWrist.wristMaxVelocity.getValue(),
+        constWrist.GEAR_RATIO);
+    config.motionAcceleration = SN_Math.degreesToFalcon(prefWrist.wristMaxAccel.getValue(),
+        constWrist.GEAR_RATIO);
 
     config.slot0.kF = prefWrist.wristF.getValue();
     config.slot0.kP = prefWrist.wristP.getValue();
     config.slot0.kI = prefWrist.wristI.getValue();
     config.slot0.kD = prefWrist.wristD.getValue();
-    config.peakOutputForward = 0.4;
-    config.peakOutputReverse = -0.4;
 
     wristMotor.configAllSettings(config);
   }
@@ -77,7 +86,7 @@ public class Wrist extends SubsystemBase {
     angle = MathUtil.clamp(angle, prefWrist.wristMinPos.getValue(),
         prefWrist.wristMaxPos.getValue());
 
-    wristMotor.set(ControlMode.Position, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
+    wristMotor.set(ControlMode.MotionMagic, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
   }
 
   /**
@@ -111,6 +120,10 @@ public class Wrist extends SubsystemBase {
     wristMotor.setSelectedSensorPosition(
         SN_Math.degreesToFalcon(Units.rotationsToDegrees(getWristAbsoluteEncoder()),
             constWrist.GEAR_RATIO));
+  }
+
+  public void neutralElevatorOutputs() {
+    wristMotor.neutralOutput();
   }
 
   @Override

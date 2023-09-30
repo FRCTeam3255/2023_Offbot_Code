@@ -51,7 +51,7 @@ public class RobotContainer {
   private final SuperShuffle subSuperShuffle = new SuperShuffle();
   public static Elevator subElevator = new Elevator();
   private final Intake subIntake = new Intake();
-  private final Wrist subWrist = new Wrist();
+  public static Wrist subWrist = new Wrist();
   private final Vision subVision = new Vision();
   private final LEDs subLEDs = new LEDs();
 

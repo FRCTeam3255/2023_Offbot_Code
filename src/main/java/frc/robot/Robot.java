@@ -83,6 +83,7 @@ public class Robot extends TimedRobot {
     }
 
     RobotContainer.subElevator.neutralElevatorOutputs();
+    RobotContainer.subWrist.neutralElevatorOutputs();
   }
 
   /** This function is called periodically during operator control. */
