@@ -80,6 +80,11 @@ public class Wrist extends SubsystemBase {
     wristMotor.set(ControlMode.Position, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
   }
 
+  public boolean isWristAtAngle(double angle) {
+    return SN_Math.degreesToFalcon(prefWrist.wristAngleTolerance.getValue(), constWrist.GEAR_RATIO) >= Math
+        .abs(wristMotor.getClosedLoopError());
+  }
+
   /**
    * @return The angle of the wrist motor, as a Rotation2d
    */

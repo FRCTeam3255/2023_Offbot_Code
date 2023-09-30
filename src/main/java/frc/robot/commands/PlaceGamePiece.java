@@ -39,9 +39,10 @@ public class PlaceGamePiece extends SequentialCommandGroup {
         Commands.runOnce(() -> new PrepGamePiece(subElevator, subWrist, subIntake))
             .unless(() -> subElevator.isPrepped()),
 
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(speed)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(speed)).until(() -> !subIntake.isGamePieceCollected()),
 
-        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue()))
+            .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())),
 

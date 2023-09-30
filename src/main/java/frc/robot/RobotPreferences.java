@@ -164,6 +164,7 @@ public class RobotPreferences {
     // In Degrees
     public static final SN_DoublePreference wristMaxPos = new SN_DoublePreference("wristMaxPos", 238);
     public static final SN_DoublePreference wristMinPos = new SN_DoublePreference("wristMinPos", 2);
+    public static final SN_DoublePreference wristAngleTolerance = new SN_DoublePreference("wristAngleTolerance", 3);
 
     public static final SN_DoublePreference wristIntakingAngle = new SN_DoublePreference("wristIntakingAngle", 90);
     public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("wristStowAngle", 0);
