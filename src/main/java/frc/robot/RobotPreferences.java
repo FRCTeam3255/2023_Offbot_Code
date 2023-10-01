@@ -115,8 +115,8 @@ public class RobotPreferences {
 
   public static final class prefIntake {
     // Percent Output
-    public static final SN_DoublePreference intakeConeSpeed = new SN_DoublePreference("intakeConeSpeed", 1);
-    public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -1);
+    public static final SN_DoublePreference intakeConeSpeed = new SN_DoublePreference("intakeConeSpeed", 0.5);
+    public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -0.5);
     public static final SN_DoublePreference intakeHoldSpeed = new SN_DoublePreference("intakeHoldSpeed", 0.1);
     public static final SN_DoublePreference intakePlaceConeSpeed = new SN_DoublePreference("intakePlaceConeSpeed",
         -1);
@@ -141,8 +141,8 @@ public class RobotPreferences {
         "elevatorPositionTolerance", 0.5);
 
     // Meters per second
-    public static final SN_DoublePreference elevatorMaxVelocity = new SN_DoublePreference("elevatorMaxVelocity", 1);
-    public static final SN_DoublePreference elevatorMaxAccel = new SN_DoublePreference("elevatorMaxAccel", 0.5);
+    public static final SN_DoublePreference elevatorMaxVelocity = new SN_DoublePreference("elevatorMaxVelocity", 0.8);
+    public static final SN_DoublePreference elevatorMaxAccel = new SN_DoublePreference("elevatorMaxAccel", 0.8);
 
     // In meters
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0.0);

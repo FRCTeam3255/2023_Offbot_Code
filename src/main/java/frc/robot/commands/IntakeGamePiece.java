@@ -52,8 +52,12 @@ public class IntakeGamePiece extends SequentialCommandGroup {
     }
 
     addCommands(
-        Commands.parallel(
-            Commands.runOnce(() -> subElevator.setElevatorPosition(elevatorPosition))),
+        Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)),
+        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+
+        Commands.runOnce(() -> subElevator.setElevatorPosition(elevatorPosition)),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(elevatorPosition)),
 
         // Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
 
@@ -67,6 +71,8 @@ public class IntakeGamePiece extends SequentialCommandGroup {
             .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
             .unless(() -> !gamepiece.equals(GamePiece.CONE)),
+
+        Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
 
         Commands.waitUntil(() -> subIntake.isGamePieceCollected()),
 

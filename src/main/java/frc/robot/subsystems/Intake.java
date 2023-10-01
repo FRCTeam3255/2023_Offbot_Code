@@ -62,9 +62,9 @@ public class Intake extends SubsystemBase {
    */
   private void setGamePieceCollected() {
     double current = intakeMotor.getStatorCurrent();
-    if (current > 10) {
+    if (current < 16 && current > 14) {
       isGamePieceCollected = true;
-    } else if (current < 9) {
+    } else {
       isGamePieceCollected = false;
     }
   }
@@ -89,7 +89,6 @@ public class Intake extends SubsystemBase {
 
   public void setCurrentLimiting(boolean status) {
     // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
-
     intakeMotor
         .configStatorCurrentLimit(new StatorCurrentLimitConfiguration(status, constIntake.CURRENT_LIMIT_FLOOR_AMPS,
             constIntake.CURRENT_LIMIT_CEILING_AMPS, constIntake.CURRENT_LIMIT_AFTER_SEC));
