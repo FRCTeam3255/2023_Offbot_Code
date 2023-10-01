@@ -32,8 +32,10 @@ public class PlaceGamePiece extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
 
-        Commands.runOnce(() -> new PrepGamePiece(subElevator, subWrist, subIntake, subElevator.getDesiredHeight()))
-            .unless(() -> subElevator.isPrepped()),
+        // TODO: FIX
+        // Commands.runOnce(() -> new PrepGamePiece(subElevator, subWrist, subIntake,
+        // subElevator.getDesiredHeight()))
+        // .unless(() -> subElevator.isPrepped()),
 
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakePlaceCubeSpeed.getValue()))
             .unless(() -> !subIntake.getCurrentGamePiece().equals(GamePiece.CUBE)),

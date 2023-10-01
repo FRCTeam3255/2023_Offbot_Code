@@ -118,25 +118,34 @@ public class RobotContainer {
 
     // Intake Cone (RB)
     conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
-        prefWrist.wristIntakingAngle.getValue(), prefElevator.elevatorIntakingConePos.getValue()));
+        prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeConePos.getValue()));
 
     // Intake Cube (LB)
     conOperator.btn_LeftBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE,
-        prefWrist.wristIntakingAngle.getValue(), prefElevator.elevatorIntakingCubePos.getValue()));
+        prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
 
-    // Set desiredHeight to Hybrid (South)
-    conOperator.btn_South.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.HYBRID));
+    // Prep HYBRID
+    conOperator.btn_South.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHybridConeScore.getValue(),
+        prefWrist.wristScoreHybridCubeAngle.getValue(), prefElevator.elevatorHybridCubeScore.getValue()));
     conOperator.btn_South.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HYBRID)));
 
-    // Set desiredHeight to Mid (East or West)
-    conOperator.btn_East.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.MID));
+    // Prep MID
+    conOperator.btn_East.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
+        prefWrist.wristStowAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
     conOperator.btn_East.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
 
-    conOperator.btn_West.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.MID));
+    conOperator.btn_West.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
+        prefWrist.wristStowAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
     conOperator.btn_West.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
 
-    // Set desiredHeight to High (North)
-    conOperator.btn_North.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.HIGH));
+    // Prep HIGH
+    conOperator.btn_North.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
+        prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()));
+
     conOperator.btn_North.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
 
     conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
@@ -154,7 +163,7 @@ public class RobotContainer {
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0), subIntake));
 
     conOperator.btn_X
-        .onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue()), subWrist));
+        .onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristIntakeAngle.getValue()), subWrist));
     conOperator.btn_B.onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue()), subWrist));
 
   }
