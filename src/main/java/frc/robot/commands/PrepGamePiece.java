@@ -20,7 +20,7 @@ public class PrepGamePiece extends SequentialCommandGroup {
   Intake subIntake;
 
   DesiredHeight desiredHeight;
-  double desiredWristAngle = prefWrist.wristScoreHighAngle.getValue();
+  double desiredWristAngle = prefWrist.wristScoreAngle.getValue();
   double desiredPosition;
 
   public PrepGamePiece(Elevator subElevator, Wrist subWrist, Intake subIntake, DesiredHeight desiredHeight) {
@@ -31,38 +31,48 @@ public class PrepGamePiece extends SequentialCommandGroup {
 
     addRequirements(subElevator, subWrist, subIntake);
 
-    if (subIntake.getCurrentGamePiece() == GamePiece.CUBE) {
-      switch (desiredHeight) {
-        case HYBRID:
-          desiredPosition = prefElevator.hybridScore.getValue();
-          break;
-        case MID:
-          desiredPosition = prefElevator.midCubeScore.getValue();
-          break;
-        case HIGH:
-          desiredPosition = prefElevator.highCubeScore.getValue();
-          break;
-        default:
-          desiredPosition = subElevator.getElevatorPositionMeters();
-      }
-    } else {
-      switch (desiredHeight) {
-        case HYBRID:
-          desiredPosition = prefElevator.hybridScore.getValue();
-          break;
-        case MID:
-          desiredPosition = prefElevator.midConeScore.getValue();
-          desiredWristAngle = prefWrist.wristScoreMidAngle.getValue();
-          break;
-        case HIGH:
-          desiredPosition = prefElevator.highConeScore.getValue();
-          break;
-        default:
-          desiredPosition = subElevator.getElevatorPositionMeters();
-      }
-    }
-
     addCommands(
+        // --- Determining the desired height and wrist angle ---
+        // CONE
+        Commands.runOnce(() -> desiredPosition = prefElevator.hybridConeScore.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.HYBRID)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CONE)),
+
+        Commands.runOnce(() -> desiredPosition = prefElevator.midConeScore.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.MID)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CONE)),
+        Commands.runOnce(() -> desiredWristAngle = prefWrist.wristScoreMidConeAngle.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.MID)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CONE)),
+
+        Commands.runOnce(() -> desiredPosition = prefElevator.highConeScore.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.HIGH)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CONE)),
+
+        // CUBE
+        Commands.runOnce(() -> desiredPosition = prefElevator.hybridCubeScore.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.HYBRID)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CUBE)),
+        Commands.runOnce(() -> desiredWristAngle = prefWrist.wristScoreHybridCubeAngle.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.HYBRID)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CUBE)),
+
+        Commands.runOnce(() -> desiredPosition = prefElevator.midCubeScore.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.MID)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CUBE)),
+        Commands.runOnce(() -> desiredWristAngle = prefWrist.wristStowAngle.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.MID)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CUBE)),
+
+        Commands.runOnce(() -> desiredPosition = prefElevator.highCubeScore.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.HIGH)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CUBE)),
+        Commands.runOnce(() -> desiredWristAngle = prefWrist.wristScoreHighCubeAngle.getValue())
+            .unless(() -> !desiredHeight.equals(DesiredHeight.HIGH)
+                || !subIntake.getCurrentGamePiece().equals(GamePiece.CUBE)),
+
+        // --- Determining the desired height and wrist angle ---
+
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
         Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),
 
