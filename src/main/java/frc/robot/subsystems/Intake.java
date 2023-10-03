@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.GamePiece;
 import frc.robot.Constants.constIntake;
 import frc.robot.RobotMap.mapIntake;
+import frc.robot.RobotPreferences.prefIntake;
 
 public class Intake extends SubsystemBase {
   TalonFX intakeMotor;
@@ -62,7 +63,8 @@ public class Intake extends SubsystemBase {
    */
   private void setGamePieceCollected() {
     double current = intakeMotor.getStatorCurrent();
-    if (current < 16 && current > 14) {
+    if (current < prefIntake.intakePieceCollectedBelowAmps.getValue()
+        && current > prefIntake.intakePieceCollectedAboveAmps.getValue()) {
       isGamePieceCollected = true;
     } else {
       isGamePieceCollected = false;

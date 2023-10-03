@@ -153,18 +153,11 @@ public class RobotContainer {
     conOperator.btn_Y.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
         prefWrist.wristShelfAngle.getValue(), prefElevator.elevatorShelf.getValue()));
 
-    conOperator.btn_A.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+    conOperator.btn_X.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
         prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
 
-    conOperator.btn_Start.onTrue(Commands
-        .runOnce(() -> subElevator.setElevatorPosition(0.5), subElevator));
-
-    conOperator.btn_Back.onTrue(
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0), subIntake));
-
-    conOperator.btn_X
-        .onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristIntakeAngle.getValue()), subWrist));
-    conOperator.btn_B.onTrue(Commands.run(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue()), subWrist));
+    conOperator.btn_B.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+        prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
 
   }
 

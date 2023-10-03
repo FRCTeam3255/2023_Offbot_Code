@@ -61,10 +61,6 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
         // Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
 
-        // Commands.waitUntil(() ->
-        // subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue())
-        // == true),
-
         Commands.runOnce(() -> subWrist.setWristAngle(wristPosition)),
 
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
