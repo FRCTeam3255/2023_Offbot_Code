@@ -33,6 +33,7 @@ import frc.robot.commands.IntakeGamePiece;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
+import frc.robot.commands.Stow;
 import frc.robot.commands.Auto.OnePiece.CenterCube;
 import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityCable;
@@ -118,27 +119,49 @@ public class RobotContainer {
     // Operator
 
     // Intake Cone (RB)
-    conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE));
+    conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+        prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeConePos.getValue()));
 
     // Intake Cube (LB)
-    conOperator.btn_LeftBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE));
+    conOperator.btn_LeftBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE,
+        prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
 
-    // Set desiredHeight to Hybrid (South)
-    conOperator.btn_South.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.HYBRID));
+    // Prep HYBRID
+    conOperator.btn_South.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHybridConeScore.getValue(),
+        prefWrist.wristScoreHybridCubeAngle.getValue(), prefElevator.elevatorHybridCubeScore.getValue()));
     conOperator.btn_South.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HYBRID)));
 
-    // Set desiredHeight to Mid (East or West)
-    conOperator.btn_East.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.MID));
+    // Prep MID
+    conOperator.btn_East.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
+        prefWrist.wristStowAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
     conOperator.btn_East.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
 
-    conOperator.btn_West.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.MID));
+    conOperator.btn_West.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
+        prefWrist.wristStowAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
     conOperator.btn_West.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
 
-    // Set desiredHeight to High (North)
-    conOperator.btn_North.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake, DesiredHeight.HIGH));
+    // Prep HIGH
+    conOperator.btn_North.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
+        prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()));
+
     conOperator.btn_North.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
 
     conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
+
+    conOperator.btn_Y.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+        prefWrist.wristShelfAngle.getValue(), prefElevator.elevatorShelf.getValue()));
+
+    conOperator.btn_X.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+        prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
+
+    conOperator.btn_B.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+        prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
+
+    conOperator.btn_A.onTrue(new Stow(subWrist, subIntake, subElevator));
   }
 
   public static boolean isPracticeBot() {
