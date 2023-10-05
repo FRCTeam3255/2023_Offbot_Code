@@ -52,7 +52,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void configure() {
-    if (absoluteEncoder.getAbsolutePosition() > constElevator.ABSOLUTE_ENCODER_ROLLOVER_OFFSET) {
+    if (absoluteEncoder.getAbsolutePosition() < constElevator.ABSOLUTE_ENCODER_ROLLOVER_OFFSET) {
       absoluteEncoder.setPositionOffset(1);
     }
 
@@ -161,7 +161,7 @@ public class Elevator extends SubsystemBase {
   public void resetElevatorEncoderToAbsolute() {
     rightMotor.setSelectedSensorPosition(
         SN_Math.degreesToFalcon(Units.rotationsToDegrees(getElevatorAbsoluteEncoder()),
-            constElevator.GEAR_RATIO)*2);
+            constElevator.GEAR_RATIO) * 2);
   }
 
   /**
