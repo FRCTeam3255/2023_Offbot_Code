@@ -52,6 +52,7 @@ public class IntakeGamePiece extends SequentialCommandGroup {
     }
 
     addCommands(
+        Commands.runOnce(() -> subIntake.setDesiredGamePiece(gamepiece)),
         Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)),
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
@@ -75,7 +76,6 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
-        Commands.runOnce(() -> subIntake.setCurrentGamePiece(gamepiece)),
         Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())));
 
   }
