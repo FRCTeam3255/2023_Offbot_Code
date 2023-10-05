@@ -113,25 +113,25 @@ public class Drive extends CommandBase {
     // of the rotation buttons. each button corresponds to a cardinal direction
     else {
 
-      if (northTrigger.getAsBoolean()) {
-        isRotationPositional = true;
-        rotationPosition = Rotation2d.fromDegrees(180);
-      }
+      // if (northTrigger.getAsBoolean()) {
+      // isRotationPositional = true;
+      // rotationPosition = Rotation2d.fromDegrees(180);
+      // }
 
-      if (eastTrigger.getAsBoolean()) {
-        isRotationPositional = true;
-        rotationPosition = Rotation2d.fromDegrees(90);
-      }
+      // if (eastTrigger.getAsBoolean()) {
+      // isRotationPositional = true;
+      // rotationPosition = Rotation2d.fromDegrees(90);
+      // }
 
-      if (southTrigger.getAsBoolean()) {
-        isRotationPositional = true;
-        rotationPosition = Rotation2d.fromDegrees(0);
-      }
+      // if (southTrigger.getAsBoolean()) {
+      // isRotationPositional = true;
+      // rotationPosition = Rotation2d.fromDegrees(0);
+      // }
 
-      if (westTrigger.getAsBoolean()) {
-        isRotationPositional = true;
-        rotationPosition = Rotation2d.fromDegrees(-90);
-      }
+      // if (westTrigger.getAsBoolean()) {
+      // isRotationPositional = true;
+      // rotationPosition = Rotation2d.fromDegrees(-90);
+      // }
 
     }
 
