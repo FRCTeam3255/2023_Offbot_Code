@@ -129,7 +129,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(
         "intakePieceCollectedBelowAmps", 16);
     public static final SN_DoublePreference intakePieceCollectedAboveAmps = new SN_DoublePreference(
-        "intakePieceCollectedAboveAmps", 13);
+        "intakePieceCollectedAboveAmps", 14);
 
     // Seconds
     public static final SN_DoublePreference intakePlaceDelay = new SN_DoublePreference("intakePlaceDelay", 0);

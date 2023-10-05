@@ -24,7 +24,6 @@ public class Intake extends SubsystemBase {
   StatorCurrentLimitConfiguration statorLimit;
 
   boolean isGamePieceCollected;
-  GamePiece desiredGamepiece = GamePiece.NONE;
   GamePiece currentGamePiece = GamePiece.NONE;
 
   public Intake() {
@@ -67,20 +66,23 @@ public class Intake extends SubsystemBase {
     if (current < prefIntake.intakePieceCollectedBelowAmps.getValue()
         && current > prefIntake.intakePieceCollectedAboveAmps.getValue()) {
       isGamePieceCollected = true;
-      currentGamePiece = desiredGamepiece;
     } else {
       isGamePieceCollected = false;
-      currentGamePiece = GamePiece.NONE;
     }
   }
 
   /**
-   * Set the game piece that we would like to have
+   * Used to set the current game piece collected. Will check if we have a
+   * gamepiece before setting the gamepiece.
    * 
    * @param gamepiece Desired collected game piece
    */
-  public void setDesiredGamePiece(GamePiece gamepiece) {
-    this.desiredGamepiece = gamepiece;
+  public void setCurrentGamePiece(GamePiece gamepiece) {
+    if (isGamePieceCollected) {
+      currentGamePiece = gamepiece;
+      return;
+    }
+    currentGamePiece = GamePiece.NONE;
   }
 
   public GamePiece getCurrentGamePiece() {
