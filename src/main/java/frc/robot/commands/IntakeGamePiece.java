@@ -72,7 +72,7 @@ public class IntakeGamePiece extends SequentialCommandGroup {
         Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
 
         Commands.waitUntil(() -> subIntake.isGamePieceCollected()),
-        Commands.waitSeconds(0.1),
+        Commands.waitSeconds(prefIntake.intakeDelay.getValue()),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
