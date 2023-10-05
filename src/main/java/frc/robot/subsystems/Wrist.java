@@ -56,7 +56,7 @@ public class Wrist extends SubsystemBase {
     config.forwardSoftLimitEnable = true;
     config.reverseSoftLimitEnable = true;
 
-    config.slot0.allowableClosedloopError = SN_Math.degreesToFalcon(prefWrist.wristPositionTolerance.getValue(),
+    config.slot0.allowableClosedloopError = SN_Math.degreesToFalcon(prefWrist.wristPIDTolerance.getValue(),
         constWrist.GEAR_RATIO);
     config.motionCruiseVelocity = SN_Math.degreesToFalcon(prefWrist.wristMaxVelocity.getValue(),
         constWrist.GEAR_RATIO);
@@ -98,6 +98,17 @@ public class Wrist extends SubsystemBase {
   }
 
   /**
+   * Returns if the wrist is within its positional tolerance.
+   * 
+   * @param desiredPosition Desired position, in degrees
+   * @return If it is at that position
+   * 
+   */
+  public boolean isWristAtPosition(double desiredPosition) {
+    return prefWrist.wristPositionTolerance.getValue() >= Math.abs(getWristAngle().getDegrees() - desiredPosition);
+  }
+
+  /**
    * Get the Wrist absolute encoder reading with the offset applied.
    * 
    * @return Wrist absolute encoder reading in rotations
@@ -132,7 +143,6 @@ public class Wrist extends SubsystemBase {
     SmartDashboard.putNumber("Abs Encoder Raw", absoluteEncoder.get());
     SmartDashboard.putNumber("Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("Abs Encoder Get", getWristAbsoluteEncoder());
-
     SmartDashboard.putNumber("Wrist Motor Degrees", getWristAngle().getDegrees());
 
   }

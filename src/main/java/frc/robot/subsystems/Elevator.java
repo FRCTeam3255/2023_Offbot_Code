@@ -52,11 +52,11 @@ public class Elevator extends SubsystemBase {
     config.slot0.kD = prefElevator.elevatorD.getValue();
 
     config.slot0.allowableClosedloopError = SN_Math.metersToFalcon(prefElevator.elevatorPIDTolerance.getValue(),
-        constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
+        constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
     config.motionCruiseVelocity = SN_Math.metersToFalcon(prefElevator.elevatorMaxVelocity.getValue(),
-        constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
+        constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
     config.motionAcceleration = SN_Math.metersToFalcon(prefElevator.elevatorMaxAccel.getValue(),
-        constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
+        constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
 
     leftMotor.setInverted(constElevator.INVERT_LEFT_MOTOR);
     rightMotor.setInverted(!constElevator.INVERT_LEFT_MOTOR);
@@ -65,10 +65,10 @@ public class Elevator extends SubsystemBase {
     rightMotor.setNeutralMode(NeutralMode.Brake);
 
     config.forwardSoftLimitThreshold = SN_Math.metersToFalcon(prefElevator.elevatorMaxPos.getValue(),
-        constElevator.CIRCUMFRENCE,
+        constElevator.CIRCUMFERENCE,
         constElevator.GEAR_RATIO);
     config.reverseSoftLimitThreshold = SN_Math.metersToFalcon(prefElevator.elevatorMinPos.getValue(),
-        constElevator.CIRCUMFRENCE,
+        constElevator.CIRCUMFERENCE,
         constElevator.GEAR_RATIO);
 
     config.forwardSoftLimitEnable = true;
@@ -84,8 +84,6 @@ public class Elevator extends SubsystemBase {
 
     // rightMotor.configStatorCurrentLimit(statorLimit);
     // leftMotor.configStatorCurrentLimit(statorLimit);
-
-    leftMotor.follow(rightMotor);
   }
 
   /**
@@ -109,7 +107,7 @@ public class Elevator extends SubsystemBase {
   public void setElevatorPosition(double position) {
     position = SN_Math.metersToFalcon(MathUtil.clamp(position,
         prefElevator.elevatorMinPos.getValue(),
-        prefElevator.elevatorMaxPos.getValue()), constElevator.CIRCUMFRENCE, constElevator.GEAR_RATIO);
+        prefElevator.elevatorMaxPos.getValue()), constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
 
     leftMotor.set(ControlMode.MotionMagic, position);
     rightMotor.set(ControlMode.MotionMagic, position);
@@ -118,12 +116,12 @@ public class Elevator extends SubsystemBase {
   /**
    * Returns if the elevator is within its positional tolerance.
    * 
+   * @param desiredPosition Desired position, in meters
    * @return If it is at that position
    * 
    */
-  public boolean isElevatorAtPosition() {
-    return SN_Math.metersToFalcon(prefElevator.elevatorPositionTolerance.getValue(), constElevator.CIRCUMFRENCE,
-        constElevator.GEAR_RATIO) >= Math.abs(rightMotor.getClosedLoopError());
+  public boolean isElevatorAtPosition(double desiredPosition) {
+    return prefElevator.elevatorPositionTolerance.getValue() >= Math.abs(getElevatorPositionMeters() - desiredPosition);
   }
 
   /**
