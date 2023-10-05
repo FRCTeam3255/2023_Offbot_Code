@@ -33,6 +33,7 @@ import frc.robot.commands.IntakeGamePiece;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
+import frc.robot.commands.Stow;
 import frc.robot.commands.Auto.OnePiece.CenterCube;
 import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityCable;
@@ -159,6 +160,7 @@ public class RobotContainer {
     conOperator.btn_B.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
         prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
 
+    conOperator.btn_A.onTrue(new Stow(subWrist, subIntake, subElevator));
   }
 
   public static boolean isPracticeBot() {
