@@ -114,6 +114,9 @@ public class RobotPreferences {
   }
 
   public static final class prefIntake {
+    public static final SN_BooleanPreference intakeLimitSwitchInvert = new SN_BooleanPreference(
+        "intakeLimitSwitchInvert", false);
+
     // Percent Output
     public static final SN_DoublePreference intakeConeSpeed = new SN_DoublePreference("intakeConeSpeed", 0.5);
     public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -0.5);

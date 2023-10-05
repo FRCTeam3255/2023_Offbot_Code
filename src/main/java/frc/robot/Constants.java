@@ -204,7 +204,7 @@ public final class Constants {
 
     public static final boolean INVERT_LEFT_MOTOR = true;
 
-    public static final double CIRCUMFRENCE = 0.13972;
+    public static final double CIRCUMFERENCE = 0.13972;
     public static final double GEAR_RATIO = 2.5;
   }
 

@@ -29,7 +29,7 @@ public class IntakeGamePiece extends SequentialCommandGroup {
   PatternType pattern;
 
   double wristPosition;
-  double elevatorPositon;
+  double elevatorPosition;
 
   public IntakeGamePiece(Wrist subWrist, Intake subIntake, Elevator subElevator, GamePiece gamepiece,
       double wristPosition, double elevatorPosition) {
@@ -39,7 +39,7 @@ public class IntakeGamePiece extends SequentialCommandGroup {
     this.subElevator = subElevator;
     this.gamepiece = gamepiece;
     this.wristPosition = wristPosition;
-    this.elevatorPositon = elevatorPosition;
+    this.elevatorPosition = elevatorPosition;
 
     addRequirements(subWrist, subIntake, subElevator);
 
@@ -52,6 +52,7 @@ public class IntakeGamePiece extends SequentialCommandGroup {
     }
 
     addCommands(
+        Commands.runOnce(() -> subIntake.setDesiredGamePiece(gamepiece)),
         Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)),
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
@@ -75,7 +76,6 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
-        Commands.runOnce(() -> subIntake.setCurrentGamePiece(gamepiece)),
         Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())));
 
   }
