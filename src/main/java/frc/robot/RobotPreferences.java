@@ -130,14 +130,14 @@ public class RobotPreferences {
 
     // Sator Amps
     public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(
-        "intakePieceCollectedBelowAmps", 16);
+        "intakePieceCollectedBelowAmps", 7);
     public static final SN_DoublePreference intakePieceCollectedAboveAmps = new SN_DoublePreference(
-        "intakePieceCollectedAboveAmps", 14);
+        "intakePieceCollectedAboveAmps", 5);
 
     // Seconds
-    public static final SN_DoublePreference intakeDelay = new SN_DoublePreference("intakeDelay", 0.05);
+    public static final SN_DoublePreference intakeDelay = new SN_DoublePreference("intakeDelay", 0.005);
 
-    public static final SN_DoublePreference intakePlaceDelay = new SN_DoublePreference("intakePlaceDelay", 0);
+    public static final SN_DoublePreference intakeMidConeDelay = new SN_DoublePreference("intakePlaceDelay", 0.5);
   }
 
   public static final class prefElevator {

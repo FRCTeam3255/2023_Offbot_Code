@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.DesiredHeight;
 import frc.robot.Constants.GamePiece;
 import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
@@ -38,11 +39,14 @@ public class PlaceGamePiece extends SequentialCommandGroup {
             .unless(() -> subIntake.getDesiredGamePiece().equals(GamePiece.CUBE)),
 
         Commands.waitUntil(() -> !subIntake.isGamePieceCollected()),
-        Commands.waitSeconds(prefIntake.intakePlaceDelay.getValue()),
+        Commands.waitSeconds(prefIntake.intakeMidConeDelay.getValue())
+            .unless(() -> !subElevator.getDesiredHeight().equals(DesiredHeight.MID)
+                && !subIntake.getDesiredGamePiece().equals(GamePiece.CONE)),
 
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.NONE)),
 
-        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+        Commands.runOnce(
+            () -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
         Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())),
