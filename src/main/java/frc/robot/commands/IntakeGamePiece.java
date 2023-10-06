@@ -58,7 +58,8 @@ public class IntakeGamePiece extends SequentialCommandGroup {
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(elevatorPosition)),
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(elevatorPosition)),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(elevatorPosition,
+            prefElevator.elevatorPositionTolerance.getValue())),
 
         // Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
 
@@ -72,11 +73,14 @@ public class IntakeGamePiece extends SequentialCommandGroup {
         Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
 
         Commands.waitUntil(() -> subIntake.isGamePieceCollected()),
-        Commands.waitSeconds(0.1),
+        Commands.waitSeconds(0.05),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+        Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),
 
-        Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())));
+        Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.1)),
+        Commands.runOnce(() -> subElevator.neutralElevatorOutputs()));
 
   }
 }

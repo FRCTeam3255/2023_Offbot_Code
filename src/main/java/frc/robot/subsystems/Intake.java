@@ -132,6 +132,7 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putBoolean("Intake Limit Switch", getIntakeLimitSwitch());
     SmartDashboard.putBoolean("Is Game Piece Collected", isGamePieceCollected());
     SmartDashboard.putString("Current Game Piece", getCurrentGamePiece().toString());
+    SmartDashboard.putString("Desired Game Piece", getDesiredGamePiece().toString());
     SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
   }
 }

@@ -135,12 +135,12 @@ public class RobotContainer {
     // Prep MID
     conOperator.btn_East.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
-        prefWrist.wristStowAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
+        prefWrist.wristScoreMidCubeAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
     conOperator.btn_East.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
 
     conOperator.btn_West.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
-        prefWrist.wristStowAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
+        prefWrist.wristScoreMidCubeAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
     conOperator.btn_West.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
 
     // Prep HIGH

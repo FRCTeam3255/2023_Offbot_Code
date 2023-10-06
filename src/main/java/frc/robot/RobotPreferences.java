@@ -122,7 +122,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -0.5);
     public static final SN_DoublePreference intakeHoldSpeed = new SN_DoublePreference("intakeHoldSpeed", 0.1);
     public static final SN_DoublePreference intakePlaceConeSpeed = new SN_DoublePreference("intakePlaceConeSpeed",
-        -1);
+        -0.7);
     public static final SN_DoublePreference intakePlaceCubeSpeed = new SN_DoublePreference("intakePlaceCubeSpeed",
         1);
     public static final SN_DoublePreference intakeShootSpeedHigh = new SN_DoublePreference("intakeShootSpeedHigh",
@@ -169,7 +169,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorHybridCubeScore = new SN_DoublePreference("elevatorHybridCubeScore",
         0.05);
     public static final SN_DoublePreference elevatorMidConeScore = new SN_DoublePreference("elevatorMidConeScore",
-        0.547828);
+        0.72);
     public static final SN_DoublePreference elevatorMidCubeScore = new SN_DoublePreference("elevatorMidCubeScore",
         0.392799);
     public static final SN_DoublePreference elevatorHighConeScore = new SN_DoublePreference("elevatorHighConeScore",
@@ -184,7 +184,7 @@ public class RobotPreferences {
 
   public static final class prefWrist {
     public static final SN_DoublePreference wristF = new SN_DoublePreference("wristF", 0);
-    public static final SN_DoublePreference wristP = new SN_DoublePreference("wristP", 0.1);
+    public static final SN_DoublePreference wristP = new SN_DoublePreference("wristP", 0.4);
     public static final SN_DoublePreference wristI = new SN_DoublePreference("wristI", 0);
     public static final SN_DoublePreference wristD = new SN_DoublePreference("wristD", 0);
 
@@ -205,16 +205,19 @@ public class RobotPreferences {
 
     public static final SN_DoublePreference wristScoreHybridCubeAngle = new SN_DoublePreference(
         "wristScoreHybridCubeAngle", 117.776507);
+
     public static final SN_DoublePreference wristScoreMidConeAngle = new SN_DoublePreference("wristScoreMidConeAngle",
-        107);
+        136);
+    public static final SN_DoublePreference wristScoreMidCubeAngle = new SN_DoublePreference("wristScoreMidCubeAngle",
+        54);
     public static final SN_DoublePreference wristScoreHighConeAngle = new SN_DoublePreference("wristScoreHighAngle",
         150);
     public static final SN_DoublePreference wristScoreHighCubeAngle = new SN_DoublePreference("wristScoreHighCubeAngle",
         98.466439);
 
     // Degrees Per Second
-    public static final SN_DoublePreference wristMaxVelocity = new SN_DoublePreference("wristMaxVelocity", 75);
-    public static final SN_DoublePreference wristMaxAccel = new SN_DoublePreference("wristMaxAccel", 75);
+    public static final SN_DoublePreference wristMaxVelocity = new SN_DoublePreference("wristMaxVelocity", 150);
+    public static final SN_DoublePreference wristMaxAccel = new SN_DoublePreference("wristMaxAccel", 150);
 
   }
 

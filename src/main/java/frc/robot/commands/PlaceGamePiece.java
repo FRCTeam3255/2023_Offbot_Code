@@ -50,7 +50,10 @@ public class PlaceGamePiece extends SequentialCommandGroup {
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)),
 
         Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
-        Commands.runOnce(() -> subElevator.setIsPrepped(false)));
+        Commands.runOnce(() -> subElevator.setIsPrepped(false)),
+
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.1)),
+        Commands.runOnce(() -> subElevator.neutralElevatorOutputs()));
 
   }
 }

@@ -129,11 +129,13 @@ public class Elevator extends SubsystemBase {
    * Returns if the elevator is within its positional tolerance.
    * 
    * @param desiredPosition Desired position, in meters
+   * @param tolerance       The tolerance before we are considered at that
+   *                        position, in meters
    * @return If it is at that position
    * 
    */
-  public boolean isElevatorAtPosition(double desiredPosition) {
-    return prefElevator.elevatorPositionTolerance.getValue() >= Math.abs(getElevatorPositionMeters() - desiredPosition);
+  public boolean isElevatorAtPosition(double desiredPosition, double tolerance) {
+    return tolerance >= Math.abs(getElevatorPositionMeters() - desiredPosition);
   }
 
   /**
