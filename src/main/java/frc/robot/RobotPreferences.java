@@ -135,6 +135,8 @@ public class RobotPreferences {
         "intakePieceCollectedAboveAmps", 14);
 
     // Seconds
+    public static final SN_DoublePreference intakeDelay = new SN_DoublePreference("intakeDelay", 0.05);
+
     public static final SN_DoublePreference intakePlaceDelay = new SN_DoublePreference("intakePlaceDelay", 0);
   }
 
