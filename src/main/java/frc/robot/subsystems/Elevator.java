@@ -7,9 +7,11 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.frcteam3255.utils.SN_Math;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,29 +44,46 @@ public class Elevator extends SubsystemBase {
   }
 
   public void configure() {
-
     leftMotor.configFactoryDefault();
     rightMotor.configFactoryDefault();
 
-    leftMotor.configAllSettings(config);
-    rightMotor.configAllSettings(config);
-
-    config.slot0.kF = prefElevator.elevatorF.getValue();
     config.slot0.kP = prefElevator.elevatorP.getValue();
     config.slot0.kI = prefElevator.elevatorI.getValue();
     config.slot0.kD = prefElevator.elevatorD.getValue();
 
-    leftMotor.setInverted(true);
-    rightMotor.setInverted(false);
+    config.slot0.allowableClosedloopError = SN_Math.metersToFalcon(prefElevator.elevatorPIDTolerance.getValue(),
+        constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
+    config.motionCruiseVelocity = SN_Math.metersToFalcon(prefElevator.elevatorMaxVelocity.getValue(),
+        constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
+    config.motionAcceleration = SN_Math.metersToFalcon(prefElevator.elevatorMaxAccel.getValue(),
+        constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
+
+    leftMotor.setInverted(constElevator.INVERT_LEFT_MOTOR);
+    rightMotor.setInverted(!constElevator.INVERT_LEFT_MOTOR);
+
+    leftMotor.setNeutralMode(NeutralMode.Brake);
+    rightMotor.setNeutralMode(NeutralMode.Brake);
+
+    config.forwardSoftLimitThreshold = SN_Math.metersToFalcon(prefElevator.elevatorMaxPos.getValue(),
+        constElevator.CIRCUMFERENCE,
+        constElevator.GEAR_RATIO);
+    config.reverseSoftLimitThreshold = SN_Math.metersToFalcon(prefElevator.elevatorMinPos.getValue(),
+        constElevator.CIRCUMFERENCE,
+        constElevator.GEAR_RATIO);
+
+    config.forwardSoftLimitEnable = true;
+    config.reverseSoftLimitEnable = true;
 
     // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
-    statorLimit = new StatorCurrentLimitConfiguration(true, constElevator.CURRENT_LIMIT_FLOOR_AMPS,
-        constElevator.CURRENT_LIMIT_CEILING_AMPS, constElevator.CURRENT_LIMIT_AFTER_SEC);
+    // statorLimit = new StatorCurrentLimitConfiguration(true,
+    // constElevator.CURRENT_LIMIT_FLOOR_AMPS,
+    // 1000, constElevator.CURRENT_LIMIT_AFTER_SEC);
 
-    rightMotor.configStatorCurrentLimit(statorLimit);
-    leftMotor.configStatorCurrentLimit(statorLimit);
+    leftMotor.configAllSettings(config);
+    rightMotor.configAllSettings(config);
 
-    leftMotor.follow(rightMotor);
+    // rightMotor.configStatorCurrentLimit(statorLimit);
+    // leftMotor.configStatorCurrentLimit(statorLimit);
   }
 
   /**
@@ -75,16 +94,6 @@ public class Elevator extends SubsystemBase {
    * 
    */
   public void setElevatorSpeed(double speed) {
-    // don't go past the max position
-    if (getElevatorPositionFeet() > prefElevator.elevatorMaxPos.getValue() && speed > 0) {
-      speed = 0;
-    }
-
-    // don't go past the min position
-    if (getElevatorPositionFeet() < prefElevator.elevatorMinPos.getValue() && speed < 0) {
-      speed = 0;
-    }
-
     leftMotor.set(ControlMode.PercentOutput, speed);
     rightMotor.set(ControlMode.PercentOutput, speed);
   }
@@ -92,30 +101,27 @@ public class Elevator extends SubsystemBase {
   /**
    * Set the position of the Elevator. Includes safeties/soft stops.
    * 
-   * @param position Desired position to set both of the motors to, in Encoder
-   *                 ticks
+   * @param position Desired position to set both of the motors to, in meters
    * 
    */
   public void setElevatorPosition(double position) {
-    position = MathUtil.clamp(position, prefElevator.elevatorMinPos.getValue(),
-        prefElevator.elevatorMaxPos.getValue());
+    position = SN_Math.metersToFalcon(MathUtil.clamp(position,
+        prefElevator.elevatorMinPos.getValue(),
+        prefElevator.elevatorMaxPos.getValue()), constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
 
-    leftMotor.set(ControlMode.Position, position);
-    rightMotor.set(ControlMode.Position, position);
+    leftMotor.set(ControlMode.MotionMagic, position);
+    rightMotor.set(ControlMode.MotionMagic, position);
   }
 
   /**
-   * Returns if the elevator is within the tolerance of a given position.
+   * Returns if the elevator is within its positional tolerance.
    * 
-   * @param position The position (in encoder ticks) to check
+   * @param desiredPosition Desired position, in meters
    * @return If it is at that position
    * 
    */
-  public boolean isElevatorAtPosition(double position) {
-    position = MathUtil.clamp(position, prefElevator.elevatorMinPos.getValue(),
-        prefElevator.elevatorMaxPos.getValue());
-
-    return prefElevator.elevatorPositionTolerance.getValue() > Math.abs(getElevatorEncoderCounts() - position);
+  public boolean isElevatorAtPosition(double desiredPosition) {
+    return prefElevator.elevatorPositionTolerance.getValue() >= Math.abs(getElevatorPositionMeters() - desiredPosition);
   }
 
   /**
@@ -130,17 +136,22 @@ public class Elevator extends SubsystemBase {
   }
 
   /**
-   * Returns the position of the elevator, relative to itself, in feet.
+   * Returns the position of the elevator, relative to itself, in meters.
    * 
    * @return Elevator position
    * 
    */
-  public double getElevatorPositionFeet() {
-    return getElevatorEncoderCounts() / prefElevator.elevatorEncoderCountsPerFoot.getValue();
+  public double getElevatorPositionMeters() {
+    return getElevatorEncoderCounts() / prefElevator.elevatorEncoderCountsPerMeter.getValue();
+  }
+
+  public void neutralElevatorOutputs() {
+    leftMotor.neutralOutput();
+    rightMotor.neutralOutput();
   }
 
   public void setDesiredHeight(DesiredHeight height) {
-    height = desiredHeight;
+    desiredHeight = height;
   }
 
   public DesiredHeight getDesiredHeight() {
@@ -159,6 +170,6 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Elevator Encoder Counts", getElevatorEncoderCounts());
-    SmartDashboard.putNumber("Elevator Distance Feet", getElevatorPositionFeet());
+    SmartDashboard.putNumber("Elevator Position Meters", getElevatorPositionMeters());
   }
 }

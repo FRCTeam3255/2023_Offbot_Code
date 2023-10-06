@@ -28,41 +28,55 @@ public class IntakeGamePiece extends SequentialCommandGroup {
   double intakeSpeed;
   PatternType pattern;
 
-  public IntakeGamePiece(Wrist subWrist, Intake subIntake, Elevator subElevator, GamePiece gamepiece) {
+  double wristPosition;
+  double elevatorPosition;
+
+  public IntakeGamePiece(Wrist subWrist, Intake subIntake, Elevator subElevator, GamePiece gamepiece,
+      double wristPosition, double elevatorPosition) {
 
     this.subWrist = subWrist;
     this.subIntake = subIntake;
     this.subElevator = subElevator;
     this.gamepiece = gamepiece;
+    this.wristPosition = wristPosition;
+    this.elevatorPosition = elevatorPosition;
 
     addRequirements(subWrist, subIntake, subElevator);
 
     // Assume its a cone if there is no value (fallback condition, should never
     // happen)
     if (gamepiece == GamePiece.CUBE) {
-      intakeSpeed = prefIntake.intakeCubeSpeed.getValue();
       pattern = constLEDs.INTAKING_CUBE_COLOR;
     } else {
-      intakeSpeed = prefIntake.intakeConeSpeed.getValue();
       pattern = constLEDs.INTAKING_CONE_COLOR;
     }
 
     addCommands(
-        Commands.parallel(
-            Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorIntakingPos.getValue())),
-            Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
+        Commands.runOnce(() -> subIntake.setDesiredGamePiece(gamepiece)),
+        Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)),
+        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorIntakingPos.getValue()) == true),
+        Commands.runOnce(() -> subElevator.setElevatorPosition(elevatorPosition)),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(elevatorPosition)),
 
-        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristIntakingAngle.getValue())),
+        // Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
 
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(intakeSpeed)),
+        Commands.runOnce(() -> subWrist.setWristAngle(wristPosition)),
+
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
+            .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
+            .unless(() -> !gamepiece.equals(GamePiece.CONE)),
+
+        Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
 
         Commands.waitUntil(() -> subIntake.isGamePieceCollected()),
+        Commands.waitSeconds(prefIntake.intakeDelay.getValue()),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
-        Commands.runOnce(() -> subIntake.setCurrentGamePiece(gamepiece)));
+        Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())));
 
   }
 }

@@ -29,23 +29,28 @@ public class PlaceGamePiece extends SequentialCommandGroup {
     this.subWrist = subWrist;
     this.subElevator = subElevator;
 
-    if (subIntake.getCurrentGamePiece() == GamePiece.CUBE) {
-      speed = prefIntake.intakePlaceCubeSpeed.getValue();
-    } else if (subIntake.getCurrentGamePiece() == GamePiece.CONE) {
-      speed = prefIntake.intakePlaceConeSpeed.getValue();
-    }
-
     addCommands(
-        Commands.runOnce(() -> new PrepGamePiece(subElevator, subWrist, subIntake))
-            .unless(() -> subElevator.isPrepped()),
+        Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
 
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(speed)).until(() -> !subIntake.isGamePieceCollected()),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakePlaceCubeSpeed.getValue()))
+            .unless(() -> !subIntake.getDesiredGamePiece().equals(GamePiece.CUBE)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakePlaceConeSpeed.getValue()))
+            .unless(() -> subIntake.getDesiredGamePiece().equals(GamePiece.CUBE)),
 
-        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue()))
-            .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())),
+        Commands.waitUntil(() -> !subIntake.isGamePieceCollected()),
+        Commands.waitSeconds(prefIntake.intakePlaceDelay.getValue()),
+
+        Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.NONE)),
+
+        Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
+        Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())),
 
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)),
+
+        Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
         Commands.runOnce(() -> subElevator.setIsPrepped(false)));
+
   }
 }

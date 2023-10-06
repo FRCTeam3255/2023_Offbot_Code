@@ -47,17 +47,26 @@ public class Wrist extends SubsystemBase {
     wristMotor.configFactoryDefault();
 
     wristMotor.setNeutralMode(NeutralMode.Brake);
-    wristMotor.configForwardSoftLimitThreshold(
-        SN_Math.degreesToFalcon(prefWrist.wristMaxPos.getValue(), constWrist.GEAR_RATIO));
-    wristMotor.configReverseSoftLimitThreshold(
-        SN_Math.degreesToFalcon(prefWrist.wristMinPos.getValue(), constWrist.GEAR_RATIO));
+
+    config.forwardSoftLimitThreshold = SN_Math.degreesToFalcon(prefWrist.wristMaxPos.getValue(),
+        constWrist.GEAR_RATIO);
+    config.reverseSoftLimitThreshold = SN_Math.degreesToFalcon(prefWrist.wristMinPos.getValue(),
+        constWrist.GEAR_RATIO);
+
+    config.forwardSoftLimitEnable = true;
+    config.reverseSoftLimitEnable = true;
+
+    config.slot0.allowableClosedloopError = SN_Math.degreesToFalcon(prefWrist.wristPIDTolerance.getValue(),
+        constWrist.GEAR_RATIO);
+    config.motionCruiseVelocity = SN_Math.degreesToFalcon(prefWrist.wristMaxVelocity.getValue(),
+        constWrist.GEAR_RATIO);
+    config.motionAcceleration = SN_Math.degreesToFalcon(prefWrist.wristMaxAccel.getValue(),
+        constWrist.GEAR_RATIO);
 
     config.slot0.kF = prefWrist.wristF.getValue();
     config.slot0.kP = prefWrist.wristP.getValue();
     config.slot0.kI = prefWrist.wristI.getValue();
     config.slot0.kD = prefWrist.wristD.getValue();
-    config.peakOutputForward = 0.2;
-    config.peakOutputReverse = -0.2;
 
     wristMotor.configAllSettings(config);
   }
@@ -77,7 +86,7 @@ public class Wrist extends SubsystemBase {
     angle = MathUtil.clamp(angle, prefWrist.wristMinPos.getValue(),
         prefWrist.wristMaxPos.getValue());
 
-    wristMotor.set(ControlMode.Position, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
+    wristMotor.set(ControlMode.MotionMagic, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
   }
 
   public boolean isWristAtAngle(double angle) {
@@ -91,6 +100,17 @@ public class Wrist extends SubsystemBase {
   public Rotation2d getWristAngle() {
     return Rotation2d
         .fromDegrees(SN_Math.falconToDegrees(wristMotor.getSelectedSensorPosition(), constWrist.GEAR_RATIO));
+  }
+
+  /**
+   * Returns if the wrist is within its positional tolerance.
+   * 
+   * @param desiredPosition Desired position, in degrees
+   * @return If it is at that position
+   * 
+   */
+  public boolean isWristAtPosition(double desiredPosition) {
+    return prefWrist.wristPositionTolerance.getValue() >= Math.abs(getWristAngle().getDegrees() - desiredPosition);
   }
 
   /**
@@ -118,13 +138,16 @@ public class Wrist extends SubsystemBase {
             constWrist.GEAR_RATIO));
   }
 
+  public void neutralElevatorOutputs() {
+    wristMotor.neutralOutput();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Abs Encoder Raw", absoluteEncoder.get());
     SmartDashboard.putNumber("Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("Abs Encoder Get", getWristAbsoluteEncoder());
-
     SmartDashboard.putNumber("Wrist Motor Degrees", getWristAngle().getDegrees());
 
   }
