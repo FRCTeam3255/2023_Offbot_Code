@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DesiredHeight;
 import frc.robot.Constants.GamePiece;
+import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.commands.PlaceGamePiece;
@@ -38,16 +39,16 @@ public class CenterCube extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.scoreThenDock.getInitialHolonomicPose().getRotation().getDegrees())),
 
-        Commands.runOnce(() -> subIntake.setCurrentGamePiece(GamePiece.CUBE)),
-
-        Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)),
+        Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CUBE)),
 
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
             .until(() -> subIntake.isGamePieceCollected()).withTimeout(5),
 
-        new PrepGamePiece(subElevator, subWrist, subIntake),
+        new PrepGamePiece(subElevator, subWrist, subIntake,
+            prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
+            prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()),
 
-        Commands.waitUntil(() -> subWrist.isWristAtAngle(prefWrist.wristScoringAngle.getValue())),
+        Commands.waitUntil(() -> subElevator.isPrepped()),
 
         new PlaceGamePiece(subIntake, subWrist, subElevator));
   }
