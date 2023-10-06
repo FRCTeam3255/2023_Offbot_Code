@@ -41,7 +41,7 @@ public class PlaceGamePiece extends SequentialCommandGroup {
         Commands.waitUntil(() -> !subIntake.isGamePieceCollected()),
         Commands.waitSeconds(prefIntake.intakeMidConeDelay.getValue())
             .unless(() -> !subElevator.getDesiredHeight().equals(DesiredHeight.MID)
-                && !subIntake.getDesiredGamePiece().equals(GamePiece.CONE)),
+                || !subIntake.getDesiredGamePiece().equals(GamePiece.CONE)),
 
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.NONE)),
 
