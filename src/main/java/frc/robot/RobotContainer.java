@@ -118,11 +118,11 @@ public class RobotContainer {
     // Operator
 
     // Intake Cone (RB)
-    conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+    conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeConePos.getValue()));
 
     // Intake Cube (LB)
-    conOperator.btn_LeftBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE,
+    conOperator.btn_LeftBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
 
     // Prep HYBRID
@@ -151,13 +151,13 @@ public class RobotContainer {
 
     conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
 
-    conOperator.btn_Y.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+    conOperator.btn_Y.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristShelfAngle.getValue(), prefElevator.elevatorShelf.getValue()));
 
-    conOperator.btn_X.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+    conOperator.btn_X.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
 
-    conOperator.btn_B.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CONE,
+    conOperator.btn_B.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
 
     conOperator.btn_A.onTrue(new Stow(subWrist, subIntake, subElevator));
