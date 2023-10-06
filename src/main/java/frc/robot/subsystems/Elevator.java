@@ -159,7 +159,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setIsPrepped(boolean prepped) {
-    prepped = isPrepped;
+    isPrepped = prepped;
   }
 
   public boolean isPrepped() {
