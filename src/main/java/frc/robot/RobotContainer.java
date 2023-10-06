@@ -94,7 +94,6 @@ public class RobotContainer {
   public void resetToAbsolutePositions() {
     subDrivetrain.resetSteerMotorEncodersToAbsolute();
     subWrist.resetWristEncoderToAbsolute();
-    subElevator.resetElevatorEncoderToAbsolute();
   }
 
   private void configureBindings() {
