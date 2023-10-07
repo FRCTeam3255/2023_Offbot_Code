@@ -58,7 +58,8 @@ public class PrepGamePiece extends SequentialCommandGroup {
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(desiredPosition)),
 
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(desiredPosition)),
+        Commands.waitUntil(
+            () -> subElevator.isElevatorAtPosition(desiredPosition, prefElevator.elevatorPositionTolerance.getValue())),
 
         Commands.runOnce(() -> subWrist.setWristAngle(desiredAngle)),
 

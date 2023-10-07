@@ -43,6 +43,7 @@ public class RobotMap {
   public static final class mapElevator {
     public static final int LEFT_MOTOR_CAN = 40;
     public static final int RIGHT_MOTOR_CAN = 41;
+    public static final int ELEVATOR_ABSOLUTE_ENCODER_DIO = 1;
   }
 
   public static final class mapWrist {

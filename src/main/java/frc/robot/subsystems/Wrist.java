@@ -42,6 +42,8 @@ public class Wrist extends SubsystemBase {
   public void configure() {
     if (absoluteEncoder.getAbsolutePosition() > constWrist.ABSOLUTE_ENCODER_ROLLOVER_OFFSET) {
       absoluteEncoder.setPositionOffset(1);
+    } else {
+      absoluteEncoder.setPositionOffset(0);
     }
 
     wristMotor.configFactoryDefault();
@@ -127,7 +129,7 @@ public class Wrist extends SubsystemBase {
   /**
    * Reset the wrist motor to the offset value of the absolute encoder.
    */
-  public void resetEncoderToAbsolute() {
+  public void resetWristEncoderToAbsolute() {
     wristMotor.setSelectedSensorPosition(
         SN_Math.degreesToFalcon(Units.rotationsToDegrees(getWristAbsoluteEncoder()),
             constWrist.GEAR_RATIO));
@@ -140,9 +142,9 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Abs Encoder Raw", absoluteEncoder.get());
-    SmartDashboard.putNumber("Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Abs Encoder Get", getWristAbsoluteEncoder());
+    SmartDashboard.putNumber("Wrist Abs Encoder Raw", absoluteEncoder.get());
+    SmartDashboard.putNumber("Wrist Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Wrist Abs Encoder Get", getWristAbsoluteEncoder());
     SmartDashboard.putNumber("Wrist Motor Degrees", getWristAngle().getDegrees());
 
   }
