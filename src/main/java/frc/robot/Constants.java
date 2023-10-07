@@ -183,7 +183,7 @@ public final class Constants {
 
     public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
 
-    public static final double CURRENT_LIMIT_FLOOR_AMPS = 5; // Floor: what we limit it to
+    public static final double CURRENT_LIMIT_FLOOR_AMPS = 8; // Floor: what we limit it to
     public static final double CURRENT_LIMIT_CEILING_AMPS = 40; // Ceiling: when we begin limiting
     public static final double CURRENT_LIMIT_AFTER_SEC = 10;
   }

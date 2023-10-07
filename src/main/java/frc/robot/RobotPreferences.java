@@ -68,9 +68,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference teleTransI = new SN_DoublePreference("teleTransI", 0);
     public static final SN_DoublePreference teleTransD = new SN_DoublePreference("teleTransD", 0);
     // feet per second
-    public static final SN_DoublePreference teleTransMaxSpeed = new SN_DoublePreference("teleTransMaxSpeed", 16.3);
+    public static final SN_DoublePreference teleTransMaxSpeed = new SN_DoublePreference("teleTransMaxSpeed", 13.04);
     // feet per second per second
-    public static final SN_DoublePreference teleTransMaxAccel = new SN_DoublePreference("teleTransMaxAccel", 5);
+    public static final SN_DoublePreference teleTransMaxAccel = new SN_DoublePreference("teleTransMaxAccel", 4);
     // inches
     public static final SN_DoublePreference teleTransTolerance = new SN_DoublePreference("teleTransTolerance", 1);
 
@@ -130,14 +130,18 @@ public class RobotPreferences {
 
     // Sator Amps
     public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(
-        "intakePieceCollectedBelowAmps", 7);
+        "intakePieceCollectedBelowAmps", 10);
     public static final SN_DoublePreference intakePieceCollectedAboveAmps = new SN_DoublePreference(
-        "intakePieceCollectedAboveAmps", 5);
+        "intakePieceCollectedAboveAmps", 6);
+
+    // Periodic Runtimes
+    public static final SN_DoublePreference intakePieceCollectedDebounce = new SN_DoublePreference(
+        "intakePieceCollectedDebounce", 11);
 
     // Seconds
-    public static final SN_DoublePreference intakeDelay = new SN_DoublePreference("intakeDelay", 0.005);
+    public static final SN_DoublePreference intakeDelay = new SN_DoublePreference("intakeDelay", 0);
 
-    public static final SN_DoublePreference intakeMidConeDelay = new SN_DoublePreference("intakePlaceDelay", 0.5);
+    public static final SN_DoublePreference intakeMidConeDelay = new SN_DoublePreference("intakeMidConeDelay", 0.5);
   }
 
   public static final class prefElevator {
