@@ -173,10 +173,12 @@ public class RobotContainer {
 
     autoChooser.addOption("Score Cube Center (NO DOCK)",
         new CenterCube(subDrivetrain, subIntake, subElevator, subWrist));
-    autoChooser.addOption("Score Cube Then Mobility Cable",
-        new CubeThenMobilityCable(subDrivetrain));
-    autoChooser.addOption("Score Cube Then Mobility Open", new CubeThenMobilityOpen(subDrivetrain));
-    autoChooser.addOption("Score Cube Then Engage Center", new CubeThenEngageCenter(subDrivetrain));
+    // autoChooser.addOption("Score Cube Then Mobility Cable",
+    // new CubeThenMobilityCable(subDrivetrain));
+    // autoChooser.addOption("Score Cube Then Mobility Open", new
+    // CubeThenMobilityOpen(subDrivetrain));
+    // autoChooser.addOption("Score Cube Then Engage Center", new
+    // CubeThenEngageCenter(subDrivetrain));
     autoChooser.addOption("Score Two Cubes Then Engage Open",
         new TwoCubeDockOpen(subDrivetrain, subIntake, subWrist, subElevator));
 
