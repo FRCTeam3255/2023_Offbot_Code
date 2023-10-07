@@ -66,7 +66,7 @@ public class TwoCubeDockOpen extends SequentialCommandGroup {
             prefElevator.elevatorIntakeConePos.getValue()),
 
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
-            prefElevator.elevatorPositionTolerance.getValue())),
+            0.1)),
 
         // Drive to score
         Commands.race(
