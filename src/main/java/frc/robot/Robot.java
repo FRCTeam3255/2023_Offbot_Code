@@ -48,7 +48,6 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    RobotContainer.subElevator.resetElevatorEncoderToAbsolute();
   }
 
   @Override
@@ -62,6 +61,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    RobotContainer.subElevator.resetElevatorEncoderToAbsolute();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
@@ -76,6 +76,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    RobotContainer.subElevator.resetElevatorEncoderToAbsolute();
 
     // Comment this line out if you would like autonomous to continue until being
     // interrupted by another command

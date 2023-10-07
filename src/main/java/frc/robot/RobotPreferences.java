@@ -118,21 +118,21 @@ public class RobotPreferences {
         "intakeLimitSwitchInvert", false);
 
     // Percent Output
-    public static final SN_DoublePreference intakeConeSpeed = new SN_DoublePreference("intakeConeSpeed", 0.5);
-    public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -0.5);
+    public static final SN_DoublePreference intakeConeSpeed = new SN_DoublePreference("intakeConeSpeed", 1);
+    public static final SN_DoublePreference intakeCubeSpeed = new SN_DoublePreference("intakeCubeSpeed", -0.6);
     public static final SN_DoublePreference intakeHoldSpeed = new SN_DoublePreference("intakeHoldSpeed", 0.1);
     public static final SN_DoublePreference intakePlaceConeSpeed = new SN_DoublePreference("intakePlaceConeSpeed",
         -0.7);
     public static final SN_DoublePreference intakePlaceCubeSpeed = new SN_DoublePreference("intakePlaceCubeSpeed",
-        1);
+        0.8);
     public static final SN_DoublePreference intakeShootSpeedHigh = new SN_DoublePreference("intakeShootSpeedHigh",
         -0.65);
 
     // Sator Amps
     public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(
-        "intakePieceCollectedBelowAmps", 10);
+        "intakePieceCollectedBelowAmps", 11);
     public static final SN_DoublePreference intakePieceCollectedAboveAmps = new SN_DoublePreference(
-        "intakePieceCollectedAboveAmps", 6);
+        "intakePieceCollectedAboveAmps", 7);
 
     // Periodic Runtimes
     public static final SN_DoublePreference intakePieceCollectedDebounce = new SN_DoublePreference(
@@ -145,7 +145,7 @@ public class RobotPreferences {
   }
 
   public static final class prefElevator {
-    public static final SN_DoublePreference elevatorP = new SN_DoublePreference("elevatorP", 0.1);
+    public static final SN_DoublePreference elevatorP = new SN_DoublePreference("elevatorP", 0.2);
     public static final SN_DoublePreference elevatorI = new SN_DoublePreference("elevatorI", 0);
     public static final SN_DoublePreference elevatorD = new SN_DoublePreference("elevatorD", 0);
 
@@ -215,7 +215,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference wristScoreMidConeAngle = new SN_DoublePreference("wristScoreMidConeAngle",
         136);
     public static final SN_DoublePreference wristScoreMidCubeAngle = new SN_DoublePreference("wristScoreMidCubeAngle",
-        54);
+        64);
     public static final SN_DoublePreference wristScoreHighConeAngle = new SN_DoublePreference("wristScoreHighAngle",
         150);
     public static final SN_DoublePreference wristScoreHighCubeAngle = new SN_DoublePreference("wristScoreHighCubeAngle",
