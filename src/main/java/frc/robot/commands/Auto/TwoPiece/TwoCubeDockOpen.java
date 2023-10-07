@@ -69,8 +69,8 @@ public class TwoCubeDockOpen extends SequentialCommandGroup {
 
         // Drive to score
         Commands.race(
-            subDrivetrain.swerveAutoBuilder.fullAuto(subDrivetrain.cubeToDockOutsideOpen)
-                .withTimeout(subDrivetrain.cubeToDockOutsideOpen.getTotalTimeSeconds())),
+            subDrivetrain.swerveAutoBuilder.fullAuto(subDrivetrain.cubeToScoreOpen)
+                .withTimeout(subDrivetrain.cubeToScoreOpen.getTotalTimeSeconds())),
 
         // Place cube
         new PrepGamePiece(subElevator, subWrist, subIntake,
