@@ -55,10 +55,10 @@ public class SetLEDs extends CommandBase {
     Double[] coordinates = {};
 
     if (subIntake.isGamePieceCollected()) {
-      switch (subIntake.getCurrentGamePiece()) {
+      switch (subIntake.getDesiredGamePiece()) {
         case CUBE:
           desiredPattern = constLEDs.HAS_CUBE_COLOR;
-        case CONE:
+        default:
           desiredPattern = constLEDs.HAS_CONE_COLOR;
       }
     } else {
