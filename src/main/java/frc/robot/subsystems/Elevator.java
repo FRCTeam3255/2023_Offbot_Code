@@ -14,6 +14,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.frcteam3255.utils.SN_Math;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constElevator;
@@ -25,6 +27,9 @@ public class Elevator extends SubsystemBase {
 
   TalonFX leftMotor;
   TalonFX rightMotor;
+
+  DutyCycleEncoder absoluteEncoder;
+  double absoluteEncoderOffset;
 
   TalonFXConfiguration config;
   StatorCurrentLimitConfiguration statorLimit;
@@ -38,12 +43,19 @@ public class Elevator extends SubsystemBase {
     rightMotor = new TalonFX(mapElevator.RIGHT_MOTOR_CAN);
     config = new TalonFXConfiguration();
 
+    absoluteEncoder = new DutyCycleEncoder(mapElevator.ELEVATOR_ABSOLUTE_ENCODER_DIO);
+    absoluteEncoderOffset = constElevator.ABSOLUTE_ENCODER_OFFSET;
+
     desiredHeight = DesiredHeight.NONE;
 
     configure();
   }
 
   public void configure() {
+    if (absoluteEncoder.getAbsolutePosition() < constElevator.ABSOLUTE_ENCODER_ROLLOVER_OFFSET) {
+      absoluteEncoder.setPositionOffset(1);
+    }
+
     leftMotor.configFactoryDefault();
     rightMotor.configFactoryDefault();
 
@@ -117,11 +129,13 @@ public class Elevator extends SubsystemBase {
    * Returns if the elevator is within its positional tolerance.
    * 
    * @param desiredPosition Desired position, in meters
+   * @param tolerance       The tolerance before we are considered at that
+   *                        position, in meters
    * @return If it is at that position
    * 
    */
-  public boolean isElevatorAtPosition(double desiredPosition) {
-    return prefElevator.elevatorPositionTolerance.getValue() >= Math.abs(getElevatorPositionMeters() - desiredPosition);
+  public boolean isElevatorAtPosition(double desiredPosition, double tolerance) {
+    return tolerance >= Math.abs(getElevatorPositionMeters() - desiredPosition);
   }
 
   /**
@@ -133,6 +147,23 @@ public class Elevator extends SubsystemBase {
    */
   public double getElevatorEncoderCounts() {
     return rightMotor.getSelectedSensorPosition();
+  }
+
+  private double getElevatorAbsoluteEncoder() {
+    double rotations = absoluteEncoder.get();
+    rotations -= absoluteEncoderOffset;
+
+    if (constElevator.ABSOLUTE_ENCODER_INVERT) {
+      return -rotations;
+    } else {
+      return rotations;
+    }
+  }
+
+  public void resetElevatorEncoderToAbsolute() {
+    rightMotor.setSelectedSensorPosition(
+        SN_Math.degreesToFalcon(Units.rotationsToDegrees(getElevatorAbsoluteEncoder()),
+            constElevator.GEAR_RATIO) * 2);
   }
 
   /**
@@ -169,7 +200,11 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Elevator Encoder Counts", getElevatorEncoderCounts());
+    SmartDashboard.putNumber("Elevator Encoder Counts Raw", getElevatorEncoderCounts());
     SmartDashboard.putNumber("Elevator Position Meters", getElevatorPositionMeters());
+
+    SmartDashboard.putNumber("Elevator Abs Encoder Raw", absoluteEncoder.get());
+    SmartDashboard.putNumber("Elevator Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Elevator Abs Encoder Get", getElevatorAbsoluteEncoder());
   }
 }

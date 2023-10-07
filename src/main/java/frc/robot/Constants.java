@@ -183,7 +183,7 @@ public final class Constants {
 
     public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
 
-    public static final double CURRENT_LIMIT_FLOOR_AMPS = 13; // Floor: what we limit it to
+    public static final double CURRENT_LIMIT_FLOOR_AMPS = 8; // Floor: what we limit it to
     public static final double CURRENT_LIMIT_CEILING_AMPS = 40; // Ceiling: when we begin limiting
     public static final double CURRENT_LIMIT_AFTER_SEC = 10;
   }
@@ -202,6 +202,9 @@ public final class Constants {
     public static final double CURRENT_LIMIT_CEILING_AMPS = 1000; // Ceiling: when we begin limiting
     public static final double CURRENT_LIMIT_AFTER_SEC = 10;
 
+    public static final double ABSOLUTE_ENCODER_OFFSET = 0.659091;;
+    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.326189;
+    public static final boolean ABSOLUTE_ENCODER_INVERT = true;
     public static final boolean INVERT_LEFT_MOTOR = true;
 
     public static final double CIRCUMFERENCE = 0.13972;
