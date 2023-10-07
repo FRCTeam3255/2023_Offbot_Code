@@ -38,6 +38,7 @@ import frc.robot.commands.Auto.OnePiece.CenterCube;
 import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityCable;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityOpen;
+import frc.robot.commands.Auto.TwoPiece.TwoCubeDockOpen;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -170,12 +171,14 @@ public class RobotContainer {
   private void configureAutoSelector() {
     autoChooser.setDefaultOption("null", null);
 
-    autoChooser.addOption("Score Cube Then Mobility Cable",
-        new CubeThenMobilityCable(subDrivetrain));
-    autoChooser.addOption("Score Cube Then Engage Center", new CubeThenEngageCenter(subDrivetrain));
     autoChooser.addOption("Score Cube Center (NO DOCK)",
         new CenterCube(subDrivetrain, subIntake, subElevator, subWrist));
+    autoChooser.addOption("Score Cube Then Mobility Cable",
+        new CubeThenMobilityCable(subDrivetrain));
     autoChooser.addOption("Score Cube Then Mobility Open", new CubeThenMobilityOpen(subDrivetrain));
+    autoChooser.addOption("Score Cube Then Engage Center", new CubeThenEngageCenter(subDrivetrain));
+    autoChooser.addOption("Score Two Cubes Then Engage Open",
+        new TwoCubeDockOpen(subDrivetrain, subIntake, subWrist, subElevator));
 
     SmartDashboard.putData(autoChooser);
 
