@@ -17,6 +17,7 @@ import frc.robot.commands.PrepGamePiece;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -28,12 +29,15 @@ public class TwoCubeDockOpen extends SequentialCommandGroup {
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
+  LEDs subLEDs;
 
-  public TwoCubeDockOpen(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator) {
+  public TwoCubeDockOpen(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+      LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
     this.subWrist = subWrist;
     this.subElevator = subElevator;
+    this.subLEDs = subLEDs;
 
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
@@ -62,7 +66,8 @@ public class TwoCubeDockOpen extends SequentialCommandGroup {
             subDrivetrain.swerveAutoBuilder.fullAuto(subDrivetrain.scoreToCubeOpen)
                 .withTimeout(subDrivetrain.scoreToCubeOpen.getTotalTimeSeconds())),
 
-        new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE, prefWrist.wristIntakeAngle.getValue(),
+        new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
+            prefWrist.wristIntakeAngle.getValue(),
             prefElevator.elevatorIntakeConePos.getValue()),
 
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
