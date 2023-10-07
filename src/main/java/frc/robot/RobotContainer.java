@@ -94,7 +94,7 @@ public class RobotContainer {
    */
   public void resetToAbsolutePositions() {
     subDrivetrain.resetSteerMotorEncodersToAbsolute();
-    subWrist.resetEncoderToAbsolute();
+    subWrist.resetWristEncoderToAbsolute();
   }
 
   private void configureBindings() {
@@ -127,28 +127,28 @@ public class RobotContainer {
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
 
     // Prep HYBRID
-    conOperator.btn_South.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+    conOperator.btn_North.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHybridConeScore.getValue(),
         prefWrist.wristScoreHybridCubeAngle.getValue(), prefElevator.elevatorHybridCubeScore.getValue()));
-    conOperator.btn_South.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HYBRID)));
+    conOperator.btn_North.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HYBRID)));
 
     // Prep MID
     conOperator.btn_East.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
-        prefWrist.wristStowAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
+        prefWrist.wristScoreMidCubeAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
     conOperator.btn_East.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
 
     conOperator.btn_West.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
-        prefWrist.wristStowAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
+        prefWrist.wristScoreMidCubeAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
     conOperator.btn_West.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.MID)));
 
     // Prep HIGH
-    conOperator.btn_North.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
+    conOperator.btn_South.onTrue(new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
         prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()));
 
-    conOperator.btn_North.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
+    conOperator.btn_South.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
 
     conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
 

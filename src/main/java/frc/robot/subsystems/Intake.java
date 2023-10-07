@@ -28,6 +28,8 @@ public class Intake extends SubsystemBase {
   GamePiece currentGamePiece = GamePiece.NONE;
   GamePiece desiredGamePiece = GamePiece.NONE;
 
+  double intakeTimer = 0;
+
   public Intake() {
     intakeMotor = new TalonFX(mapIntake.INTAKE_MOTOR_CAN);
     intakeLimitSwitch = new DigitalInput(mapIntake.INTAKE_LIMIT_SWITCH_DIO);
@@ -51,7 +53,9 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean getIntakeLimitSwitch() {
-    return prefIntake.intakeLimitSwitchInvert.getValue() ? !intakeLimitSwitch.get() : intakeLimitSwitch.get();
+    return false; // Disabling the limit switch
+    // return prefIntake.intakeLimitSwitchInvert.getValue() ?
+    // !intakeLimitSwitch.get() : intakeLimitSwitch.get();
   }
 
   /**
@@ -94,7 +98,14 @@ public class Intake extends SubsystemBase {
     boolean hasGamePiece = (current < prefIntake.intakePieceCollectedBelowAmps.getValue()
         && current > prefIntake.intakePieceCollectedAboveAmps.getValue()) || getIntakeLimitSwitch();
 
-    return hasGamePiece;
+    if (hasGamePiece && intakeTimer <= prefIntake.intakePieceCollectedDebounce.getValue()) {
+      intakeTimer += 1;
+    } else if (!hasGamePiece) {
+      intakeTimer = 0;
+    } else {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -129,9 +140,11 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     setCurrentGamePiece();
-    SmartDashboard.putBoolean("Intake Limit Switch", getIntakeLimitSwitch());
+    SmartDashboard.putNumber("Intake Game Piece Timer", intakeTimer);
+
     SmartDashboard.putBoolean("Is Game Piece Collected", isGamePieceCollected());
     SmartDashboard.putString("Current Game Piece", getCurrentGamePiece().toString());
+    SmartDashboard.putString("Desired Game Piece", getDesiredGamePiece().toString());
     SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
   }
 }
