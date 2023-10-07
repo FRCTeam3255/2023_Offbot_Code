@@ -130,9 +130,9 @@ public class RobotPreferences {
 
     // Sator Amps
     public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(
-        "intakePieceCollectedBelowAmps", 10);
+        "intakePieceCollectedBelowAmps", 11);
     public static final SN_DoublePreference intakePieceCollectedAboveAmps = new SN_DoublePreference(
-        "intakePieceCollectedAboveAmps", 6);
+        "intakePieceCollectedAboveAmps", 7);
 
     // Periodic Runtimes
     public static final SN_DoublePreference intakePieceCollectedDebounce = new SN_DoublePreference(
@@ -145,7 +145,7 @@ public class RobotPreferences {
   }
 
   public static final class prefElevator {
-    public static final SN_DoublePreference elevatorP = new SN_DoublePreference("elevatorP", 0.1);
+    public static final SN_DoublePreference elevatorP = new SN_DoublePreference("elevatorP", 0.2);
     public static final SN_DoublePreference elevatorI = new SN_DoublePreference("elevatorI", 0);
     public static final SN_DoublePreference elevatorD = new SN_DoublePreference("elevatorD", 0);
 

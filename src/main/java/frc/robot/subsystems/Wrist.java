@@ -130,6 +130,10 @@ public class Wrist extends SubsystemBase {
    * Reset the wrist motor to the offset value of the absolute encoder.
    */
   public void resetWristEncoderToAbsolute() {
+    if (absoluteEncoder.get() == 0.0) {
+      return; // ENCODER UNPLUGGED!!!!!
+    }
+
     wristMotor.setSelectedSensorPosition(
         SN_Math.degreesToFalcon(Units.rotationsToDegrees(getWristAbsoluteEncoder()),
             constWrist.GEAR_RATIO));
