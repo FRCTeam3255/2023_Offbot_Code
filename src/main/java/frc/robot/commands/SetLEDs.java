@@ -58,8 +58,10 @@ public class SetLEDs extends CommandBase {
       switch (subIntake.getDesiredGamePiece()) {
         case CUBE:
           desiredPattern = constLEDs.HAS_CUBE_COLOR;
+          return;
         default:
           desiredPattern = constLEDs.HAS_CONE_COLOR;
+          return;
       }
     } else {
       desiredPattern = constLEDs.DEFAULT_COLOR;
