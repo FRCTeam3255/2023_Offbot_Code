@@ -59,7 +59,7 @@ public class SetLEDs extends CommandBase {
         case CUBE:
           desiredPattern = constLEDs.HAS_CUBE_COLOR;
           return;
-        case CONE:
+        default:
           desiredPattern = constLEDs.HAS_CONE_COLOR;
           return;
       }

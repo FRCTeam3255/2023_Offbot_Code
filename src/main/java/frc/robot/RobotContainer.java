@@ -150,6 +150,7 @@ public class RobotContainer {
     conOperator.btn_South.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
 
     conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
+    conOperator.btn_LeftTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
 
     conOperator.btn_Y.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristShelfAngle.getValue(), prefElevator.elevatorShelf.getValue()));

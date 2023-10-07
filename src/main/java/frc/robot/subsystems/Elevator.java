@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -70,9 +72,6 @@ public class Elevator extends SubsystemBase {
     config.motionAcceleration = SN_Math.metersToFalcon(prefElevator.elevatorMaxAccel.getValue(),
         constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
 
-    leftMotor.setInverted(constElevator.INVERT_LEFT_MOTOR);
-    rightMotor.setInverted(!constElevator.INVERT_LEFT_MOTOR);
-
     leftMotor.setNeutralMode(NeutralMode.Brake);
     rightMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -93,6 +92,10 @@ public class Elevator extends SubsystemBase {
 
     leftMotor.configAllSettings(config);
     rightMotor.configAllSettings(config);
+
+    rightMotor.follow(leftMotor);
+    leftMotor.setInverted(constElevator.INVERT_LEFT_MOTOR);
+    rightMotor.setInverted(InvertType.OpposeMaster);
 
     // rightMotor.configStatorCurrentLimit(statorLimit);
     // leftMotor.configStatorCurrentLimit(statorLimit);
