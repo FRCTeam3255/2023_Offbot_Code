@@ -65,7 +65,8 @@ public class TwoCubeDockOpen extends SequentialCommandGroup {
         new IntakeGamePiece(subWrist, subIntake, subElevator, GamePiece.CUBE, prefWrist.wristIntakeAngle.getValue(),
             prefElevator.elevatorIntakeConePos.getValue()),
 
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue())),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
+            prefElevator.elevatorPositionTolerance.getValue())),
 
         // Drive to score
         Commands.race(
