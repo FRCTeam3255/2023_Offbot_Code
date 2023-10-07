@@ -31,25 +31,18 @@ public class IntakeGamePiece extends SequentialCommandGroup {
   double wristPosition;
   double elevatorPosition;
 
-  public IntakeGamePiece(Wrist subWrist, Intake subIntake, Elevator subElevator, GamePiece gamepiece,
+  public IntakeGamePiece(Wrist subWrist, Intake subIntake, Elevator subElevator, LEDs subLEDs, GamePiece gamepiece,
       double wristPosition, double elevatorPosition) {
 
     this.subWrist = subWrist;
     this.subIntake = subIntake;
     this.subElevator = subElevator;
+    this.subLEDs = subLEDs;
     this.gamepiece = gamepiece;
     this.wristPosition = wristPosition;
     this.elevatorPosition = elevatorPosition;
 
-    addRequirements(subWrist, subIntake, subElevator);
-
-    // Assume its a cone if there is no value (fallback condition, should never
-    // happen)
-    if (gamepiece == GamePiece.CUBE) {
-      pattern = constLEDs.INTAKING_CUBE_COLOR;
-    } else {
-      pattern = constLEDs.INTAKING_CONE_COLOR;
-    }
+    addRequirements(subWrist, subIntake, subElevator, subLEDs);
 
     addCommands(
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(gamepiece)),
@@ -66,8 +59,10 @@ public class IntakeGamePiece extends SequentialCommandGroup {
         Commands.runOnce(() -> subWrist.setWristAngle(wristPosition)),
 
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
+            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CUBE_COLOR)))
             .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
+            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CONE_COLOR)))
             .unless(() -> !gamepiece.equals(GamePiece.CONE)),
 
         Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
