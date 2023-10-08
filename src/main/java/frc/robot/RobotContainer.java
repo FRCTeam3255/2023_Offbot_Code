@@ -30,27 +30,21 @@ import frc.robot.Constants.constLEDs;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.RobotPreferences.prefElevator;
-import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
-import frc.robot.commands.Engage;
 import frc.robot.commands.IntakeGamePiece;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
 import frc.robot.commands.Auto.OnePiece.CenterCube;
-import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
-import frc.robot.commands.Auto.OnePiece.CubeThenMobilityCable;
-import frc.robot.commands.Auto.OnePiece.CubeThenMobilityOpen;
 import frc.robot.commands.Auto.OnePiece.TestLine;
-import frc.robot.commands.Auto.TwoPiece.ConeCubeDockOpen;
-import frc.robot.commands.Auto.TwoPiece.TwoCubeDockOpen;
+import frc.robot.commands.Auto.TwoPiece.OpenCoCuDock;
+import frc.robot.commands.Auto.TwoPiece.OpenCuCuDock;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
@@ -74,15 +68,15 @@ public class RobotContainer {
   public static SwerveAutoBuilder swerveAutoBuilder;
 
   public RobotContainer() {
-    HashMap<String, Command> eventMap = new HashMap<>();
-    eventMap.put("CubeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
+    // -- Creating Autos --
+    HashMap<String, Command> autoEventMap = new HashMap<>();
+    autoEventMap.put("CubeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
-    eventMap.put("ConeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
+    autoEventMap.put("ConeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
-
-    eventMap.put("waitForStow",
+    autoEventMap.put("waitForStow",
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.1)));
-    eventMap.put("prepCube", new PrepGamePiece(subElevator, subWrist, subIntake,
+    autoEventMap.put("prepCube", new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
         prefWrist.wristScoreMidCubeAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
 
@@ -99,9 +93,10 @@ public class RobotContainer {
             prefDrivetrain.autoThetaI.getValue(),
             prefDrivetrain.autoThetaD.getValue()),
         subDrivetrain::setModuleStatesAuto,
-        eventMap,
+        autoEventMap,
         true,
         subDrivetrain);
+    // -- Creating Autos --
 
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_X_DEADBAND);
 
@@ -211,21 +206,18 @@ public class RobotContainer {
   private void configureAutoSelector() {
     autoChooser.setDefaultOption("null", null);
 
-    autoChooser.addOption("TEST LINE",
-        new TestLine(subDrivetrain));
+    // Open Side
+    autoChooser.addOption("OPEN - 2 CU, Engage",
+        new OpenCuCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    autoChooser.addOption("OPEN - 1 CO, 1 CU, Engage",
+        new OpenCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
-    autoChooser.addOption("1 CU (NO DOCK)",
+    // Center
+    // TODO: Remove, replace with cone
+    autoChooser.addOption("CENTER - 1 CU (NO DOCK)",
         new CenterCube(subDrivetrain, subIntake, subElevator, subWrist));
-    // autoChooser.addOption("Score Cube Then Mobility Cable",
-    // new CubeThenMobilityCable(subDrivetrain));
-    // autoChooser.addOption("Score Cube Then Mobility Open", new
-    // CubeThenMobilityOpen(subDrivetrain));
-    // autoChooser.addOption("Score Cube Then Engage Center", new
-    // CubeThenEngageCenter(subDrivetrain));
-    autoChooser.addOption("2 CU, Engage Open",
-        new TwoCubeDockOpen(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
-    autoChooser.addOption("1 CO 1 CU, Engage Open",
-        new ConeCubeDockOpen(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+
+    // Cable Side
 
     SmartDashboard.putData(autoChooser);
 

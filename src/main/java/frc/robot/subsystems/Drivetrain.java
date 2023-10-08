@@ -62,17 +62,10 @@ public class Drivetrain extends SubsystemBase {
   private ProfiledPIDController yPID;
   private PIDController thetaPID;
 
-  public PathPlannerTrajectory scoreToCubeOpen;
-  public PathPlannerTrajectory scoreThenDock;
-  public PathPlannerTrajectory scoreToCubeCable;
-
-  public PathPlannerTrajectory cubeToScoreOpen;
-  public PathPlannerTrajectory scoreToDockOpen;
-
-  public PathPlannerTrajectory testLine;
-
-  public PathPlannerTrajectory cubeToDockOutsideOpen;
-  public PathPlannerTrajectory coneCubeDockOpen;
+  // Paths
+  public PathPlannerTrajectory testLinePath;
+  public PathPlannerTrajectory openCoCuDock;
+  public PathPlannerTrajectory openCuCuDock;
 
   public Double[] columnYCoordinatesBlue = { 0.5, 1.05, 1.63, 2.19, 2.75, 3.31, 3.86, 4.43, 4.98 };
   public Double[] columnYCoordinatesRed = { 4.98, 4.43, 3.86, 3.31, 2.75, 2.19, 1.63, 1.05, 0.5 };
@@ -141,40 +134,20 @@ public class Drivetrain extends SubsystemBase {
         prefDrivetrain.teleThetaI.getValue(),
         prefDrivetrain.teleThetaD.getValue());
 
-    testLine = PathPlanner.loadPath("linePath",
+    testLinePath = PathPlanner.loadPath("testLinePath",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    coneCubeDockOpen = PathPlanner.loadPath("coneCubeDockOpen",
+    openCoCuDock = PathPlanner.loadPath("openCoCuDock",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    scoreToCubeCable = PathPlanner.loadPath("scoreToCubeCable",
-        new PathConstraints(
-            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
-
-    scoreToCubeOpen = PathPlanner.loadPath("scoreToCubeOpen", new PathConstraints(
+    openCuCuDock = PathPlanner.loadPath("openCuCuDock", new PathConstraints(
         Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
         Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    scoreThenDock = PathPlanner.loadPath("scoreThenDock", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
-
-    cubeToScoreOpen = PathPlanner.loadPath("cubeToScoreOpen", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
-
-    scoreToDockOpen = PathPlanner.loadPath("scoreToDockOpen", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
-
-    cubeToDockOutsideOpen = PathPlanner.loadPath("cubeToDockOutsideOpen", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
     configure();
   }
 
