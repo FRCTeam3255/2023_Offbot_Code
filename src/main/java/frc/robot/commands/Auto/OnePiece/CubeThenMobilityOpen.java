@@ -6,6 +6,7 @@ package frc.robot.commands.Auto.OnePiece;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -22,6 +23,6 @@ public class CubeThenMobilityOpen extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.scoreToCubeOpen.getInitialHolonomicPose().getRotation().getDegrees())),
 
-        subDrivetrain.swerveAutoBuilder.fullAuto(subDrivetrain.scoreToCubeOpen));
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.scoreToCubeOpen));
   }
 }

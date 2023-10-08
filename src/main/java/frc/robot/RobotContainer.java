@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+
 import com.frcteam3255.joystick.SN_XboxController;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotState;
@@ -24,11 +28,13 @@ import frc.robot.Constants.GamePiece;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constLEDs;
 import frc.robot.RobotMap.mapControllers;
+import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
+import frc.robot.commands.Engage;
 import frc.robot.commands.IntakeGamePiece;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
@@ -38,10 +44,12 @@ import frc.robot.commands.Auto.OnePiece.CenterCube;
 import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityCable;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityOpen;
+import frc.robot.commands.Auto.OnePiece.TestLine;
 import frc.robot.commands.Auto.TwoPiece.TwoCubeDockOpen;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
@@ -62,8 +70,35 @@ public class RobotContainer {
   SendableChooser<Command> autoChooser = new SendableChooser<>();
   private static DigitalInput pracBotSwitch = new DigitalInput(9);
   private final Trigger teleopTrigger = new Trigger(() -> RobotState.isEnabled() && RobotState.isTeleop());
+  public static SwerveAutoBuilder swerveAutoBuilder;
 
   public RobotContainer() {
+    HashMap<String, Command> eventMap = new HashMap<>();
+    eventMap.put("autoDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
+        prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
+    eventMap.put("waitForStow",
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.1)));
+    eventMap.put("prepCube", new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
+        prefWrist.wristScoreMidCubeAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
+
+    swerveAutoBuilder = new SwerveAutoBuilder(
+        subDrivetrain::getPose,
+        subDrivetrain::resetPose,
+        subDrivetrain.swerveKinematics,
+        new PIDConstants(
+            prefDrivetrain.autoTransP.getValue(),
+            prefDrivetrain.autoTransI.getValue(),
+            prefDrivetrain.autoTransD.getValue()),
+        new PIDConstants(
+            prefDrivetrain.autoThetaP.getValue(),
+            prefDrivetrain.autoThetaI.getValue(),
+            prefDrivetrain.autoThetaD.getValue()),
+        subDrivetrain::setModuleStatesAuto,
+        eventMap,
+        true,
+        subDrivetrain);
+
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_X_DEADBAND);
 
     subDrivetrain
@@ -150,8 +185,8 @@ public class RobotContainer {
 
     conOperator.btn_South.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
 
-    conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
-    conOperator.btn_LeftTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator));
+    conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator, false));
+    conOperator.btn_LeftTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator, false));
 
     conOperator.btn_Y.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristShelfAngle.getValue(), prefElevator.elevatorShelf.getValue()));
@@ -172,7 +207,10 @@ public class RobotContainer {
   private void configureAutoSelector() {
     autoChooser.setDefaultOption("null", null);
 
-    autoChooser.addOption("Score Cube Center (NO DOCK)",
+    autoChooser.addOption("TEST LINE",
+        new TestLine(subDrivetrain));
+
+    autoChooser.addOption("1 CU (NO DOCK)",
         new CenterCube(subDrivetrain, subIntake, subElevator, subWrist));
     // autoChooser.addOption("Score Cube Then Mobility Cable",
     // new CubeThenMobilityCable(subDrivetrain));
@@ -180,8 +218,8 @@ public class RobotContainer {
     // CubeThenMobilityOpen(subDrivetrain));
     // autoChooser.addOption("Score Cube Then Engage Center", new
     // CubeThenEngageCenter(subDrivetrain));
-    autoChooser.addOption("Score Two Cubes Then Engage Open",
-        new TwoCubeDockOpen(subDrivetrain, subIntake, subWrist, subElevator));
+    autoChooser.addOption("2 CU, Engage Open",
+        new TwoCubeDockOpen(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     SmartDashboard.putData(autoChooser);
 

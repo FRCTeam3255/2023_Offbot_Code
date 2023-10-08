@@ -12,19 +12,19 @@ import frc.robot.subsystems.Drivetrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CubeThenMobilityCable extends SequentialCommandGroup {
-
+public class TestLine extends SequentialCommandGroup {
+  /** Creates a new TestLine. */
   Drivetrain subDrivetrain;
 
-  public CubeThenMobilityCable(Drivetrain subDrivetrain) {
+  public TestLine(Drivetrain subDrivetrain) {
     this.subDrivetrain = subDrivetrain;
 
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
-            subDrivetrain.scoreToCubeCable.getInitialHolonomicPose().getRotation().getDegrees())),
+            subDrivetrain.testLine.getInitialHolonomicPose().getRotation().getDegrees())),
 
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.scoreToCubeCable));
-
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.testLine)
+            .withTimeout(subDrivetrain.testLine.getTotalTimeSeconds()));
   }
 }

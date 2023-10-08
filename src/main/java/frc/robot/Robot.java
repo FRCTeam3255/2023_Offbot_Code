@@ -52,7 +52,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_robotContainer.resetToAbsolutePositions();
   }
 
   /**
@@ -62,6 +61,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.subElevator.resetElevatorEncoderToAbsolute();
+    m_robotContainer.resetToAbsolutePositions();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
@@ -77,6 +77,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     RobotContainer.subElevator.resetElevatorEncoderToAbsolute();
+    m_robotContainer.resetToAbsolutePositions();
 
     // Comment this line out if you would like autonomous to continue until being
     // interrupted by another command

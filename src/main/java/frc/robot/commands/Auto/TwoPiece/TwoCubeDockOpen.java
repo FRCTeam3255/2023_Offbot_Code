@@ -6,6 +6,7 @@ package frc.robot.commands.Auto.TwoPiece;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.GamePiece;
 import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
@@ -57,39 +58,41 @@ public class TwoCubeDockOpen extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> subElevator.isPrepped()),
 
-        new PlaceGamePiece(subIntake, subWrist, subElevator),
+        Commands.waitSeconds(0.2),
+
+        new PlaceGamePiece(subIntake, subWrist, subElevator, false),
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
         // Drive to collect a cube
-        Commands.race(
-            subDrivetrain.swerveAutoBuilder.fullAuto(subDrivetrain.scoreToCubeOpen)
-                .withTimeout(subDrivetrain.scoreToCubeOpen.getTotalTimeSeconds())),
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.scoreToCubeOpen)
+            .withTimeout(subDrivetrain.scoreToCubeOpen.getTotalTimeSeconds()),
 
-        new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
-            prefWrist.wristIntakeAngle.getValue(),
-            prefElevator.elevatorIntakeConePos.getValue()),
-
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
-            0.1)),
-
-        // Drive to score
-        Commands.race(
-            subDrivetrain.swerveAutoBuilder.fullAuto(subDrivetrain.cubeToScoreOpen)
-                .withTimeout(subDrivetrain.cubeToScoreOpen.getTotalTimeSeconds())),
-
-        // Place cube
-        new PrepGamePiece(subElevator, subWrist, subIntake,
-            prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
-            prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()),
-
-        Commands.waitUntil(() -> subElevator.isPrepped()),
-
-        new PlaceGamePiece(subIntake, subWrist, subElevator),
+        new PlaceGamePiece(subIntake, subWrist, subElevator, true),
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        // Engage
         new Engage(subDrivetrain));
+
+    // Drive to score
+    // Commands.race(
+    // RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.cubeToScoreOpen)
+    // .withTimeout(subDrivetrain.cubeToScoreOpen.getTotalTimeSeconds())));
+
+    // // Place cube
+    // new PrepGamePiece(subElevator, subWrist, subIntake,
+    // prefWrist.wristScoreHighConeAngle.getValue(),
+    // prefElevator.elevatorHighConeScore.getValue(),
+    // prefWrist.wristScoreHighCubeAngle.getValue(),
+    // prefElevator.elevatorHighCubeScore.getValue()),
+
+    // Commands.waitUntil(() -> subElevator.isPrepped()),
+
+    // new PlaceGamePiece(subIntake, subWrist, subElevator),
+
+    // Commands.waitUntil(() -> !subElevator.isPrepped()),
+
+    // // Engage
+    // new Engage(subDrivetrain));
   }
 }

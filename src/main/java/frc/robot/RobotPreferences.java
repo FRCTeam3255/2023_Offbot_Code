@@ -44,25 +44,19 @@ public class RobotPreferences {
     // down.
     public static final SN_DoublePreference triggerValue = new SN_DoublePreference("triggerValue", .2);
 
-    public static final SN_DoublePreference autoThetaP = new SN_DoublePreference("autoThetaP", 0.5);
+    public static final SN_DoublePreference autoThetaP = new SN_DoublePreference("autoThetaP", 0.65);
     public static final SN_DoublePreference autoThetaI = new SN_DoublePreference("autoThetaI", 0.0);
     public static final SN_DoublePreference autoThetaD = new SN_DoublePreference("autoThetaD", 0.0);
 
-    public static final SN_DoublePreference autoTransP = new SN_DoublePreference("autoTransP", 2);
+    public static final SN_DoublePreference autoTransP = new SN_DoublePreference("autoTransP", 8);
     public static final SN_DoublePreference autoTransI = new SN_DoublePreference("autoTransI", 0);
     public static final SN_DoublePreference autoTransD = new SN_DoublePreference("autoTransD", 0);
 
     public static final SN_DoublePreference autoMaxSpeedFeet = new SN_DoublePreference(
-        "autoMaxSpeedFeet", 2);
+        "autoMaxSpeedFeet", 8);
 
     public static final SN_DoublePreference autoMaxAccelFeet = new SN_DoublePreference(
-        "autoMaxAccelFeet", 1);
-
-    public static final SN_DoublePreference fasterAutoMaxSpeedFeet = new SN_DoublePreference(
-        "autoMaxSpeedFeet", 5);
-
-    public static final SN_DoublePreference fasterAutoMaxAccelFeet = new SN_DoublePreference(
-        "autoMaxAccelFeet", 4);
+        "autoMaxAccelFeet", 6);
 
     public static final SN_DoublePreference teleTransP = new SN_DoublePreference("teleTransP", 0);
     public static final SN_DoublePreference teleTransI = new SN_DoublePreference("teleTransI", 0);
@@ -108,9 +102,9 @@ public class RobotPreferences {
         "steerPeakCurrentTime", 0.1);
 
     public static final SN_DoublePreference measurementStdDevsFeet = new SN_DoublePreference(
-        "measurementStdDevsFeet", Units.metersToFeet(0.1));
+        "measurementStdDevsFeet", Units.metersToFeet(0));
     public static final SN_DoublePreference measurementStdDevsDegrees = new SN_DoublePreference(
-        "measurementStdDevsDegrees", Units.radiansToDegrees(0.1));
+        "measurementStdDevsDegrees", Units.radiansToDegrees(0));
   }
 
   public static final class prefIntake {
@@ -124,9 +118,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakePlaceConeSpeed = new SN_DoublePreference("intakePlaceConeSpeed",
         -0.7);
     public static final SN_DoublePreference intakePlaceCubeSpeed = new SN_DoublePreference("intakePlaceCubeSpeed",
-        0.8);
-    public static final SN_DoublePreference intakeShootSpeedHigh = new SN_DoublePreference("intakeShootSpeedHigh",
-        -0.65);
+        0.6);
+    public static final SN_DoublePreference intakeShootCubeSpeed = new SN_DoublePreference("intakeShootCubeSpeed",
+        1);
 
     // Sator Amps
     public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(

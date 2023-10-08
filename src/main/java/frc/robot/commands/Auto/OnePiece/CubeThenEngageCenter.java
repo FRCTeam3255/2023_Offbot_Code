@@ -6,6 +6,7 @@ package frc.robot.commands.Auto.OnePiece;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.RobotContainer;
 import frc.robot.commands.Engage;
 import frc.robot.subsystems.Drivetrain;
 
@@ -24,7 +25,7 @@ public class CubeThenEngageCenter extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.scoreThenDock.getInitialHolonomicPose().getRotation().getDegrees())),
 
-        subDrivetrain.swerveAutoBuilder.fullAuto(subDrivetrain.scoreThenDock)
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.scoreThenDock)
             .withTimeout(subDrivetrain.scoreThenDock.getTotalTimeSeconds()),
 
         new Engage(subDrivetrain));

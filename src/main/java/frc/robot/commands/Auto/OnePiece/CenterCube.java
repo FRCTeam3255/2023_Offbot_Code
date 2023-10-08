@@ -50,6 +50,8 @@ public class CenterCube extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> subElevator.isPrepped()),
 
-        new PlaceGamePiece(subIntake, subWrist, subElevator));
+        Commands.waitSeconds(0.2),
+
+        new PlaceGamePiece(subIntake, subWrist, subElevator, false));
   }
 }
