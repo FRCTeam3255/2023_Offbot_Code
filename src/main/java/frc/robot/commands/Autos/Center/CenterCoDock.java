@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Autos.Open;
+package frc.robot.commands.Autos.Center;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -11,6 +11,7 @@ import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.RobotContainer;
+import frc.robot.commands.Engage;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.Stow;
@@ -20,14 +21,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class OpenCoCu extends SequentialCommandGroup {
+public class CenterCoDock extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public OpenCoCu(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public CenterCoDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -38,7 +39,7 @@ public class OpenCoCu extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
-            subDrivetrain.openCoCu.getInitialHolonomicPose().getRotation().getDegrees())),
+            subDrivetrain.openCoCuDock.getInitialHolonomicPose().getRotation().getDegrees())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
@@ -62,10 +63,10 @@ public class OpenCoCu extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        // Drive, collect a cube, and go to the cube node
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCu)
-            .withTimeout(subDrivetrain.openCoCu.getTotalTimeSeconds()),
+        // Drive onto the charge station
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCuDock)
+            .withTimeout(subDrivetrain.openCoCuDock.getTotalTimeSeconds()),
 
-        new PlaceGamePiece(subIntake, subWrist, subElevator, true));
+        new Engage(subDrivetrain));
   }
 }

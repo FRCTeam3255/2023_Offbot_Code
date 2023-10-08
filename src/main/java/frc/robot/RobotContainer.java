@@ -38,6 +38,8 @@ import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
+import frc.robot.commands.Autos.Center.CenterCo;
+import frc.robot.commands.Autos.Center.CenterCoDock;
 import frc.robot.commands.Autos.Open.OpenCoCuDock;
 import frc.robot.commands.Autos.Open.OpenCuCuDock;
 import frc.robot.subsystems.Drivetrain;
@@ -204,6 +206,10 @@ public class RobotContainer {
   private void configureAutoSelector() {
     autoChooser.setDefaultOption("null", null);
 
+    // For Autonomous, line up the left bumper (from the perspective of behind the
+    // glass) with the divider to the left of the node you place in first.
+    // TODO: Include a photo of this in Documentation and reference it here
+
     // Open Side
     autoChooser.addOption("OPEN - 2 CU, Engage",
         new OpenCuCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
@@ -213,6 +219,10 @@ public class RobotContainer {
         new OpenCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Center
+    autoChooser.addOption("CENTER - 1 CO, Engage",
+        new CenterCoDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    autoChooser.addOption("CENTER - 1 CO",
+        new CenterCo(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Cable Side
 
