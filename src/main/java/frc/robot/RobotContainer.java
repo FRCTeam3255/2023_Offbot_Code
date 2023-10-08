@@ -38,10 +38,8 @@ import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
-import frc.robot.commands.Auto.OnePiece.CenterCube;
-import frc.robot.commands.Auto.OnePiece.TestLine;
-import frc.robot.commands.Auto.TwoPiece.OpenCoCuDock;
-import frc.robot.commands.Auto.TwoPiece.OpenCuCuDock;
+import frc.robot.commands.Autos.Open.OpenCoCuDock;
+import frc.robot.commands.Autos.Open.OpenCuCuDock;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -70,9 +68,9 @@ public class RobotContainer {
   public RobotContainer() {
     // -- Creating Autos --
     HashMap<String, Command> autoEventMap = new HashMap<>();
-    autoEventMap.put("CubeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
+    autoEventMap.put("cubeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
-    autoEventMap.put("ConeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
+    autoEventMap.put("coneDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
     autoEventMap.put("waitForStow",
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.1)));
@@ -211,11 +209,10 @@ public class RobotContainer {
         new OpenCuCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
     autoChooser.addOption("OPEN - 1 CO, 1 CU, Engage",
         new OpenCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    autoChooser.addOption("OPEN - 1 CO, 1 CU",
+        new OpenCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Center
-    // TODO: Remove, replace with cone
-    autoChooser.addOption("CENTER - 1 CU (NO DOCK)",
-        new CenterCube(subDrivetrain, subIntake, subElevator, subWrist));
 
     // Cable Side
 

@@ -21,14 +21,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class OpenCoCuDock extends SequentialCommandGroup {
+public class OpenCoCu extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public OpenCoCuDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public OpenCoCu(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -63,14 +63,10 @@ public class OpenCoCuDock extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        // Drive, collect a cube, and go onto the charge station
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCuDock)
-            .withTimeout(subDrivetrain.openCoCuDock.getTotalTimeSeconds()),
+        // Drive, collect a cube, and go to the cube node
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCu)
+            .withTimeout(subDrivetrain.openCoCu.getTotalTimeSeconds()),
 
-        new PlaceGamePiece(subIntake, subWrist, subElevator, true),
-
-        Commands.waitUntil(() -> !subElevator.isPrepped()),
-
-        new Engage(subDrivetrain));
+        new PlaceGamePiece(subIntake, subWrist, subElevator, true));
   }
 }
