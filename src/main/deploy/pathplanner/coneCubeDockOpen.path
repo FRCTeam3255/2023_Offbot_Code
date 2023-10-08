@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.8298457109734734,
-        "y": 4.4077989010678875
+        "x": 1.83,
+        "y": 4.96962197343198
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8298457109734727,
-        "y": 4.407798901067888
+        "x": 2.8299999999999996,
+        "y": 4.969621973431981
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -147,19 +147,19 @@
   ],
   "markers": [
     {
-      "position": 1.8327272727272799,
+      "position": 1.83,
       "names": [
         "CubeDeployIntake"
       ]
     },
     {
-      "position": 2.9672727272727633,
+      "position": 2.7999999999999456,
       "names": [
         "waitForStow"
       ]
     },
     {
-      "position": 4.109090909090893,
+      "position": 3.9636363636364162,
       "names": [
         "prepCube"
       ]

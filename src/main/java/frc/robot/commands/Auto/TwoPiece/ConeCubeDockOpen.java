@@ -6,15 +6,15 @@ package frc.robot.commands.Auto.TwoPiece;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.GamePiece;
 import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
+import frc.robot.RobotContainer;
 import frc.robot.commands.Engage;
-import frc.robot.commands.IntakeGamePiece;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
+import frc.robot.commands.Stow;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -24,15 +24,14 @@ import frc.robot.subsystems.Wrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoCubeDockOpen extends SequentialCommandGroup {
-
+public class ConeCubeDockOpen extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public TwoCubeDockOpen(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public ConeCubeDockOpen(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -46,10 +45,13 @@ public class TwoCubeDockOpen extends SequentialCommandGroup {
             subDrivetrain.scoreToCubeOpen.getInitialHolonomicPose().getRotation().getDegrees())),
 
         // Intake cube
-        Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CUBE)),
+        Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
 
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
             .until(() -> subIntake.isGamePieceCollected()).withTimeout(5),
+
+        new Stow(subWrist, subIntake, subElevator)
+            .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
 
         // Place cube and stow
         new PrepGamePiece(subElevator, subWrist, subIntake,
@@ -65,8 +67,8 @@ public class TwoCubeDockOpen extends SequentialCommandGroup {
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
         // Drive to collect a cube
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.scoreToCubeOpen)
-            .withTimeout(subDrivetrain.scoreToCubeOpen.getTotalTimeSeconds()),
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.coneCubeDockOpen)
+            .withTimeout(subDrivetrain.coneCubeDockOpen.getTotalTimeSeconds()),
 
         new PlaceGamePiece(subIntake, subWrist, subElevator, true),
 

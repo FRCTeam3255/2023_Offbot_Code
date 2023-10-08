@@ -45,6 +45,7 @@ import frc.robot.commands.Auto.OnePiece.CubeThenEngageCenter;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityCable;
 import frc.robot.commands.Auto.OnePiece.CubeThenMobilityOpen;
 import frc.robot.commands.Auto.OnePiece.TestLine;
+import frc.robot.commands.Auto.TwoPiece.ConeCubeDockOpen;
 import frc.robot.commands.Auto.TwoPiece.TwoCubeDockOpen;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
@@ -74,8 +75,11 @@ public class RobotContainer {
 
   public RobotContainer() {
     HashMap<String, Command> eventMap = new HashMap<>();
-    eventMap.put("autoDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
+    eventMap.put("CubeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
+    eventMap.put("ConeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
+        prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
+
     eventMap.put("waitForStow",
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.1)));
     eventMap.put("prepCube", new PrepGamePiece(subElevator, subWrist, subIntake,
@@ -220,6 +224,8 @@ public class RobotContainer {
     // CubeThenEngageCenter(subDrivetrain));
     autoChooser.addOption("2 CU, Engage Open",
         new TwoCubeDockOpen(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    autoChooser.addOption("1 CO 1 CU, Engage Open",
+        new ConeCubeDockOpen(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     SmartDashboard.putData(autoChooser);
 
