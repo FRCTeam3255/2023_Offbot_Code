@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Autos.Center;
+package frc.robot.commands.Autos.Cable;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -21,14 +21,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class CenterCoDock extends SequentialCommandGroup {
+public class CableCoCuDock extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public CenterCoDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public CableCoCuDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -39,7 +39,7 @@ public class CenterCoDock extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
-            subDrivetrain.centerCoDock.getInitialHolonomicPose().getRotation().getDegrees())),
+            subDrivetrain.cableCoCuDock.getInitialHolonomicPose().getRotation().getDegrees())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
@@ -63,9 +63,13 @@ public class CenterCoDock extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        // Drive onto the charge station
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.centerCoDock)
-            .withTimeout(subDrivetrain.centerCoDock.getTotalTimeSeconds()),
+        // Drive, collect a cube, and go onto the charge station
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.cableCoCuDock)
+            .withTimeout(subDrivetrain.cableCoCuDock.getTotalTimeSeconds()),
+
+        new PlaceGamePiece(subIntake, subWrist, subElevator, true),
+
+        Commands.waitUntil(() -> !subElevator.isPrepped()),
 
         new Engage(subDrivetrain));
   }

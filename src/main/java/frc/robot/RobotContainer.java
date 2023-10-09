@@ -38,8 +38,11 @@ import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
+import frc.robot.commands.Autos.Cable.CableCoCu;
+import frc.robot.commands.Autos.Cable.CableCoCuDock;
 import frc.robot.commands.Autos.Center.CenterCo;
 import frc.robot.commands.Autos.Center.CenterCoDock;
+import frc.robot.commands.Autos.Open.OpenCoCu;
 import frc.robot.commands.Autos.Open.OpenCoCuDock;
 import frc.robot.commands.Autos.Open.OpenCuCuDock;
 import frc.robot.subsystems.Drivetrain;
@@ -207,7 +210,9 @@ public class RobotContainer {
     autoChooser.setDefaultOption("null", null);
 
     // For Autonomous, line up the left bumper (from the perspective of behind the
-    // glass) with the divider to the left of the node you place in first.
+    // glass) with the outside edge of the divider to the left of the node you place
+    // in
+    // first. Line up the game piece as needed.
     // TODO: Include a photo of this in Documentation and reference it here
 
     // Open Side
@@ -216,7 +221,7 @@ public class RobotContainer {
     autoChooser.addOption("OPEN - 1 CO, 1 CU, Engage",
         new OpenCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
     autoChooser.addOption("OPEN - 1 CO, 1 CU",
-        new OpenCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+        new OpenCoCu(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Center
     autoChooser.addOption("CENTER - 1 CO, Engage",
@@ -225,6 +230,10 @@ public class RobotContainer {
         new CenterCo(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Cable Side
+    autoChooser.addOption("CABLE - 1 CO, 1 CU, Engage",
+        new CableCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    autoChooser.addOption("CABLE - 1 CO, 1 CU",
+        new CableCoCu(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     SmartDashboard.putData(autoChooser);
 
