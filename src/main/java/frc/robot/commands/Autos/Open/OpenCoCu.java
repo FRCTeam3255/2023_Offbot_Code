@@ -56,7 +56,7 @@ public class OpenCoCu extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> subElevator.isPrepped()),
 
-        Commands.waitSeconds(0.2),
+        Commands.waitSeconds(prefIntake.autoPlaceConeDelay.getValue()),
 
         new PlaceGamePiece(subIntake, subWrist, subElevator, false),
 

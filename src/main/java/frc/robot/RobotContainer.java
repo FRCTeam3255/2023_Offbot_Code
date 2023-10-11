@@ -82,6 +82,9 @@ public class RobotContainer {
     autoEventMap.put("prepCube", new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
         prefWrist.wristScoreMidCubeAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
+    autoEventMap.put("prepCubeHybrid", new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHybridConeScore.getValue(),
+        prefWrist.wristScoreHybridCubeAngle.getValue(), prefElevator.elevatorHybridCubeScore.getValue()));
 
     swerveAutoBuilder = new SwerveAutoBuilder(
         subDrivetrain::getPose,
@@ -209,11 +212,10 @@ public class RobotContainer {
   private void configureAutoSelector() {
     autoChooser.setDefaultOption("null", null);
 
-    // For Autonomous, line up the left bumper (from the perspective of behind the
-    // glass) with the outside edge of the divider to the left of the node you place
-    // in
-    // first. Line up the game piece as needed.
-    // TODO: Include a photo of this in Documentation and reference it here
+    // Autonomous Alignment:
+    // src\main\documentation\autoalignment.jpg
+    // For CENTER autos, align with the cone node to the OPEN side.
+    // For CABLE autos, align with the wall instead (we are too wide)
 
     // Open Side
     autoChooser.addOption("OPEN - 2 CU, Engage",
@@ -224,7 +226,7 @@ public class RobotContainer {
         new OpenCoCu(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Center
-    autoChooser.addOption("CENTER - 1 CO, Engage",
+    autoChooser.addOption("CENTER - 1 CO, Mobility, Engage",
         new CenterCoDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
     autoChooser.addOption("CENTER - 1 CO",
         new CenterCo(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
