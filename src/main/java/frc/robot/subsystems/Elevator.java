@@ -170,6 +170,14 @@ public class Elevator extends SubsystemBase {
     rightMotor.setSelectedSensorPosition(
         SN_Math.degreesToFalcon(Units.rotationsToDegrees(getElevatorAbsoluteEncoder()),
             constElevator.GEAR_RATIO) * 2);
+    leftMotor.setSelectedSensorPosition(
+        SN_Math.degreesToFalcon(Units.rotationsToDegrees(getElevatorAbsoluteEncoder()),
+            constElevator.GEAR_RATIO) * 2);
+  }
+
+  public void resetElevatorToZero() {
+    rightMotor.setSelectedSensorPosition(0);
+    leftMotor.setSelectedSensorPosition(0);
   }
 
   /**
