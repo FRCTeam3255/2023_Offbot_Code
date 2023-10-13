@@ -130,7 +130,7 @@ public class RobotPreferences {
 
     // Periodic Runtimes
     public static final SN_DoublePreference intakePieceCollectedDebounce = new SN_DoublePreference(
-        "intakePieceCollectedDebounce", 11);
+        "intakePieceCollectedDebounce", 4);
 
     // Seconds
     public static final SN_DoublePreference intakeDelay = new SN_DoublePreference("intakeDelay", 0);
@@ -140,12 +140,12 @@ public class RobotPreferences {
   }
 
   public static final class prefElevator {
-    public static final SN_DoublePreference elevatorP = new SN_DoublePreference("elevatorP", 0.2);
+    public static final SN_DoublePreference elevatorP = new SN_DoublePreference("elevatorP", 0.25);
     public static final SN_DoublePreference elevatorI = new SN_DoublePreference("elevatorI", 0);
     public static final SN_DoublePreference elevatorD = new SN_DoublePreference("elevatorD", 0);
 
     public static final SN_DoublePreference elevatorPIDTolerance = new SN_DoublePreference(
-        "elevatorPIDTolerance", 0.01);
+        "elevatorPIDTolerance", 0.005);
 
     public static final SN_DoublePreference elevatorPositionTolerance = new SN_DoublePreference(
         "elevatorPositionTolerance", 0.5);
@@ -158,10 +158,10 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0.0);
     public static final SN_DoublePreference elevatorMaxPos = new SN_DoublePreference("elevatorMaxPos", 1.29);
     public static final SN_DoublePreference elevatorIntakeConePos = new SN_DoublePreference("elevatorIntakeConePos",
-        0.125);
+        0.115);
     public static final SN_DoublePreference elevatorIntakeCubePos = new SN_DoublePreference("elevatorIntakeCubePos",
         0.1);
-    public static final SN_DoublePreference elevatorShelf = new SN_DoublePreference("elevatorShelf", 1.25);
+    public static final SN_DoublePreference elevatorShelf = new SN_DoublePreference("elevatorShelf", 1.24);
     public static final SN_DoublePreference elevatorSingle = new SN_DoublePreference("elevatorSingle", 0.2);
     public static final SN_DoublePreference elevatorStow = new SN_DoublePreference("elevatorStow", 0.15);
 

@@ -24,6 +24,7 @@ public class Intake extends SubsystemBase {
 
   TalonFXConfiguration config;
   StatorCurrentLimitConfiguration statorLimit;
+  boolean isCurrentLimitingOn = true;
 
   GamePiece currentGamePiece = GamePiece.NONE;
   GamePiece desiredGamePiece = GamePiece.NONE;
@@ -74,6 +75,7 @@ public class Intake extends SubsystemBase {
     intakeMotor
         .configStatorCurrentLimit(new StatorCurrentLimitConfiguration(status, constIntake.CURRENT_LIMIT_FLOOR_AMPS,
             constIntake.CURRENT_LIMIT_CEILING_AMPS, constIntake.CURRENT_LIMIT_AFTER_SEC));
+    isCurrentLimitingOn = status;
   }
 
   // --- Game Piece Logic Start ---
@@ -98,9 +100,9 @@ public class Intake extends SubsystemBase {
     boolean hasGamePiece = (current < prefIntake.intakePieceCollectedBelowAmps.getValue()
         && current > prefIntake.intakePieceCollectedAboveAmps.getValue()) || getIntakeLimitSwitch();
 
-    if (hasGamePiece && intakeTimer <= prefIntake.intakePieceCollectedDebounce.getValue()) {
+    if (hasGamePiece && intakeTimer <= prefIntake.intakePieceCollectedDebounce.getValue() && isCurrentLimitingOn) {
       intakeTimer += 1;
-    } else if (!hasGamePiece) {
+    } else if (!hasGamePiece || !isCurrentLimitingOn) {
       intakeTimer = 0;
     } else {
       return true;

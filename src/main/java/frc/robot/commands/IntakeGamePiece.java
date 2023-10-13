@@ -47,7 +47,12 @@ public class IntakeGamePiece extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(gamepiece)),
         Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
+            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CUBE_COLOR)))
+            .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
+            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CONE_COLOR)))
+            .unless(() -> gamepiece.equals(GamePiece.CUBE)),
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(elevatorPosition)),
@@ -55,14 +60,7 @@ public class IntakeGamePiece extends SequentialCommandGroup {
             prefElevator.elevatorPositionTolerance.getValue())),
 
         Commands.runOnce(() -> subWrist.setWristAngle(wristPosition)),
-
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
-            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CUBE_COLOR)))
-            .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
-            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CONE_COLOR)))
-            .unless(() -> gamepiece.equals(GamePiece.CUBE)),
-
+        Commands.waitUntil(() -> subWrist.isWristAtPosition(wristPosition)),
         Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
 
         Commands.waitUntil(() -> subIntake.isGamePieceCollected()),
