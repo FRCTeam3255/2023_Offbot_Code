@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathConstraints;
@@ -31,12 +32,15 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.SN_SwerveModule;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.RobotPreferences.prefVision;
+import frc.robot.commands.IntakeGamePiece;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -46,7 +50,7 @@ public class Drivetrain extends SubsystemBase {
 
   private AHRS navX;
 
-  private SwerveDriveKinematics swerveKinematics;
+  public SwerveDriveKinematics swerveKinematics;
 
   private SwerveDrivePoseEstimator poseEstimator;
 
@@ -58,19 +62,14 @@ public class Drivetrain extends SubsystemBase {
   private ProfiledPIDController yPID;
   private PIDController thetaPID;
 
-  public SwerveAutoBuilder swerveAutoBuilder;
-
-  public PathPlannerTrajectory scoreToCubeOpen;
-  public PathPlannerTrajectory scoreThenDock;
-  public PathPlannerTrajectory scoreToCubeCable;
-
-  public PathPlannerTrajectory cubeToScoreOpen;
-  public PathPlannerTrajectory scoreToDockOpen;
-
-  public PathPlannerTrajectory cubeToDockOutsideOpen;
-
-  // TEST AUTO
-  public PathPlannerTrajectory linePath;
+  // Paths
+  public PathPlannerTrajectory testLinePath;
+  public PathPlannerTrajectory openCoCuDock;
+  public PathPlannerTrajectory openCuCuDock;
+  public PathPlannerTrajectory openCoCu;
+  public PathPlannerTrajectory centerCoDock;
+  public PathPlannerTrajectory cableCoCuDock;
+  public PathPlannerTrajectory cableCoCu;
 
   public Double[] columnYCoordinatesBlue = { 0.5, 1.05, 1.63, 2.19, 2.75, 3.31, 3.86, 4.43, 4.98 };
   public Double[] columnYCoordinatesRed = { 4.98, 4.43, 3.86, 3.31, 2.75, 2.19, 1.63, 1.05, 0.5 };
@@ -139,30 +138,39 @@ public class Drivetrain extends SubsystemBase {
         prefDrivetrain.teleThetaI.getValue(),
         prefDrivetrain.teleThetaD.getValue());
 
-    scoreToCubeCable = PathPlanner.loadPath("scoreToCubeCable",
+    testLinePath = PathPlanner.loadPath("testLinePath",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    scoreToCubeOpen = PathPlanner.loadPath("scoreToCubeOpen", new PathConstraints(
+    openCoCuDock = PathPlanner.loadPath("openCoCuDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+
+    openCuCuDock = PathPlanner.loadPath("openCuCuDock", new PathConstraints(
         Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
         Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    scoreThenDock = PathPlanner.loadPath("scoreThenDock", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.fasterAutoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.fasterAutoMaxAccelFeet.getValue())));
+    openCoCu = PathPlanner.loadPath("openCoCu",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    cubeToScoreOpen = PathPlanner.loadPath("cubeToScoreOpen", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+    centerCoDock = PathPlanner.loadPath("centerCoDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    scoreToDockOpen = PathPlanner.loadPath("scoreToDockOpen", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.fasterAutoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.fasterAutoMaxAccelFeet.getValue())));
+    cableCoCuDock = PathPlanner.loadPath("cableCoCuDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    cubeToDockOutsideOpen = PathPlanner.loadPath("cubeToDockOutsideOpen", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.fasterAutoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.fasterAutoMaxAccelFeet.getValue())));
+    cableCoCu = PathPlanner.loadPath("cableCoCu",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
     configure();
   }
@@ -200,22 +208,6 @@ public class Drivetrain extends SubsystemBase {
     thetaPID.enableContinuousInput(-Math.PI, Math.PI);
     thetaPID.reset();
 
-    swerveAutoBuilder = new SwerveAutoBuilder(
-        this::getPose,
-        this::resetPose,
-        swerveKinematics,
-        new PIDConstants(
-            prefDrivetrain.autoTransP.getValue(),
-            prefDrivetrain.autoTransI.getValue(),
-            prefDrivetrain.autoTransD.getValue()),
-        new PIDConstants(
-            prefDrivetrain.autoThetaP.getValue(),
-            prefDrivetrain.autoThetaI.getValue(),
-            prefDrivetrain.autoThetaD.getValue()),
-        this::setModuleStatesAuto,
-        new HashMap<>(),
-        true,
-        this);
   }
 
   /**
@@ -311,7 +303,7 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
-  private void setModuleStatesAuto(SwerveModuleState[] desiredStates) {
+  public void setModuleStatesAuto(SwerveModuleState[] desiredStates) {
     setModuleStates(desiredStates, false);
   }
 

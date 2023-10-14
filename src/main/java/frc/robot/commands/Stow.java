@@ -32,6 +32,10 @@ public class Stow extends ParallelCommandGroup {
 
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)).unless(() -> subIntake.isGamePieceCollected()),
 
-        Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())));
+        Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),
+
+        Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.15)),
+        Commands.runOnce(() -> subElevator.neutralElevatorOutputs()));
   }
 }

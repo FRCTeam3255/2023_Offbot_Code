@@ -47,30 +47,30 @@ public class IntakeGamePiece extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(gamepiece)),
         Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
+            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CUBE_COLOR)))
+            .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
+            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CONE_COLOR)))
+            .unless(() -> gamepiece.equals(GamePiece.CUBE)),
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(elevatorPosition)),
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(elevatorPosition,
             prefElevator.elevatorPositionTolerance.getValue())),
 
-        // Commands.runOnce(() -> subLEDs.setLEDPattern(pattern))),
-
         Commands.runOnce(() -> subWrist.setWristAngle(wristPosition)),
-
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
-            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CUBE_COLOR)))
-            .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
-            .alongWith(Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.INTAKING_CONE_COLOR)))
-            .unless(() -> !gamepiece.equals(GamePiece.CONE)),
-
+        Commands.waitUntil(() -> subWrist.isWristAtPosition(wristPosition)),
         Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
 
         Commands.waitUntil(() -> subIntake.isGamePieceCollected()),
 
-        Commands.waitSeconds(prefIntake.intakeDelay.getValue()),
+        Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.HAS_CUBE_COLOR))
+            .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
+        Commands.runOnce(() -> subLEDs.setLEDPattern(constLEDs.HAS_CONE_COLOR))
+            .unless(() -> gamepiece.equals(GamePiece.CUBE)),
 
+        Commands.waitSeconds(prefIntake.intakeDelay.getValue()),
 
         Commands.runOnce(() -> subWrist.setWristAngle(prefWrist.wristStowAngle.getValue())),
         Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),

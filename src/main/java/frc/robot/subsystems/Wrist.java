@@ -91,6 +91,11 @@ public class Wrist extends SubsystemBase {
     wristMotor.set(ControlMode.MotionMagic, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
   }
 
+  public boolean isWristAtAngle(double angle) {
+    return SN_Math.degreesToFalcon(prefWrist.wristAngleTolerance.getValue(), constWrist.GEAR_RATIO) >= Math
+        .abs(wristMotor.getClosedLoopError());
+  }
+
   /**
    * @return The angle of the wrist motor, as a Rotation2d
    */
@@ -127,10 +132,18 @@ public class Wrist extends SubsystemBase {
   }
 
   /**
+   * Gets if the absolutes encoder is plugged in. Returns true if it is unplugged.
+   */
+  public boolean getWristEncoderUnplugged() {
+    return absoluteEncoder.get() == 0.0;
+  }
+
+  /**
    * Reset the wrist motor to the offset value of the absolute encoder.
    */
   public void resetWristEncoderToAbsolute() {
-    if (absoluteEncoder.get() == 0.0) {
+    if (getWristEncoderUnplugged()) {
+      // todo: add default value to reset wrist to
       return; // ENCODER UNPLUGGED!!!!!
     }
 
@@ -149,6 +162,7 @@ public class Wrist extends SubsystemBase {
     SmartDashboard.putNumber("Wrist Abs Encoder Raw", absoluteEncoder.get());
     SmartDashboard.putNumber("Wrist Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("Wrist Abs Encoder Get", getWristAbsoluteEncoder());
+    SmartDashboard.putBoolean("Wrist Abs Encoder Unplugged?", getWristEncoderUnplugged());
     SmartDashboard.putNumber("Wrist Motor Degrees", getWristAngle().getDegrees());
 
   }

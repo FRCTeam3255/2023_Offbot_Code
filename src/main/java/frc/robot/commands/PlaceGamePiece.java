@@ -25,7 +25,7 @@ public class PlaceGamePiece extends SequentialCommandGroup {
 
   double speed;
 
-  public PlaceGamePiece(Intake subIntake, Wrist subWrist, Elevator subElevator) {
+  public PlaceGamePiece(Intake subIntake, Wrist subWrist, Elevator subElevator, boolean isShooting) {
     this.subIntake = subIntake;
     this.subWrist = subWrist;
     this.subElevator = subElevator;
@@ -34,9 +34,11 @@ public class PlaceGamePiece extends SequentialCommandGroup {
         Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
 
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakePlaceCubeSpeed.getValue()))
-            .unless(() -> !subIntake.getDesiredGamePiece().equals(GamePiece.CUBE)),
+            .unless(() -> !subIntake.getDesiredGamePiece().equals(GamePiece.CUBE) || isShooting),
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakePlaceConeSpeed.getValue()))
-            .unless(() -> subIntake.getDesiredGamePiece().equals(GamePiece.CUBE)),
+            .unless(() -> subIntake.getDesiredGamePiece().equals(GamePiece.CUBE) || isShooting),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeShootCubeSpeed.getValue()))
+            .unless(() -> !isShooting),
 
         Commands.waitUntil(() -> !subIntake.isGamePieceCollected()),
         Commands.waitSeconds(prefIntake.intakeMidConeDelay.getValue())

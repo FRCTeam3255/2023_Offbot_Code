@@ -52,45 +52,53 @@ public class SetLEDs extends CommandBase {
 
   @Override
   public void execute() {
-    Double[] coordinates = {};
+    // Double[] coordinates = {};
 
     if (subIntake.isGamePieceCollected()) {
       switch (subIntake.getDesiredGamePiece()) {
         case CUBE:
           desiredPattern = constLEDs.HAS_CUBE_COLOR;
-          return;
+          break;
         default:
           desiredPattern = constLEDs.HAS_CONE_COLOR;
-          return;
+          break;
       }
     } else {
       desiredPattern = constLEDs.DEFAULT_COLOR;
     }
 
-    if (Timer.getMatchTime() < prefLEDs.timeChargeStationLEDsOn.getValue()) {
-      if (Math.abs(subDrivetrain.getPose().getX() - chargeStationCenterX) < chargeStationCenterToleranceX
-          && Math.abs(subDrivetrain.getPose().getY() - chargeStationCenterY) < chargeStationCenterToleranceY) {
-        desiredPattern = constLEDs.CHARGE_STATION_ALIGNED_COLOR;
-      }
-    }
+    // POSE BASED: VISION IS DISABLED
 
-    if (desiredColumn > 0) {
-      if (DriverStation.getAlliance() == Alliance.Blue) {
-        coordinates = subDrivetrain.columnYCoordinatesBlue;
-        if (Math.abs(subDrivetrain.getPose().getY()
-            - coordinates[desiredColumn - 1]) < prefVision.gridAlignmentToleranceY.getValue()
-            && subDrivetrain.getPose().getX() < prefVision.gridLEDsXPosMaxBlue.getValue()) {
-          desiredPattern = constLEDs.GRID_ALIGNED_COLOR;
-        }
-      } else if (DriverStation.getAlliance() == Alliance.Red) {
-        coordinates = subDrivetrain.columnYCoordinatesRed;
-        if (Math.abs(subDrivetrain.getPose().getY()
-            - coordinates[desiredColumn - 1]) < prefVision.gridAlignmentToleranceY.getValue()
-            && subDrivetrain.getPose().getX() > prefVision.gridLEDsXPosMaxRed.getValue()) {
-          desiredPattern = constLEDs.GRID_ALIGNED_COLOR;
-        }
-      }
-    }
+    // if (Timer.getMatchTime() < prefLEDs.timeChargeStationLEDsOn.getValue()) {
+    // if (Math.abs(subDrivetrain.getPose().getX() - chargeStationCenterX) <
+    // chargeStationCenterToleranceX
+    // && Math.abs(subDrivetrain.getPose().getY() - chargeStationCenterY) <
+    // chargeStationCenterToleranceY) {
+    // desiredPattern = constLEDs.CHARGE_STATION_ALIGNED_COLOR;
+    // }
+    // }
+
+    // if (desiredColumn > 0) {
+    // if (DriverStation.getAlliance() == Alliance.Blue) {
+    // coordinates = subDrivetrain.columnYCoordinatesBlue;
+    // if (Math.abs(subDrivetrain.getPose().getY()
+    // - coordinates[desiredColumn - 1]) <
+    // prefVision.gridAlignmentToleranceY.getValue()
+    // && subDrivetrain.getPose().getX() <
+    // prefVision.gridLEDsXPosMaxBlue.getValue()) {
+    // desiredPattern = constLEDs.GRID_ALIGNED_COLOR;
+    // }
+    // } else if (DriverStation.getAlliance() == Alliance.Red) {
+    // coordinates = subDrivetrain.columnYCoordinatesRed;
+    // if (Math.abs(subDrivetrain.getPose().getY()
+    // - coordinates[desiredColumn - 1]) <
+    // prefVision.gridAlignmentToleranceY.getValue()
+    // && subDrivetrain.getPose().getX() > prefVision.gridLEDsXPosMaxRed.getValue())
+    // {
+    // desiredPattern = constLEDs.GRID_ALIGNED_COLOR;
+    // }
+    // }
+    // }
 
     subLEDs.setLEDPattern(desiredPattern);
   }

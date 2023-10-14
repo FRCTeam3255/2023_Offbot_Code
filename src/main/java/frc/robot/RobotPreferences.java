@@ -44,25 +44,19 @@ public class RobotPreferences {
     // down.
     public static final SN_DoublePreference triggerValue = new SN_DoublePreference("triggerValue", .2);
 
-    public static final SN_DoublePreference autoThetaP = new SN_DoublePreference("autoThetaP", 0.5);
+    public static final SN_DoublePreference autoThetaP = new SN_DoublePreference("autoThetaP", 0.75);
     public static final SN_DoublePreference autoThetaI = new SN_DoublePreference("autoThetaI", 0.0);
     public static final SN_DoublePreference autoThetaD = new SN_DoublePreference("autoThetaD", 0.0);
 
-    public static final SN_DoublePreference autoTransP = new SN_DoublePreference("autoTransP", 2);
+    public static final SN_DoublePreference autoTransP = new SN_DoublePreference("autoTransP", 8);
     public static final SN_DoublePreference autoTransI = new SN_DoublePreference("autoTransI", 0);
     public static final SN_DoublePreference autoTransD = new SN_DoublePreference("autoTransD", 0);
 
     public static final SN_DoublePreference autoMaxSpeedFeet = new SN_DoublePreference(
-        "autoMaxSpeedFeet", 2);
+        "autoMaxSpeedFeet", 8);
 
     public static final SN_DoublePreference autoMaxAccelFeet = new SN_DoublePreference(
-        "autoMaxAccelFeet", 1);
-
-    public static final SN_DoublePreference fasterAutoMaxSpeedFeet = new SN_DoublePreference(
-        "autoMaxSpeedFeet", 5);
-
-    public static final SN_DoublePreference fasterAutoMaxAccelFeet = new SN_DoublePreference(
-        "autoMaxAccelFeet", 4);
+        "autoMaxAccelFeet", 6);
 
     public static final SN_DoublePreference teleTransP = new SN_DoublePreference("teleTransP", 0);
     public static final SN_DoublePreference teleTransI = new SN_DoublePreference("teleTransI", 0);
@@ -108,9 +102,9 @@ public class RobotPreferences {
         "steerPeakCurrentTime", 0.1);
 
     public static final SN_DoublePreference measurementStdDevsFeet = new SN_DoublePreference(
-        "measurementStdDevsFeet", Units.metersToFeet(0.1));
+        "measurementStdDevsFeet", Units.metersToFeet(0));
     public static final SN_DoublePreference measurementStdDevsDegrees = new SN_DoublePreference(
-        "measurementStdDevsDegrees", Units.radiansToDegrees(0.1));
+        "measurementStdDevsDegrees", Units.radiansToDegrees(0));
   }
 
   public static final class prefIntake {
@@ -124,9 +118,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakePlaceConeSpeed = new SN_DoublePreference("intakePlaceConeSpeed",
         -0.7);
     public static final SN_DoublePreference intakePlaceCubeSpeed = new SN_DoublePreference("intakePlaceCubeSpeed",
-        0.8);
-    public static final SN_DoublePreference intakeShootSpeedHigh = new SN_DoublePreference("intakeShootSpeedHigh",
-        -0.65);
+        0.6);
+    public static final SN_DoublePreference intakeShootCubeSpeed = new SN_DoublePreference("intakeShootCubeSpeed",
+        1);
 
     // Sator Amps
     public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(
@@ -136,21 +130,22 @@ public class RobotPreferences {
 
     // Periodic Runtimes
     public static final SN_DoublePreference intakePieceCollectedDebounce = new SN_DoublePreference(
-        "intakePieceCollectedDebounce", 11);
+        "intakePieceCollectedDebounce", 4);
 
     // Seconds
     public static final SN_DoublePreference intakeDelay = new SN_DoublePreference("intakeDelay", 0);
 
     public static final SN_DoublePreference intakeMidConeDelay = new SN_DoublePreference("intakeMidConeDelay", 0.5);
+    public static final SN_DoublePreference autoPlaceConeDelay = new SN_DoublePreference("autoPlaceConeDelay", 0.4);
   }
 
   public static final class prefElevator {
-    public static final SN_DoublePreference elevatorP = new SN_DoublePreference("elevatorP", 0.2);
+    public static final SN_DoublePreference elevatorP = new SN_DoublePreference("elevatorP", 0.25);
     public static final SN_DoublePreference elevatorI = new SN_DoublePreference("elevatorI", 0);
     public static final SN_DoublePreference elevatorD = new SN_DoublePreference("elevatorD", 0);
 
     public static final SN_DoublePreference elevatorPIDTolerance = new SN_DoublePreference(
-        "elevatorPIDTolerance", 0.01);
+        "elevatorPIDTolerance", 0.005);
 
     public static final SN_DoublePreference elevatorPositionTolerance = new SN_DoublePreference(
         "elevatorPositionTolerance", 0.5);
@@ -163,10 +158,10 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorMinPos = new SN_DoublePreference("elevatorMinPos", 0.0);
     public static final SN_DoublePreference elevatorMaxPos = new SN_DoublePreference("elevatorMaxPos", 1.29);
     public static final SN_DoublePreference elevatorIntakeConePos = new SN_DoublePreference("elevatorIntakeConePos",
-        0.125);
+        0.115);
     public static final SN_DoublePreference elevatorIntakeCubePos = new SN_DoublePreference("elevatorIntakeCubePos",
         0.1);
-    public static final SN_DoublePreference elevatorShelf = new SN_DoublePreference("elevatorShelf", 1.26);
+    public static final SN_DoublePreference elevatorShelf = new SN_DoublePreference("elevatorShelf", 1.24);
     public static final SN_DoublePreference elevatorSingle = new SN_DoublePreference("elevatorSingle", 0.2);
     public static final SN_DoublePreference elevatorStow = new SN_DoublePreference("elevatorStow", 0.15);
 
@@ -197,11 +192,12 @@ public class RobotPreferences {
     // In Degrees
     public static final SN_DoublePreference wristMaxPos = new SN_DoublePreference("wristMaxPos", 238);
     public static final SN_DoublePreference wristMinPos = new SN_DoublePreference("wristMinPos", 2);
+    public static final SN_DoublePreference wristAngleTolerance = new SN_DoublePreference("wristAngleTolerance", 2);
 
     public static final SN_DoublePreference wristPIDTolerance = new SN_DoublePreference("wristPIDTolerance",
         1);
     public static final SN_DoublePreference wristPositionTolerance = new SN_DoublePreference("wristPositionTolerance",
-        3);
+        2);
 
     public static final SN_DoublePreference wristIntakeAngle = new SN_DoublePreference("wristIntakeAngle", 150);
     public static final SN_DoublePreference wristShelfAngle = new SN_DoublePreference("wristShelfAngle", 145);

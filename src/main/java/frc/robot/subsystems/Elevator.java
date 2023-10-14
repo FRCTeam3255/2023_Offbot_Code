@@ -163,13 +163,29 @@ public class Elevator extends SubsystemBase {
     }
   }
 
+  /**
+   * Gets if the absolute encoder is plugged in. Returns true if it is unplugged.
+   */
+  public boolean getElevatorEncoderUnplugged() {
+    return absoluteEncoder.get() == 0.0;
+  }
+
   public void resetElevatorEncoderToAbsolute() {
-    if (absoluteEncoder.get() == 0.0) {
+    if (getElevatorEncoderUnplugged()) {
+      resetElevatorToZero();
       return; // ENCODER UNPLUGGED!!!!!
     }
     rightMotor.setSelectedSensorPosition(
         SN_Math.degreesToFalcon(Units.rotationsToDegrees(getElevatorAbsoluteEncoder()),
             constElevator.GEAR_RATIO) * 2);
+    leftMotor.setSelectedSensorPosition(
+        SN_Math.degreesToFalcon(Units.rotationsToDegrees(getElevatorAbsoluteEncoder()),
+            constElevator.GEAR_RATIO) * 2);
+  }
+
+  public void resetElevatorToZero() {
+    rightMotor.setSelectedSensorPosition(0);
+    leftMotor.setSelectedSensorPosition(0);
   }
 
   /**
@@ -196,7 +212,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setIsPrepped(boolean prepped) {
-    prepped = isPrepped;
+    isPrepped = prepped;
   }
 
   public boolean isPrepped() {
@@ -212,5 +228,7 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Abs Encoder Raw", absoluteEncoder.get());
     SmartDashboard.putNumber("Elevator Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("Elevator Abs Encoder Get", getElevatorAbsoluteEncoder());
+    SmartDashboard.putBoolean("Elevator Abs Encoder Unplugged?", getElevatorEncoderUnplugged());
+
   }
 }

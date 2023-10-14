@@ -50,7 +50,7 @@ public final class Constants {
    */
 
   // Colson Wheels
-  private static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
+  private static final double WHEEL_DIAMETER = Units.inchesToMeters(3.8);
   public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
   // https://www.swervedrivespecialties.com/products/mk4i-swerve-module
@@ -202,8 +202,8 @@ public final class Constants {
     public static final double CURRENT_LIMIT_CEILING_AMPS = 1000; // Ceiling: when we begin limiting
     public static final double CURRENT_LIMIT_AFTER_SEC = 10;
 
-    public static final double ABSOLUTE_ENCODER_OFFSET = 0.838815;
-    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.161185;
+    public static final double ABSOLUTE_ENCODER_OFFSET = 0.840983;
+    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.159017;
     public static final boolean ABSOLUTE_ENCODER_INVERT = true;
     public static final boolean INVERT_LEFT_MOTOR = true;
 
@@ -229,8 +229,8 @@ public final class Constants {
   public static final class constLEDs {
     public static final PatternType HAS_CUBE_COLOR = SN_Blinkin.PatternType.Violet;
     public static final PatternType HAS_CONE_COLOR = SN_Blinkin.PatternType.Yellow;
-    public static final PatternType INTAKING_CUBE_COLOR = SN_Blinkin.PatternType.ColorWavesOceanPalette;
-    public static final PatternType INTAKING_CONE_COLOR = SN_Blinkin.PatternType.ColorWavesLavaPalette;
+    public static final PatternType INTAKING_CUBE_COLOR = SN_Blinkin.PatternType.StrobeBlue;
+    public static final PatternType INTAKING_CONE_COLOR = SN_Blinkin.PatternType.StrobeGold;
 
     public static final PatternType FAILURE_COLOR = PatternType.Red;
 
