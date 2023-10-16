@@ -16,6 +16,8 @@ public class Engage extends CommandBase {
   Drivetrain subDrivetrain;
 
   boolean isDriveOpenLoop;
+  double desiredSpeedFeet;
+  double timeElapsed = 0;
 
   public Engage(Drivetrain subDrivetrain) {
     this.subDrivetrain = subDrivetrain;
@@ -31,16 +33,30 @@ public class Engage extends CommandBase {
 
   @Override
   public void execute() {
-    if (subDrivetrain.isTiltedForward()) {
-      subDrivetrain.drive(new Pose2d(Units.metersToFeet(prefDrivetrain.dockingSpeed.getValue()), 0, new Rotation2d()),
-          isDriveOpenLoop);
-    } else if (subDrivetrain.isTiltedBackwards()) {
-      subDrivetrain.drive(new Pose2d(-Units.metersToFeet(prefDrivetrain.dockingSpeed.getValue()), 0, new Rotation2d()),
-          isDriveOpenLoop);
+    if (subDrivetrain.isTiltedForward() && timeElapsed == 0) {
+      timeElapsed = 1;
+      desiredSpeedFeet = prefDrivetrain.forwardTiltDockSpeed.getValue();
+
+    } else if (subDrivetrain.isTiltedBackwards() && timeElapsed == 0) {
+      timeElapsed = 1;
+      desiredSpeedFeet = prefDrivetrain.backwardTitDockSpeed.getValue();
+
+    } else if (subDrivetrain.isTiltedForward() && timeElapsed != 0) {
+      timeElapsed += 0.05;
+      desiredSpeedFeet = prefDrivetrain.forwardTiltDockSpeed.getValue() / timeElapsed;
+
+    } else if (subDrivetrain.isTiltedBackwards() && timeElapsed != 0) {
+      timeElapsed += 0.05;
+      desiredSpeedFeet = prefDrivetrain.backwardTitDockSpeed.getValue() / timeElapsed;
+
     } else {
-      subDrivetrain.drive(new Pose2d(0, 0, new Rotation2d()), isDriveOpenLoop);
-      // defence mode here too would be nice
+      timeElapsed = 1.5;
+      desiredSpeedFeet = 0;
+
     }
+    subDrivetrain.drive(
+        new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0, new Rotation2d()),
+        isDriveOpenLoop);
   }
 
   @Override
