@@ -203,6 +203,7 @@ public class RobotContainer {
         prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
 
     conOperator.btn_A.onTrue(new Stow(subWrist, subIntake, subElevator));
+    conOperator.btn_Back.onTrue(Commands.runOnce(() -> subElevator.resetElevatorToZero()));
   }
 
   public static boolean isPracticeBot() {
