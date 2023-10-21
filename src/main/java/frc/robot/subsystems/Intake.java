@@ -70,10 +70,6 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  // public boolean isIntakeAtVelocity(double velocity) {
-  // return Math.abs(intakeMotor.getSelectedSensorVelocity() - velocity) < 1;
-  // }
-
   public void setCurrentLimiting(boolean status) {
     // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
     intakeMotor
@@ -93,9 +89,6 @@ public class Intake extends SubsystemBase {
     this.desiredGamePiece = gamePiece;
   }
 
-  boolean isAtVelocity = false;
-  boolean test = false;
-
   /**
    * Uses the intake motor's draw (input bus voltage) and/or the limit switch to
    * determine if a game piece is collected.
@@ -113,12 +106,6 @@ public class Intake extends SubsystemBase {
       belowCurrent = prefIntake.intakePieceCubeCollectedBelowAmps.getValue();
       aboveCurrent = prefIntake.intakePieceCubeCollectedAboveAmps.getValue();
     }
-
-    // TODO: REMOVE
-    isAtVelocity = Math.abs(intakeMotor.getSelectedSensorVelocity()) < Math
-        .abs(desiredVelocity);
-
-    test = current < belowCurrent && current > aboveCurrent;
 
     if (current < belowCurrent
         && current > aboveCurrent
@@ -168,12 +155,6 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putBoolean("Is Game Piece Collected", isGamePieceCollected());
     SmartDashboard.putString("Current Game Piece", getCurrentGamePiece().toString());
     SmartDashboard.putString("Desired Game Piece", getDesiredGamePiece().toString());
-
-    // TODO: REMOVE THESE
-    SmartDashboard.putBoolean("Intake bool velocity",
-        isAtVelocity);
-    SmartDashboard.putBoolean("Intake bool current",
-        test);
 
     SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
     SmartDashboard.putNumber("Intake Velocity", intakeMotor.getSelectedSensorVelocity());
