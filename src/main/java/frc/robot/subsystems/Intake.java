@@ -93,6 +93,9 @@ public class Intake extends SubsystemBase {
     this.desiredGamePiece = gamePiece;
   }
 
+  boolean isAtVelocity = false;
+  boolean test = false;
+
   /**
    * Uses the intake motor's draw (input bus voltage) and/or the limit switch to
    * determine if a game piece is collected.
@@ -101,10 +104,26 @@ public class Intake extends SubsystemBase {
    */
   public boolean isGamePieceCollected() {
     double current = intakeMotor.getStatorCurrent();
+    double desiredVelocity = prefIntake.intakeConeVelocityTolerance.getValue();
+    double belowCurrent = prefIntake.intakePieceConeCollectedBelowAmps.getValue();
+    double aboveCurrent = prefIntake.intakePieceConeCollectedAboveAmps.getValue();
 
-    if (current < prefIntake.intakePieceCollectedBelowAmps.getValue()
-        && current > prefIntake.intakePieceCollectedAboveAmps.getValue()
-        && intakeMotor.getSelectedSensorVelocity() < prefIntake.intakeVelocityTolerance.getValue()) {
+    if (getDesiredGamePiece().equals(GamePiece.CUBE)) {
+      desiredVelocity = prefIntake.intakeCubeVelocityTolerance.getValue();
+      belowCurrent = prefIntake.intakePieceCubeCollectedBelowAmps.getValue();
+      aboveCurrent = prefIntake.intakePieceCubeCollectedAboveAmps.getValue();
+    }
+
+    // TODO: REMOVE
+    isAtVelocity = Math.abs(intakeMotor.getSelectedSensorVelocity()) < Math
+        .abs(desiredVelocity);
+
+    test = current < belowCurrent && current > aboveCurrent;
+
+    if (current < belowCurrent
+        && current > aboveCurrent
+        && Math.abs(intakeMotor.getSelectedSensorVelocity()) < Math
+            .abs(desiredVelocity)) {
       return true;
     } else {
       return false;
@@ -152,14 +171,12 @@ public class Intake extends SubsystemBase {
 
     // TODO: REMOVE THESE
     SmartDashboard.putBoolean("Intake bool velocity",
-        intakeMotor.getSelectedSensorVelocity() < prefIntake.intakeVelocityTolerance.getValue());
+        isAtVelocity);
     SmartDashboard.putBoolean("Intake bool current",
-        intakeMotor.getStatorCurrent() < prefIntake.intakePieceCollectedBelowAmps.getValue()
-            && intakeMotor.getStatorCurrent() > prefIntake.intakePieceCollectedAboveAmps.getValue());
+        test);
 
     SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
     SmartDashboard.putNumber("Intake Velocity", intakeMotor.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("Intake Acceleration",
-        intakeMotor.getSelectedSensorVelocity() / prefIntake.durationToCalculateAcceleration.getValue());
+
   }
 }

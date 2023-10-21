@@ -123,22 +123,24 @@ public class RobotPreferences {
         0.6);
     public static final SN_DoublePreference intakeShootCubeSpeed = new SN_DoublePreference("intakeShootCubeSpeed",
         1);
-    public static final SN_DoublePreference intakeVelocityTolerance = new SN_DoublePreference("intakeVelocityTolerance",
-        19);
 
-    // Encoder Units per 100 ms
-    public static final SN_DoublePreference hasGamePieceVelocityTolerance = new SN_DoublePreference(
-        "hasGamePieceVelocityTolerance", 0.05);
-
-    // Milliseconds
-    public static final SN_DoublePreference durationToCalculateAcceleration = new SN_DoublePreference(
-        "durationToCalculateAcceleration", 1000);
+    // RPM
+    public static final SN_DoublePreference intakeConeVelocityTolerance = new SN_DoublePreference(
+        "intakeConeVelocityTolerance",
+        14000);
+    public static final SN_DoublePreference intakeCubeVelocityTolerance = new SN_DoublePreference(
+        "intakeCubeVelocityTolerance",
+        -9000);
 
     // Sator Amps
-    public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(
-        "intakePieceCollectedBelowAmps", 11);
-    public static final SN_DoublePreference intakePieceCollectedAboveAmps = new SN_DoublePreference(
-        "intakePieceCollectedAboveAmps", 7);
+    public static final SN_DoublePreference intakePieceConeCollectedBelowAmps = new SN_DoublePreference(
+        "intakePieceConeCollectedBelowAmps", 20);
+    public static final SN_DoublePreference intakePieceConeCollectedAboveAmps = new SN_DoublePreference(
+        "intakePieceConeCollectedAboveAmps", 5);
+    public static final SN_DoublePreference intakePieceCubeCollectedBelowAmps = new SN_DoublePreference(
+        "intakePieceCubeCollectedBelowAmps", 20);
+    public static final SN_DoublePreference intakePieceCubeCollectedAboveAmps = new SN_DoublePreference(
+        "intakePieceCubeCollectedAboveAmps", 8);
 
     // Periodic Runtimes
     public static final SN_DoublePreference intakePieceCollectedDebounce = new SN_DoublePreference(
