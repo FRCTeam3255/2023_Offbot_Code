@@ -97,17 +97,24 @@ public class Intake extends SubsystemBase {
    */
   public boolean isGamePieceCollected() {
     double current = intakeMotor.getStatorCurrent();
-    boolean hasGamePiece = (current < prefIntake.intakePieceCollectedBelowAmps.getValue()
-        && current > prefIntake.intakePieceCollectedAboveAmps.getValue()) || getIntakeLimitSwitch();
+    double desiredVelocity = prefIntake.intakeConeVelocityTolerance.getValue();
+    double belowCurrent = prefIntake.intakePieceConeCollectedBelowAmps.getValue();
+    double aboveCurrent = prefIntake.intakePieceConeCollectedAboveAmps.getValue();
 
-    if (hasGamePiece && intakeTimer <= prefIntake.intakePieceCollectedDebounce.getValue() && isCurrentLimitingOn) {
-      intakeTimer += 1;
-    } else if (!hasGamePiece || !isCurrentLimitingOn) {
-      intakeTimer = 0;
-    } else {
-      return true;
+    if (getDesiredGamePiece().equals(GamePiece.CUBE)) {
+      desiredVelocity = prefIntake.intakeCubeVelocityTolerance.getValue();
+      belowCurrent = prefIntake.intakePieceCubeCollectedBelowAmps.getValue();
+      aboveCurrent = prefIntake.intakePieceCubeCollectedAboveAmps.getValue();
     }
-    return false;
+
+    if (current < belowCurrent
+        && current > aboveCurrent
+        && Math.abs(intakeMotor.getSelectedSensorVelocity()) < Math
+            .abs(desiredVelocity)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -142,11 +149,15 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     setCurrentGamePiece();
+
     SmartDashboard.putNumber("Intake Game Piece Timer", intakeTimer);
 
     SmartDashboard.putBoolean("Is Game Piece Collected", isGamePieceCollected());
     SmartDashboard.putString("Current Game Piece", getCurrentGamePiece().toString());
     SmartDashboard.putString("Desired Game Piece", getDesiredGamePiece().toString());
+
     SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
+    SmartDashboard.putNumber("Intake Velocity", intakeMotor.getSelectedSensorVelocity());
+
   }
 }
