@@ -121,8 +121,10 @@ public class RobotPreferences {
         -0.7);
     public static final SN_DoublePreference intakePlaceCubeSpeed = new SN_DoublePreference("intakePlaceCubeSpeed",
         0.6);
-    public static final SN_DoublePreference intakeShootCubeSpeed = new SN_DoublePreference("intakeShootCubeSpeed",
+    public static final SN_DoublePreference intakeYeetCubeSpeed = new SN_DoublePreference("intakeYeetCubeSpeed",
         1);
+    public static final SN_DoublePreference intakeYeetConeSpeed = new SN_DoublePreference("intakeYeetConeSpeed",
+        -1);
 
     // Sator Amps
     public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(
@@ -149,8 +151,13 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorPIDTolerance = new SN_DoublePreference(
         "elevatorPIDTolerance", 0.005);
 
-    public static final SN_DoublePreference elevatorPositionTolerance = new SN_DoublePreference(
+    // When can we move the wrist?
+    public static final SN_DoublePreference elevatorWristPositionTolerance = new SN_DoublePreference(
         "elevatorPositionTolerance", 0.5);
+
+    // When is the elevator actually at the position we want?
+    public static final SN_DoublePreference elevatorActualPositionTolerance = new SN_DoublePreference(
+        "elevatorActualPositionTolerance", 0.1);
 
     // Meters per second
     public static final SN_DoublePreference elevatorMaxVelocity = new SN_DoublePreference("elevatorMaxVelocity", 0.8);
@@ -179,6 +186,8 @@ public class RobotPreferences {
         1.27);
     public static final SN_DoublePreference elevatorHighCubeScore = new SN_DoublePreference("elevatorHighCubeScore",
         0.998234);
+    public static final SN_DoublePreference elevatorYeetGamePiecePosition = new SN_DoublePreference(
+        "elevatorYeetConePosition", 1);
 
     public static final SN_DoublePreference elevatorEncoderCountsPerMeter = new SN_DoublePreference(
         "elevatorEncoderCountsPerMeter", 36644.718);
