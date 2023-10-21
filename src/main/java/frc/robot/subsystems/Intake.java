@@ -70,6 +70,10 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
+  // public boolean isIntakeAtVelocity(double velocity) {
+  // return Math.abs(intakeMotor.getSelectedSensorVelocity() - velocity) < 1;
+  // }
+
   public void setCurrentLimiting(boolean status) {
     // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
     intakeMotor
@@ -97,17 +101,14 @@ public class Intake extends SubsystemBase {
    */
   public boolean isGamePieceCollected() {
     double current = intakeMotor.getStatorCurrent();
-    boolean hasGamePiece = (current < prefIntake.intakePieceCollectedBelowAmps.getValue()
-        && current > prefIntake.intakePieceCollectedAboveAmps.getValue()) || getIntakeLimitSwitch();
 
-    if (hasGamePiece && intakeTimer <= prefIntake.intakePieceCollectedDebounce.getValue() && isCurrentLimitingOn) {
-      intakeTimer += 1;
-    } else if (!hasGamePiece || !isCurrentLimitingOn) {
-      intakeTimer = 0;
-    } else {
+    if (current < prefIntake.intakePieceCollectedBelowAmps.getValue()
+        && current > prefIntake.intakePieceCollectedAboveAmps.getValue()
+        && intakeMotor.getSelectedSensorVelocity() < prefIntake.intakeVelocityTolerance.getValue()) {
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 
   /**
@@ -142,11 +143,16 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     setCurrentGamePiece();
+
     SmartDashboard.putNumber("Intake Game Piece Timer", intakeTimer);
 
     SmartDashboard.putBoolean("Is Game Piece Collected", isGamePieceCollected());
     SmartDashboard.putString("Current Game Piece", getCurrentGamePiece().toString());
     SmartDashboard.putString("Desired Game Piece", getDesiredGamePiece().toString());
+
     SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
+    SmartDashboard.putNumber("Intake Velocity", intakeMotor.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Intake Acceleration",
+        intakeMotor.getSelectedSensorVelocity() / prefIntake.durationToCalculateAcceleration.getValue());
   }
 }

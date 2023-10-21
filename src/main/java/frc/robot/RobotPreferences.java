@@ -123,6 +123,16 @@ public class RobotPreferences {
         0.6);
     public static final SN_DoublePreference intakeShootCubeSpeed = new SN_DoublePreference("intakeShootCubeSpeed",
         1);
+    public static final SN_DoublePreference intakeVelocityTolerance = new SN_DoublePreference("intakeVelocityTolerance",
+        0.05);
+
+    // Encoder Units per 100 ms
+    public static final SN_DoublePreference hasGamePieceVelocityTolerance = new SN_DoublePreference(
+        "hasGamePieceVelocityTolerance", 0.05);
+
+    // Milliseconds
+    public static final SN_DoublePreference durationToCalculateAcceleration = new SN_DoublePreference(
+        "durationToCalculateAcceleration", 1000);
 
     // Sator Amps
     public static final SN_DoublePreference intakePieceCollectedBelowAmps = new SN_DoublePreference(
