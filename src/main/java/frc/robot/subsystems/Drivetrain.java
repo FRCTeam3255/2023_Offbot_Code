@@ -456,6 +456,10 @@ public class Drivetrain extends SubsystemBase {
     return navX.getRoll() < -prefDrivetrain.tiltedThreshold.getValue();
   }
 
+  public double getNavXRoll() {
+    return navX.getRoll();
+  }
+
   @Override
   public void periodic() {
 
@@ -469,7 +473,7 @@ public class Drivetrain extends SubsystemBase {
       SmartDashboard.putNumber("Drivetrain Pose Y", Units.metersToInches(getPose().getY()));
       SmartDashboard.putNumber("Drivetrain Pose Rotation", getPose().getRotation().getDegrees());
 
-      SmartDashboard.putBoolean("is Tilted Fowards", isTiltedForward());
+      SmartDashboard.putBoolean("is Tilted Forwards", isTiltedForward());
       SmartDashboard.putBoolean("is Tilted Backwards", isTiltedBackwards());
 
       SmartDashboard.putNumber("Drivetrain Yaw", navX.getRotation2d().getDegrees());

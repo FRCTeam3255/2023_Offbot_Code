@@ -4,9 +4,12 @@
 
 package frc.robot.commands;
 
+import com.frcteam3255.utils.SN_Math;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.subsystems.Drivetrain;
@@ -17,7 +20,8 @@ public class Engage extends CommandBase {
 
   boolean isDriveOpenLoop;
   double desiredSpeedFeet;
-  double timeElapsed = 0;
+  double degreesFromEngaged = 0;
+  double timeWhenEngaged;
 
   public Engage(Drivetrain subDrivetrain) {
     this.subDrivetrain = subDrivetrain;
@@ -29,43 +33,40 @@ public class Engage extends CommandBase {
 
   @Override
   public void initialize() {
+    degreesFromEngaged = Math.abs(0 - subDrivetrain.getNavXRoll());
   }
 
   @Override
   public void execute() {
-    if (subDrivetrain.isTiltedForward() && timeElapsed == 0) {
-      timeElapsed = 1;
-      desiredSpeedFeet = prefDrivetrain.forwardTiltDockSpeed.getValue();
+    degreesFromEngaged = SN_Math.interpolate(Math.abs(0 - subDrivetrain.getNavXRoll()), 0, 20, 0, 1);
 
-    } else if (subDrivetrain.isTiltedBackwards() && timeElapsed == 0) {
-      timeElapsed = 1;
-      desiredSpeedFeet = prefDrivetrain.backwardTitDockSpeed.getValue();
+    if (subDrivetrain.isTiltedForward()) {
+      desiredSpeedFeet = prefDrivetrain.maxDockSpeed.getValue();
+      timeWhenEngaged = 0;
 
-    } else if (subDrivetrain.isTiltedForward() && timeElapsed != 0) {
-      timeElapsed += 0.05;
-      desiredSpeedFeet = prefDrivetrain.forwardTiltDockSpeed.getValue() / timeElapsed;
-
-    } else if (subDrivetrain.isTiltedBackwards() && timeElapsed != 0) {
-      timeElapsed += 0.05;
-      desiredSpeedFeet = prefDrivetrain.backwardTitDockSpeed.getValue() / timeElapsed;
+    } else if (subDrivetrain.isTiltedBackwards()) {
+      desiredSpeedFeet = -prefDrivetrain.maxDockSpeed.getValue();
+      timeWhenEngaged = 0;
 
     } else {
-      timeElapsed = 1.5;
       desiredSpeedFeet = 0;
+      timeWhenEngaged = Timer.getFPGATimestamp();
 
     }
+
     subDrivetrain.drive(
-        new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0, new Rotation2d()),
+        new Pose2d(Units.metersToFeet(desiredSpeedFeet * degreesFromEngaged), 0, new Rotation2d()),
         isDriveOpenLoop);
   }
 
   @Override
   public void end(boolean interrupted) {
-    subDrivetrain.neutralDriveOutputs();
+    subDrivetrain.setDefenseMode();
   }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return timeWhenEngaged != 0
+        && timeWhenEngaged < Timer.getFPGATimestamp() - prefDrivetrain.engagedSeconds.getValue();
   }
 }

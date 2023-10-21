@@ -40,29 +40,33 @@ public class CenterCoDock extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.centerCoDock.getInitialHolonomicPose().getRotation().getDegrees())),
-
-        // Intake cone
-        Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
-
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
-            .until(() -> subIntake.isGamePieceCollected()).withTimeout(5),
-
-        new Stow(subWrist, subIntake, subElevator)
-            .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
-
-        // Place cone and stow
-        new PrepGamePiece(subElevator, subWrist, subIntake,
-            prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
-            prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()),
-
-        Commands.waitUntil(() -> subElevator.isPrepped()),
-
-        Commands.waitSeconds(prefIntake.autoPlaceConeDelay.getValue()),
-
-        new PlaceGamePiece(subIntake, subWrist, subElevator, false),
-
-        Commands.waitUntil(() -> !subElevator.isPrepped()),
-
+        /*
+         * // Intake cone
+         * Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
+         * 
+         * Commands.runOnce(() ->
+         * subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
+         * .until(() -> subIntake.isGamePieceCollected()).withTimeout(5),
+         * 
+         * new Stow(subWrist, subIntake, subElevator)
+         * .until(() ->
+         * subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
+         * 
+         * // Place cone and stow
+         * new PrepGamePiece(subElevator, subWrist, subIntake,
+         * prefWrist.wristScoreHighConeAngle.getValue(),
+         * prefElevator.elevatorHighConeScore.getValue(),
+         * prefWrist.wristScoreHighCubeAngle.getValue(),
+         * prefElevator.elevatorHighCubeScore.getValue()),
+         * 
+         * Commands.waitUntil(() -> subElevator.isPrepped()),
+         * 
+         * Commands.waitSeconds(prefIntake.autoPlaceConeDelay.getValue()),
+         * 
+         * new PlaceGamePiece(subIntake, subWrist, subElevator, false),
+         * 
+         * Commands.waitUntil(() -> !subElevator.isPrepped()),
+         */
         // Drive onto the charge station
         RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.centerCoDock)
             .withTimeout(subDrivetrain.centerCoDock.getTotalTimeSeconds()),
