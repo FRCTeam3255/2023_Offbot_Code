@@ -124,7 +124,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakeShootCubeSpeed = new SN_DoublePreference("intakeShootCubeSpeed",
         1);
     public static final SN_DoublePreference intakeVelocityTolerance = new SN_DoublePreference("intakeVelocityTolerance",
-        0.05);
+        19);
 
     // Encoder Units per 100 ms
     public static final SN_DoublePreference hasGamePieceVelocityTolerance = new SN_DoublePreference(

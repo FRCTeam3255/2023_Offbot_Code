@@ -150,6 +150,13 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putString("Current Game Piece", getCurrentGamePiece().toString());
     SmartDashboard.putString("Desired Game Piece", getDesiredGamePiece().toString());
 
+    // TODO: REMOVE THESE
+    SmartDashboard.putBoolean("Intake bool velocity",
+        intakeMotor.getSelectedSensorVelocity() < prefIntake.intakeVelocityTolerance.getValue());
+    SmartDashboard.putBoolean("Intake bool current",
+        intakeMotor.getStatorCurrent() < prefIntake.intakePieceCollectedBelowAmps.getValue()
+            && intakeMotor.getStatorCurrent() > prefIntake.intakePieceCollectedAboveAmps.getValue());
+
     SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
     SmartDashboard.putNumber("Intake Velocity", intakeMotor.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Intake Acceleration",

@@ -118,10 +118,10 @@ public final class Constants {
       MODULE_2.position,
       MODULE_3.position);
 
-  public static final double PRAC_FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET = 114.345703;
-  public static final double PRAC_FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET = 339.873047;
-  public static final double PRAC_BACK_LEFT_ABSOLUTE_ENCODER_OFFSET = 288.457031;
-  public static final double PRAC_BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET = 246.09375;
+  public static final double PRAC_FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET = 111.708984;
+  public static final double PRAC_FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET = 340.312500;
+  public static final double PRAC_BACK_LEFT_ABSOLUTE_ENCODER_OFFSET = 289.511719;
+  public static final double PRAC_BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET = 245.039062;
 
   // module positions follow the WPILib robot coordinate system
   // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/coordinate-systems.html#robot-coordinate-system
