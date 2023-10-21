@@ -118,10 +118,10 @@ public final class Constants {
       MODULE_2.position,
       MODULE_3.position);
 
-  public static final double PRAC_FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET = 114.345703;
-  public static final double PRAC_FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET = 339.873047;
-  public static final double PRAC_BACK_LEFT_ABSOLUTE_ENCODER_OFFSET = 288.457031;
-  public static final double PRAC_BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET = 246.09375;
+  public static final double PRAC_FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET = 111.708984;
+  public static final double PRAC_FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET = 340.312500;
+  public static final double PRAC_BACK_LEFT_ABSOLUTE_ENCODER_OFFSET = 289.511719;
+  public static final double PRAC_BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET = 245.039062;
 
   // module positions follow the WPILib robot coordinate system
   // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/coordinate-systems.html#robot-coordinate-system
@@ -189,9 +189,9 @@ public final class Constants {
   }
 
   public static final class constWrist {
-    public static final double ABSOLUTE_ENCODER_OFFSET = 0.333;
+    public static final double ABSOLUTE_ENCODER_OFFSET = 0.321902;
     // The value in which the Raw Absolute Encoder value rolls over from 0 to 1
-    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.667530;
+    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.678098;
     public static final boolean ABSOLUTE_ENCODER_INVERT = true;
 
     public static final double GEAR_RATIO = 40.09;
@@ -202,8 +202,8 @@ public final class Constants {
     public static final double CURRENT_LIMIT_CEILING_AMPS = 1000; // Ceiling: when we begin limiting
     public static final double CURRENT_LIMIT_AFTER_SEC = 10;
 
-    public static final double ABSOLUTE_ENCODER_OFFSET = 0.840862;
-    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.159017;
+    public static final double ABSOLUTE_ENCODER_OFFSET = 0.835219;
+    public static final double ABSOLUTE_ENCODER_ROLLOVER_OFFSET = 0.164781;
     public static final boolean ABSOLUTE_ENCODER_INVERT = true;
     public static final boolean INVERT_LEFT_MOTOR = true;
 
