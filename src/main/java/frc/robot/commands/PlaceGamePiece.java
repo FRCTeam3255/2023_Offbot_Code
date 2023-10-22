@@ -25,7 +25,7 @@ public class PlaceGamePiece extends SequentialCommandGroup {
 
   double speed;
 
-  public PlaceGamePiece(Intake subIntake, Wrist subWrist, Elevator subElevator, boolean isShooting) {
+  public PlaceGamePiece(Intake subIntake, Wrist subWrist, Elevator subElevator, boolean isYeeting) {
     this.subIntake = subIntake;
     this.subWrist = subWrist;
     this.subElevator = subElevator;
@@ -34,11 +34,14 @@ public class PlaceGamePiece extends SequentialCommandGroup {
         Commands.runOnce(() -> subIntake.setCurrentLimiting(false)),
 
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakePlaceCubeSpeed.getValue()))
-            .unless(() -> !subIntake.getDesiredGamePiece().equals(GamePiece.CUBE) || isShooting),
+            .unless(() -> !subIntake.getDesiredGamePiece().equals(GamePiece.CUBE) || isYeeting),
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakePlaceConeSpeed.getValue()))
-            .unless(() -> subIntake.getDesiredGamePiece().equals(GamePiece.CUBE) || isShooting),
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeShootCubeSpeed.getValue()))
-            .unless(() -> !isShooting),
+            .unless(() -> subIntake.getDesiredGamePiece().equals(GamePiece.CUBE) || isYeeting),
+
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeYeetCubeSpeed.getValue()))
+            .unless(() -> !subIntake.getDesiredGamePiece().equals(GamePiece.CUBE) || !isYeeting),
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeYeetConeSpeed.getValue()))
+            .unless(() -> subIntake.getDesiredGamePiece().equals(GamePiece.CUBE) || !isYeeting),
 
         Commands.waitUntil(() -> !subIntake.isGamePieceCollected()),
         Commands.waitSeconds(prefIntake.intakeMidConeDelay.getValue())
@@ -58,7 +61,8 @@ public class PlaceGamePiece extends SequentialCommandGroup {
         Commands.runOnce(() -> subIntake.setCurrentLimiting(true)),
         Commands.runOnce(() -> subElevator.setIsPrepped(false)),
 
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.1)),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
+            prefElevator.elevatorActualPositionTolerance.getValue())),
         Commands.runOnce(() -> subElevator.neutralElevatorOutputs()));
 
   }

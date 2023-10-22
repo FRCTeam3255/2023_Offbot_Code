@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     Shuffleboard.selectTab("SuperShuffle");
+    RobotContainer.subElevator.resetElevatorEncoderToAbsolute();
   }
 
   @Override
@@ -60,7 +61,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    RobotContainer.subElevator.resetElevatorEncoderToAbsolute();
     m_robotContainer.resetToAbsolutePositions();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -76,7 +76,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    RobotContainer.subElevator.resetElevatorEncoderToAbsolute();
     m_robotContainer.resetToAbsolutePositions();
 
     // Comment this line out if you would like autonomous to continue until being

@@ -38,6 +38,7 @@ import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
+import frc.robot.commands.YeetGamePiece;
 import frc.robot.commands.Autos.Cable.CableCoCu;
 import frc.robot.commands.Autos.Cable.CableCoCuDock;
 import frc.robot.commands.Autos.Center.CenterCo;
@@ -78,7 +79,8 @@ public class RobotContainer {
     autoEventMap.put("coneDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
     autoEventMap.put("waitForStow",
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.1)));
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
+            prefElevator.elevatorActualPositionTolerance.getValue())));
     autoEventMap.put("prepCube", new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
         prefWrist.wristScoreMidCubeAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
@@ -191,7 +193,7 @@ public class RobotContainer {
     conOperator.btn_South.onTrue(Commands.runOnce(() -> subElevator.setDesiredHeight(DesiredHeight.HIGH)));
 
     conOperator.btn_RightTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator, false));
-    conOperator.btn_LeftTrigger.onTrue(new PlaceGamePiece(subIntake, subWrist, subElevator, false));
+    conOperator.btn_LeftTrigger.onTrue(new YeetGamePiece(subIntake, subElevator, subWrist));
 
     conOperator.btn_Y.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristShelfAngle.getValue(), prefElevator.elevatorShelf.getValue()));
