@@ -57,7 +57,7 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(elevatorPosition)),
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(elevatorPosition,
-            prefElevator.elevatorPositionTolerance.getValue())),
+            prefElevator.elevatorWristPositionTolerance.getValue())),
 
         Commands.runOnce(() -> subWrist.setWristAngle(wristPosition)),
         Commands.waitUntil(() -> subWrist.isWristAtPosition(wristPosition)),
@@ -76,7 +76,8 @@ public class IntakeGamePiece extends SequentialCommandGroup {
         Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),
 
         Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())),
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(), 0.1)),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
+            prefElevator.elevatorActualPositionTolerance.getValue())),
         Commands.runOnce(() -> subElevator.neutralElevatorOutputs()));
 
   }
