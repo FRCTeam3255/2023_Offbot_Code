@@ -191,7 +191,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorHybridCubeScore = new SN_DoublePreference("elevatorHybridCubeScore",
         0.05);
     public static final SN_DoublePreference elevatorMidConeScore = new SN_DoublePreference("elevatorMidConeScore",
-        0.72);
+        0.77);
     public static final SN_DoublePreference elevatorMidCubeScore = new SN_DoublePreference("elevatorMidCubeScore",
         0.392799);
     public static final SN_DoublePreference elevatorHighConeScore = new SN_DoublePreference("elevatorHighConeScore",
