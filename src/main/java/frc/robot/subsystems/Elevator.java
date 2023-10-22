@@ -4,13 +4,10 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.frcteam3255.utils.SN_Math;
@@ -34,7 +31,7 @@ public class Elevator extends SubsystemBase {
   double absoluteEncoderOffset;
 
   TalonFXConfiguration config;
-  StatorCurrentLimitConfiguration statorLimit;
+  SupplyCurrentLimitConfiguration supplyLimit;
 
   DesiredHeight desiredHeight;
   double desiredPosition;
@@ -86,9 +83,10 @@ public class Elevator extends SubsystemBase {
     config.reverseSoftLimitEnable = true;
 
     // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
-    // statorLimit = new StatorCurrentLimitConfiguration(true,
-    // constElevator.CURRENT_LIMIT_FLOOR_AMPS,
-    // 1000, constElevator.CURRENT_LIMIT_AFTER_SEC);
+    supplyLimit = new SupplyCurrentLimitConfiguration(true,
+        constElevator.CURRENT_LIMIT_FLOOR_AMPS,
+        constElevator.CURRENT_LIMIT_CEILING_AMPS,
+        constElevator.CURRENT_LIMIT_AFTER_SEC);
 
     leftMotor.configAllSettings(config);
     rightMotor.configAllSettings(config);
@@ -97,8 +95,8 @@ public class Elevator extends SubsystemBase {
     leftMotor.setInverted(constElevator.INVERT_LEFT_MOTOR);
     rightMotor.setInverted(InvertType.OpposeMaster);
 
-    // rightMotor.configStatorCurrentLimit(statorLimit);
-    // leftMotor.configStatorCurrentLimit(statorLimit);
+    rightMotor.configSupplyCurrentLimit(supplyLimit);
+    leftMotor.configSupplyCurrentLimit(supplyLimit);
   }
 
   /**
@@ -229,6 +227,7 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("Elevator Abs Encoder Get", getElevatorAbsoluteEncoder());
     SmartDashboard.putBoolean("Elevator Abs Encoder Unplugged?", getElevatorEncoderUnplugged());
+    SmartDashboard.putNumber("Elevator Supply Current", leftMotor.getSupplyCurrent());
 
   }
 }
