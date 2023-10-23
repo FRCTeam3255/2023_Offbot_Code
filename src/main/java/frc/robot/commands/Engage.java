@@ -22,6 +22,7 @@ public class Engage extends CommandBase {
   double desiredSpeedFeet;
   double degreesFromEngaged = 0;
   double timeWhenEngaged;
+  double debounce = 0;
 
   public Engage(Drivetrain subDrivetrain) {
     this.subDrivetrain = subDrivetrain;
@@ -38,25 +39,27 @@ public class Engage extends CommandBase {
 
   @Override
   public void execute() {
-    degreesFromEngaged = SN_Math.interpolate(Math.abs(0 - subDrivetrain.getNavXRoll()), 0, 20, 0, 1);
+    degreesFromEngaged = SN_Math.interpolate(Math.abs(0 - subDrivetrain.getNavXRoll()), 0, 15, 0, 1);
 
-    if (subDrivetrain.isTiltedForward()) {
-      desiredSpeedFeet = prefDrivetrain.maxDockSpeed.getValue();
+    if ((subDrivetrain.isTiltedForward() || subDrivetrain.isTiltedBackwards()) && debounce < 10) {
+      debounce += 1;
+
+    } else if (subDrivetrain.isTiltedForward()) {
+      desiredSpeedFeet = prefDrivetrain.maxForwardDockSpeed.getValue();
       timeWhenEngaged = 0;
-
     } else if (subDrivetrain.isTiltedBackwards()) {
-      desiredSpeedFeet = -prefDrivetrain.maxDockSpeed.getValue();
+      desiredSpeedFeet = -prefDrivetrain.maxBackDockSpeed.getValue();
       timeWhenEngaged = 0;
 
     } else {
       desiredSpeedFeet = 0;
+      debounce = 0;
       timeWhenEngaged = Timer.getFPGATimestamp();
 
     }
 
-    subDrivetrain.drive(
-        new Pose2d(Units.metersToFeet(desiredSpeedFeet * degreesFromEngaged), 0, new Rotation2d()),
-        isDriveOpenLoop);
+    subDrivetrain.drive(new Pose2d(Units.metersToFeet(desiredSpeedFeet * (degreesFromEngaged * degreesFromEngaged)), 0,
+        new Rotation2d()), isDriveOpenLoop);
   }
 
   @Override

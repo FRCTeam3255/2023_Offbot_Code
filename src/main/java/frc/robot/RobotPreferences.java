@@ -79,8 +79,11 @@ public class RobotPreferences {
     // degrees
     public static final SN_DoublePreference tiltedThreshold = new SN_DoublePreference("tiltedThreshold", 5);
     // feet per second
-    public static final SN_DoublePreference maxDockSpeed = new SN_DoublePreference("maxDockSpeed",
+    public static final SN_DoublePreference maxForwardDockSpeed = new SN_DoublePreference("maxForwardDockSpeed",
+        0.3);
+    public static final SN_DoublePreference maxBackDockSpeed = new SN_DoublePreference("maxBackDockSpeed",
         0.1);
+
     // seconds
     public static final SN_DoublePreference engagedSeconds = new SN_DoublePreference("engagedSeconds", 2);
 
