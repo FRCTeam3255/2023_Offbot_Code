@@ -58,6 +58,16 @@ public class RobotPreferences {
     public static final SN_DoublePreference autoMaxAccelFeet = new SN_DoublePreference(
         "autoMaxAccelFeet", 6);
 
+    public static final SN_DoublePreference autoEngageP = new SN_DoublePreference("autoEngageP", 0.0075);
+    public static final SN_DoublePreference autoEngageI = new SN_DoublePreference("autoEngageI", 0);
+    public static final SN_DoublePreference autoEngageD = new SN_DoublePreference("autoEngageD", 0);
+    public static final SN_DoublePreference autoEngageSpeedMultiplier = new SN_DoublePreference(
+        "autoEngageSpeedMultiplier", 1.2);
+
+    // Degrees (I think)
+    // TODO: Find out before Commiting to Main
+    public static final SN_DoublePreference autoEngageTolerance = new SN_DoublePreference("autoEngageTolerance", 0.2);
+
     public static final SN_DoublePreference teleTransP = new SN_DoublePreference("teleTransP", 0);
     public static final SN_DoublePreference teleTransI = new SN_DoublePreference("teleTransI", 0);
     public static final SN_DoublePreference teleTransD = new SN_DoublePreference("teleTransD", 0);
@@ -75,17 +85,6 @@ public class RobotPreferences {
     public static final SN_DoublePreference teleThetaMaxSpeed = new SN_DoublePreference("teleThetaMaxSpeed", 270);
     // degrees
     public static final SN_DoublePreference teleThetaTolerance = new SN_DoublePreference("teleThetaTolerance", 2);
-
-    // degrees
-    public static final SN_DoublePreference tiltedThreshold = new SN_DoublePreference("tiltedThreshold", 5);
-    // feet per second
-    public static final SN_DoublePreference maxForwardDockSpeed = new SN_DoublePreference("maxForwardDockSpeed",
-        0.3);
-    public static final SN_DoublePreference maxBackDockSpeed = new SN_DoublePreference("maxBackDockSpeed",
-        0.1);
-
-    // seconds
-    public static final SN_DoublePreference engagedSeconds = new SN_DoublePreference("engagedSeconds", 2);
 
     // current limiting (values taken from BaseFalconSwerve)
     public static final SN_BooleanPreference driveEnableCurrentLimit = new SN_BooleanPreference(

@@ -4,13 +4,12 @@
 
 package frc.robot.commands;
 
-import com.frcteam3255.utils.SN_Math;
-
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.subsystems.Drivetrain;
 
@@ -20,45 +19,34 @@ public class Engage extends CommandBase {
 
   boolean isDriveOpenLoop;
   double desiredSpeedFeet;
-  double degreesFromEngaged = 0;
-  double timeWhenEngaged;
-  double debounce = 0;
+  PIDController rollPID;
 
   public Engage(Drivetrain subDrivetrain) {
     this.subDrivetrain = subDrivetrain;
 
     isDriveOpenLoop = false;
 
+    rollPID = new PIDController(
+        prefDrivetrain.autoEngageP.getValue(),
+        prefDrivetrain.autoEngageI.getValue(),
+        prefDrivetrain.autoEngageD.getValue());
+
+    rollPID.setTolerance(prefDrivetrain.autoEngageTolerance.getValue());
+
     addRequirements(subDrivetrain);
   }
 
   @Override
   public void initialize() {
-    degreesFromEngaged = Math.abs(0 - subDrivetrain.getNavXRoll());
   }
 
   @Override
   public void execute() {
-    degreesFromEngaged = SN_Math.interpolate(Math.abs(0 - subDrivetrain.getNavXRoll()), 0, 15, 0, 1);
+    // Value is negative because we need to go in the opposite direction
+    desiredSpeedFeet = -((rollPID.calculate(subDrivetrain.getNavXRoll(), 0))
+        * prefDrivetrain.autoEngageSpeedMultiplier.getValue()) * prefDrivetrain.autoMaxSpeedFeet.getValue();
 
-    if ((subDrivetrain.isTiltedForward() || subDrivetrain.isTiltedBackwards()) && debounce < 10) {
-      debounce += 1;
-
-    } else if (subDrivetrain.isTiltedForward()) {
-      desiredSpeedFeet = prefDrivetrain.maxForwardDockSpeed.getValue();
-      timeWhenEngaged = 0;
-    } else if (subDrivetrain.isTiltedBackwards()) {
-      desiredSpeedFeet = -prefDrivetrain.maxBackDockSpeed.getValue();
-      timeWhenEngaged = 0;
-
-    } else {
-      desiredSpeedFeet = 0;
-      debounce = 0;
-      timeWhenEngaged = Timer.getFPGATimestamp();
-
-    }
-
-    subDrivetrain.drive(new Pose2d(Units.metersToFeet(desiredSpeedFeet * (degreesFromEngaged * degreesFromEngaged)), 0,
+    subDrivetrain.drive(new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0,
         new Rotation2d()), isDriveOpenLoop);
   }
 
@@ -69,7 +57,6 @@ public class Engage extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return timeWhenEngaged != 0
-        && timeWhenEngaged < Timer.getFPGATimestamp() - prefDrivetrain.engagedSeconds.getValue();
+    return rollPID.atSetpoint();
   }
 }
