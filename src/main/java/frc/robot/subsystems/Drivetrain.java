@@ -20,7 +20,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -188,7 +191,7 @@ public class Drivetrain extends SubsystemBase {
         Units.feetToMeters(prefDrivetrain.teleTransMaxSpeed.getValue()),
         Units.feetToMeters(prefDrivetrain.teleTransMaxAccel.getValue())));
     xPID.setTolerance(Units.inchesToMeters(prefDrivetrain.teleTransTolerance.getValue()));
-    xPID.reset(getPose().getX());
+    xPID.reset(getPose2d().getX());
 
     yPID.setPID(
         prefDrivetrain.teleTransP.getValue(),
@@ -198,7 +201,7 @@ public class Drivetrain extends SubsystemBase {
         Units.feetToMeters(prefDrivetrain.teleTransMaxSpeed.getValue()),
         Units.feetToMeters(prefDrivetrain.teleTransMaxAccel.getValue())));
     yPID.setTolerance(Units.inchesToMeters(prefDrivetrain.teleThetaTolerance.getValue()));
-    yPID.reset(getPose().getY());
+    yPID.reset(getPose2d().getY());
 
     thetaPID.setPID(
         prefDrivetrain.teleThetaP.getValue(),
@@ -224,8 +227,8 @@ public class Drivetrain extends SubsystemBase {
     // create a velocity Pose2d with the calculated x and y positions, and the
     // positional rotation.
     Pose2d velocity = new Pose2d(
-        xPID.calculate(getPose().getX()),
-        yPID.calculate(getPose().getY()),
+        xPID.calculate(getPose2d().getX()),
+        yPID.calculate(getPose2d().getY()),
         position.getRotation());
 
     // pass the velocity Pose2d to driveAlignAngle(), which will close the loop for
@@ -354,17 +357,17 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetPID() {
-    xPID.reset(getPose().getX());
-    yPID.reset(getPose().getY());
+    xPID.reset(getPose2d().getX());
+    yPID.reset(getPose2d().getY());
     thetaPID.reset();
   }
 
   /**
-   * Get the current estimated position of the drivetrain.
+   * Get the current estimated 2d position of the drivetrain.
    * 
    * @return Position of drivetrain
    */
-  public Pose2d getPose() {
+  public Pose2d getPose2d() {
     return poseEstimator.getEstimatedPosition();
   }
 
@@ -456,6 +459,21 @@ public class Drivetrain extends SubsystemBase {
     return navX.getRoll() < -prefDrivetrain.tiltedThreshold.getValue();
   }
 
+  // Copied directly from 4738 🦒 who copied from 6328 🤭
+  public static synchronized double[] composePose3ds(Pose3d... value) {
+    double[] data = new double[value.length * 7];
+    for (int i = 0; i < value.length; i++) {
+      data[i * 7] = value[i].getX();
+      data[i * 7 + 1] = value[i].getY();
+      data[i * 7 + 2] = value[i].getZ();
+      data[i * 7 + 3] = value[i].getRotation().getQuaternion().getW();
+      data[i * 7 + 4] = value[i].getRotation().getQuaternion().getX();
+      data[i * 7 + 5] = value[i].getRotation().getQuaternion().getY();
+      data[i * 7 + 6] = value[i].getRotation().getQuaternion().getZ();
+    }
+    return data;
+  }
+
   @Override
   public void periodic() {
 
@@ -465,11 +483,11 @@ public class Drivetrain extends SubsystemBase {
 
     if (Constants.OUTPUT_DEBUG_VALUES) {
 
-      SmartDashboard.putNumber("Drivetrain Pose X", Units.metersToInches(getPose().getX()));
-      SmartDashboard.putNumber("Drivetrain Pose Y", Units.metersToInches(getPose().getY()));
-      SmartDashboard.putNumber("Drivetrain Pose Rotation", getPose().getRotation().getDegrees());
+      SmartDashboard.putNumber("Drivetrain Pose X", Units.metersToInches(getPose2d().getX()));
+      SmartDashboard.putNumber("Drivetrain Pose Y", Units.metersToInches(getPose2d().getY()));
+      SmartDashboard.putNumber("Drivetrain Pose Rotation", getPose2d().getRotation().getDegrees());
 
-      SmartDashboard.putBoolean("is Tilted Fowards", isTiltedForward());
+      SmartDashboard.putBoolean("is Tilted Forwards", isTiltedForward());
       SmartDashboard.putBoolean("is Tilted Backwards", isTiltedBackwards());
 
       SmartDashboard.putNumber("Drivetrain Yaw", navX.getRotation2d().getDegrees());
@@ -477,7 +495,7 @@ public class Drivetrain extends SubsystemBase {
       SmartDashboard.putNumber("Drivetrain Theta Goal", Units.radiansToDegrees(thetaPID.getSetpoint()));
       SmartDashboard.putNumber("Drivetrain Theta Error", Units.radiansToDegrees(thetaPID.getPositionError()));
 
-      field.setRobotPose(getPose());
+      field.setRobotPose(getPose2d());
       SmartDashboard.putData(field);
 
       for (SN_SwerveModule mod : modules) {
@@ -494,6 +512,23 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Module " + mod.moduleNumber + " Drive Output Percent",
             mod.getDriveMotorOutputPercent());
       }
+
+      // AdvantageScope
+      double[] swerveModuleStates = new double[8];
+      for (int i = 0; i < 8; i += 2) {
+        swerveModuleStates[i] = modules[i / 2].getState().angle.getRadians();
+        swerveModuleStates[i + 1] = modules[i / 2].getState().speedMetersPerSecond;
+      }
+      SmartDashboard.putNumberArray("Swerve/RealStates", swerveModuleStates);
+
+      SmartDashboard.putNumberArray("RobotPose3d",
+          composePose3ds(
+              new Pose3d(
+                  new Translation3d(
+                      getPose2d().getX(),
+                      getPose2d().getY(),
+                      0),
+                  new Rotation3d(navX.getRoll(), navX.getPitch(), navX.getYaw()))));
     }
   }
 }

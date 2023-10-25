@@ -10,7 +10,9 @@ import com.frcteam3255.joystick.SN_XboxController;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -72,6 +74,17 @@ public class RobotContainer {
   public static SwerveAutoBuilder swerveAutoBuilder;
 
   public RobotContainer() {
+    // Set out log file to be in its own folder
+    if (Robot.isSimulation()) {
+      DataLogManager.start("src/main/AdvantageScope Logs");
+    } else {
+      DataLogManager.start();
+    }
+    // Log data that is being put to shuffleboard
+    DataLogManager.logNetworkTables(true);
+    // Log the DS data and joysticks
+    DriverStation.startDataLog(DataLogManager.getLog(), true);
+
     // -- Creating Autos --
     HashMap<String, Command> autoEventMap = new HashMap<>();
     autoEventMap.put("cubeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
@@ -89,7 +102,7 @@ public class RobotContainer {
         prefWrist.wristScoreHybridCubeAngle.getValue(), prefElevator.elevatorHybridCubeScore.getValue()));
 
     swerveAutoBuilder = new SwerveAutoBuilder(
-        subDrivetrain::getPose,
+        subDrivetrain::getPose2d,
         subDrivetrain::resetPose,
         subDrivetrain.swerveKinematics,
         new PIDConstants(
