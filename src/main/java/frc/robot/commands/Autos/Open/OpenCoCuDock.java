@@ -40,6 +40,7 @@ public class OpenCoCuDock extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.openCoCuDock.getInitialHolonomicPose().getRotation().getDegrees())),
+        Commands.runOnce(() -> subDrivetrain.resetPose(subDrivetrain.openCoCuDock.getInitialHolonomicPose())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),

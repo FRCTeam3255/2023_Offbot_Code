@@ -40,6 +40,7 @@ public class CableCoCuDock extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.cableCoCuDock.getInitialHolonomicPose().getRotation().getDegrees())),
+        Commands.runOnce(() -> subDrivetrain.resetPose(subDrivetrain.cableCoCuDock.getInitialHolonomicPose())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),

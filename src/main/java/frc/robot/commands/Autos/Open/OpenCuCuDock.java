@@ -40,6 +40,7 @@ public class OpenCuCuDock extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.openCuCuDock.getInitialHolonomicPose().getRotation().getDegrees())),
+        Commands.runOnce(() -> subDrivetrain.resetPose(subDrivetrain.openCuCuDock.getInitialHolonomicPose())),
 
         // Intake cube
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CUBE)),
