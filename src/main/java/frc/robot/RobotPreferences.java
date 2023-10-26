@@ -58,11 +58,11 @@ public class RobotPreferences {
     public static final SN_DoublePreference autoMaxAccelFeet = new SN_DoublePreference(
         "autoMaxAccelFeet", 6);
 
-    public static final SN_DoublePreference autoEngageP = new SN_DoublePreference("autoEngageP", 0.0075);
+    public static final SN_DoublePreference autoEngageP = new SN_DoublePreference("autoEngageP", 0.0026);
     public static final SN_DoublePreference autoEngageI = new SN_DoublePreference("autoEngageI", 0);
     public static final SN_DoublePreference autoEngageD = new SN_DoublePreference("autoEngageD", 0);
     public static final SN_DoublePreference autoEngageSpeedMultiplier = new SN_DoublePreference(
-        "autoEngageSpeedMultiplier", 1.2);
+        "autoEngageSpeedMultiplier", 0.4);
 
     // Degrees (I think)
     // TODO: Find out before Commiting to Main

@@ -57,6 +57,7 @@ public class Engage extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return rollPID.atSetpoint();
+    // return rollPID.atSetpoint();
+    return false;
   }
 }
