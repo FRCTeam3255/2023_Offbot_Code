@@ -159,8 +159,9 @@ public class RobotContainer {
     // Translate the position of the elevator in robot relative
     elevatorSimRoot = elevatorSim.getRoot("elevatorSim", 0.5, 0);
     elevatorCarriageSim = elevatorSimRoot
-        .append(new MechanismLigament2d("elevatorCarriageSim", prefElevator.elevatorCarriageSimLength.getValue(), 56, 2,
-            new Color8Bit(Color.kCadetBlue)));
+        .append(
+            new MechanismLigament2d("elevatorCarriageSim", prefElevator.elevatorCarriageSimLength.getValue(), 54.54, 2,
+                new Color8Bit(Color.kCadetBlue)));
     elevatorShelfSim = elevatorCarriageSim
         .append(new MechanismLigament2d("wristSim", 0.3, 304, 2, new Color8Bit(Color.kPurple)));
     wristSim = elevatorShelfSim
