@@ -17,8 +17,13 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Intake;
@@ -72,6 +77,13 @@ public class RobotContainer {
   private static DigitalInput pracBotSwitch = new DigitalInput(9);
   private final Trigger teleopTrigger = new Trigger(() -> RobotState.isEnabled() && RobotState.isTeleop());
   public static SwerveAutoBuilder swerveAutoBuilder;
+
+  Mechanism2d elevatorSim;
+  // TODO: IMPLEMENT
+  MechanismRoot2d elevatorSimRoot;
+  MechanismLigament2d elevatorCarriageSim;
+  MechanismLigament2d wristSim;
+  MechanismLigament2d elevatorShelfSim;
 
   public RobotContainer() {
     // Set out log file to be in its own folder
@@ -141,6 +153,19 @@ public class RobotContainer {
 
     Timer.delay(2.5);
     resetToAbsolutePositions();
+
+    // TOOD: Make pref
+    elevatorSim = new Mechanism2d(2, 2);
+    // Translate the position of the elevator in robot relative
+    elevatorSimRoot = elevatorSim.getRoot("elevatorSim", 0.5, 0);
+    elevatorCarriageSim = elevatorSimRoot
+        .append(new MechanismLigament2d("elevatorCarriageSim", prefElevator.elevatorCarriageSimLength.getValue(), 56, 2,
+            new Color8Bit(Color.kCadetBlue)));
+    elevatorShelfSim = elevatorCarriageSim
+        .append(new MechanismLigament2d("wristSim", 0.3, 304, 2, new Color8Bit(Color.kPurple)));
+    wristSim = elevatorShelfSim
+        .append(new MechanismLigament2d("wristSim", 0.1, 160, 2, new Color8Bit(Color.kAquamarine)));
+    SmartDashboard.putData("Elevator & Arm Sim", elevatorSim);
   }
 
   /**
@@ -150,6 +175,16 @@ public class RobotContainer {
   public void resetToAbsolutePositions() {
     subDrivetrain.resetSteerMotorEncodersToAbsolute();
     subWrist.resetWristEncoderToAbsolute();
+  }
+
+  /**
+   * Update all Mechanism Simulations
+   */
+  public void updateMechanismSims() {
+    elevatorCarriageSim
+        .setLength(prefElevator.elevatorCarriageSimLength.getValue() + subElevator.getElevatorPositionMeters());
+
+    wristSim.setAngle(subWrist.getWristAngle());
   }
 
   private void configureBindings() {

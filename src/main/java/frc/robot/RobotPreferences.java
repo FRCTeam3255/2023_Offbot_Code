@@ -204,6 +204,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorEncoderCountsPerMeter = new SN_DoublePreference(
         "elevatorEncoderCountsPerMeter", 36644.718);
 
+    public static final SN_DoublePreference elevatorCarriageSimLength = new SN_DoublePreference(
+        "elevatorCarriageSimLength", 0.5);
+
   }
 
   public static final class prefWrist {
