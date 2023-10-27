@@ -89,6 +89,7 @@ public class RobotContainer {
     autoEventMap.put("prepCubeHybrid", new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHybridConeScore.getValue(),
         prefWrist.wristScoreHybridCubeAngle.getValue(), prefElevator.elevatorHybridCubeScore.getValue()));
+    autoEventMap.put("YEET", new YeetGamePiece(subIntake, subElevator, subWrist));
 
     swerveAutoBuilder = new SwerveAutoBuilder(
         subDrivetrain::getPose,
