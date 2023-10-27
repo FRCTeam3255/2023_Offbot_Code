@@ -68,6 +68,6 @@ public class OpenCuCuDock extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        new Engage(subDrivetrain));
+        new Engage(subDrivetrain, subLEDs));
   }
 }

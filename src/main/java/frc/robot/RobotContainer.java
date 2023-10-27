@@ -249,7 +249,7 @@ public class RobotContainer {
             Commands.runOnce(() -> subDrivetrain.resetRotation()),
             Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
                 subDrivetrain.centerCoDock.getInitialHolonomicPose().getRotation().getDegrees())),
-            new Engage(subDrivetrain)));
+            new Engage(subDrivetrain, subLEDs)));
 
     SmartDashboard.putData(autoChooser);
 

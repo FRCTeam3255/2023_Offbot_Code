@@ -68,6 +68,6 @@ public class CenterCoDock extends SequentialCommandGroup {
         // Drive onto the charge station
         RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.centerCoDock)
             .withTimeout(subDrivetrain.centerCoDock.getTotalTimeSeconds()),
-        new Engage(subDrivetrain));
+        new Engage(subDrivetrain, subLEDs));
   }
 }

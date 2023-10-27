@@ -60,7 +60,7 @@ public class RobotPreferences {
 
     public static final SN_DoublePreference autoEngageP = new SN_DoublePreference("autoEngageP", 0.0007);
     public static final SN_DoublePreference autoEngageI = new SN_DoublePreference("autoEngageI", 0);
-    public static final SN_DoublePreference autoEngageD = new SN_DoublePreference("autoEngageD", 0);
+    public static final SN_DoublePreference autoEngageD = new SN_DoublePreference("autoEngageD", 0.0002);
     public static final SN_DoublePreference autoEngageSpeedMultiplier = new SN_DoublePreference(
         "autoEngageSpeedMultiplier", 1.2);
 

@@ -12,17 +12,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.LEDs;
+import frc.robot.Constants.constLEDs;
 
 public class Engage extends CommandBase {
 
   Drivetrain subDrivetrain;
+  LEDs subLEDs;
 
   boolean isDriveOpenLoop;
   double desiredSpeedFeet;
   PIDController rollPID;
 
-  public Engage(Drivetrain subDrivetrain) {
+  public Engage(Drivetrain subDrivetrain, LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
+    this.subLEDs = subLEDs;
 
     isDriveOpenLoop = false;
 
@@ -33,7 +37,7 @@ public class Engage extends CommandBase {
 
     rollPID.setTolerance(prefDrivetrain.autoEngageTolerance.getValue());
 
-    addRequirements(subDrivetrain);
+    addRequirements(subDrivetrain, subLEDs);
   }
 
   @Override
@@ -46,8 +50,15 @@ public class Engage extends CommandBase {
     desiredSpeedFeet = -((rollPID.calculate(subDrivetrain.getNavXRoll(), 0))
         * prefDrivetrain.autoEngageSpeedMultiplier.getValue()) * prefDrivetrain.autoMaxSpeedFeet.getValue();
 
-    subDrivetrain.drive(new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0,
-        new Rotation2d()), isDriveOpenLoop);
+    if (rollPID.atSetpoint()) {
+      subDrivetrain.setDefenseMode();
+      subLEDs.setLEDPattern(constLEDs.DEFENSE_MODE_COLOR);
+    } else {
+      subDrivetrain.drive(new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0,
+          new Rotation2d()), isDriveOpenLoop);
+      subLEDs.setLEDPattern(constLEDs.DEFAULT_COLOR);
+
+    }
   }
 
   @Override
@@ -57,7 +68,6 @@ public class Engage extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    // return rollPID.atSetpoint();
     return false;
   }
 }

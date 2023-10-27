@@ -71,6 +71,6 @@ public class OpenCoCuDock extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        new Engage(subDrivetrain));
+        new Engage(subDrivetrain, subLEDs));
   }
 }
