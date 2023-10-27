@@ -64,8 +64,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference autoEngageSpeedMultiplier = new SN_DoublePreference(
         "autoEngageSpeedMultiplier", 1.2);
 
-    // Degrees (I think)
-    // TODO: Find out before Commiting to Main
+    // Degrees (Probably)
     public static final SN_DoublePreference autoEngageTolerance = new SN_DoublePreference("autoEngageTolerance", 10);
 
     public static final SN_DoublePreference teleTransP = new SN_DoublePreference("teleTransP", 0);

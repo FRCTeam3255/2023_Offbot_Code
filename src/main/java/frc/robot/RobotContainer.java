@@ -242,15 +242,6 @@ public class RobotContainer {
     autoChooser.addOption("CABLE - 1 CO, 1 CU",
         new CableCoCu(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
-    // Test Auto
-    // TODO: Remove before Commiting to Main
-    autoChooser.addOption("TEST - ENGAGE ONLY",
-        new SequentialCommandGroup(
-            Commands.runOnce(() -> subDrivetrain.resetRotation()),
-            Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
-                subDrivetrain.centerCoDock.getInitialHolonomicPose().getRotation().getDegrees())),
-            new Engage(subDrivetrain, subLEDs)));
-
     SmartDashboard.putData(autoChooser);
 
     autoTab
