@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.subsystems.Elevator;
@@ -15,7 +16,7 @@ import frc.robot.subsystems.Wrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Stow extends ParallelCommandGroup {
+public class Stow extends SequentialCommandGroup {
   Wrist subWrist;
   Intake subIntake;
   Elevator subElevator;
@@ -33,10 +34,11 @@ public class Stow extends ParallelCommandGroup {
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(0)).unless(() -> subIntake.isGamePieceCollected()),
 
         Commands.waitUntil(() -> subWrist.isWristAtPosition(prefWrist.wristStowAngle.getValue())),
-
         Commands.runOnce(() -> subElevator.setElevatorPosition(prefElevator.elevatorStow.getValue())),
-        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
-            prefElevator.elevatorActualPositionTolerance.getValue())),
-        Commands.runOnce(() -> subElevator.neutralElevatorOutputs()));
+
+        Commands.waitUntil((() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
+            prefElevator.elevatorActualPositionTolerance.getValue()))),
+
+        Commands.run(() -> subElevator.neutralElevatorOutputs()));
   }
 }
