@@ -33,6 +33,7 @@ import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
+import frc.robot.commands.Engage;
 import frc.robot.commands.IntakeGamePiece;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
@@ -49,6 +50,7 @@ import frc.robot.commands.Autos.Open.OpenCuCuDock;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {

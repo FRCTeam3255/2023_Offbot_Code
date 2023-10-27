@@ -52,8 +52,10 @@ public class CenterCoDock extends SequentialCommandGroup {
 
         // Place cone and stow
         new PrepGamePiece(subElevator, subWrist, subIntake,
-            prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
-            prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()),
+            prefWrist.wristScoreHighConeAngle.getValue(),
+            prefElevator.elevatorHighConeScore.getValue(),
+            prefWrist.wristScoreHighCubeAngle.getValue(),
+            prefElevator.elevatorHighCubeScore.getValue()),
 
         Commands.waitUntil(() -> subElevator.isPrepped()),
 
@@ -66,6 +68,6 @@ public class CenterCoDock extends SequentialCommandGroup {
         // Drive onto the charge station
         RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.centerCoDock)
             .withTimeout(subDrivetrain.centerCoDock.getTotalTimeSeconds()),
-        new Engage(subDrivetrain));
+        new Engage(subDrivetrain, subLEDs));
   }
 }

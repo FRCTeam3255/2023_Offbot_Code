@@ -71,6 +71,6 @@ public class CableCoCuDock extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        new Engage(subDrivetrain));
+        new Engage(subDrivetrain, subLEDs));
   }
 }

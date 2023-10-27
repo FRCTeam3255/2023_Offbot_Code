@@ -4,27 +4,40 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.LEDs;
+import frc.robot.Constants.constLEDs;
 
 public class Engage extends CommandBase {
 
   Drivetrain subDrivetrain;
+  LEDs subLEDs;
 
   boolean isDriveOpenLoop;
   double desiredSpeedFeet;
-  double timeElapsed = 0;
+  PIDController rollPID;
 
-  public Engage(Drivetrain subDrivetrain) {
+  public Engage(Drivetrain subDrivetrain, LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
+    this.subLEDs = subLEDs;
 
     isDriveOpenLoop = false;
 
-    addRequirements(subDrivetrain);
+    rollPID = new PIDController(
+        prefDrivetrain.autoEngageP.getValue(),
+        prefDrivetrain.autoEngageI.getValue(),
+        prefDrivetrain.autoEngageD.getValue());
+
+    rollPID.setTolerance(prefDrivetrain.autoEngageTolerance.getValue());
+
+    addRequirements(subDrivetrain, subLEDs);
   }
 
   @Override
@@ -33,35 +46,24 @@ public class Engage extends CommandBase {
 
   @Override
   public void execute() {
-    if (subDrivetrain.isTiltedForward() && timeElapsed == 0) {
-      timeElapsed = 1;
-      desiredSpeedFeet = prefDrivetrain.forwardTiltDockSpeed.getValue();
+    // Value is negative because we need to go in the opposite direction
+    desiredSpeedFeet = -((rollPID.calculate(subDrivetrain.getNavXRoll(), 0))
+        * prefDrivetrain.autoEngageSpeedMultiplier.getValue()) * prefDrivetrain.autoMaxSpeedFeet.getValue();
 
-    } else if (subDrivetrain.isTiltedBackwards() && timeElapsed == 0) {
-      timeElapsed = 1;
-      desiredSpeedFeet = prefDrivetrain.backwardTitDockSpeed.getValue();
-
-    } else if (subDrivetrain.isTiltedForward() && timeElapsed != 0) {
-      timeElapsed += 0.05;
-      desiredSpeedFeet = prefDrivetrain.forwardTiltDockSpeed.getValue() / timeElapsed;
-
-    } else if (subDrivetrain.isTiltedBackwards() && timeElapsed != 0) {
-      timeElapsed += 0.05;
-      desiredSpeedFeet = prefDrivetrain.backwardTitDockSpeed.getValue() / timeElapsed;
-
+    if (rollPID.atSetpoint()) {
+      subDrivetrain.setDefenseMode();
+      subLEDs.setLEDPattern(constLEDs.DEFENSE_MODE_COLOR);
     } else {
-      timeElapsed = 1.5;
-      desiredSpeedFeet = 0;
+      subDrivetrain.drive(new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0,
+          new Rotation2d()), isDriveOpenLoop);
+      subLEDs.setLEDPattern(constLEDs.DEFAULT_COLOR);
 
     }
-    subDrivetrain.drive(
-        new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0, new Rotation2d()),
-        isDriveOpenLoop);
   }
 
   @Override
   public void end(boolean interrupted) {
-    subDrivetrain.neutralDriveOutputs();
+    subDrivetrain.setDefenseMode();
   }
 
   @Override
