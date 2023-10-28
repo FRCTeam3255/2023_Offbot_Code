@@ -21,14 +21,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class CableCoCuDock extends SequentialCommandGroup {
+public class CableCoCuHigh extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public CableCoCuDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public CableCoCuHigh(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -39,7 +39,7 @@ public class CableCoCuDock extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
-            subDrivetrain.cableCoCuDock.getInitialHolonomicPose().getRotation().getDegrees())),
+            subDrivetrain.cableCoCu.getInitialHolonomicPose().getRotation().getDegrees())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
@@ -66,8 +66,8 @@ public class CableCoCuDock extends SequentialCommandGroup {
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
         // Drive, collect a cube, and go to the cube node
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.cableCoCuDock)
-            .withTimeout(subDrivetrain.cableCoCuDock.getTotalTimeSeconds()),
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.cableCoCu)
+            .withTimeout(subDrivetrain.cableCoCu.getTotalTimeSeconds()),
 
         new Engage(subDrivetrain, subLEDs));
   }

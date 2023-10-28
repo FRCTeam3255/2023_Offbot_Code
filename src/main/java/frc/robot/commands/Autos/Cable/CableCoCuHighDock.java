@@ -39,7 +39,7 @@ public class CableCoCuHighDock extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
-            subDrivetrain.cableCoCu.getInitialHolonomicPose().getRotation().getDegrees())),
+            subDrivetrain.cableCoCuDock.getInitialHolonomicPose().getRotation().getDegrees())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
@@ -66,8 +66,8 @@ public class CableCoCuHighDock extends SequentialCommandGroup {
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
         // Drive, collect a cube, and go to the cube node
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.cableCoCu)
-            .withTimeout(subDrivetrain.cableCoCu.getTotalTimeSeconds()),
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.cableCoCuDock)
+            .withTimeout(subDrivetrain.cableCoCuDock.getTotalTimeSeconds()),
 
         new Engage(subDrivetrain, subLEDs));
   }

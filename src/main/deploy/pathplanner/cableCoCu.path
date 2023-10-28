@@ -106,81 +106,6 @@
         "x": 2.0746034776523516,
         "y": 0.9170150384647558
       },
-      "nextControl": {
-        "x": 2.0700554706340646,
-        "y": 1.1629920718760165
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 2.465089685891759,
-        "y": 1.06
-      },
-      "prevControl": {
-        "x": 2.44814301054929,
-        "y": 1.1129888575277098
-      },
-      "nextControl": {
-        "x": 2.4820363612342278,
-        "y": 1.0070111424722903
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 2.47,
-        "y": 2.1
-      },
-      "prevControl": {
-        "x": 2.461438244346724,
-        "y": 2.096881422602461
-      },
-      "nextControl": {
-        "x": 2.4785617556532764,
-        "y": 2.1031185773975394
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 3.9462719152485377,
-        "y": 2.1
-      },
-      "prevControl": {
-        "x": 3.972520732483581,
-        "y": 2.088378525053727
-      },
       "nextControl": null,
       "holonomicAngle": 0,
       "isReversal": false,
@@ -197,25 +122,25 @@
   ],
   "markers": [
     {
-      "position": 0.9927272727272689,
+      "position": 0.99,
       "names": [
         "cubeDeployIntake"
       ]
     },
     {
-      "position": 2.5236363636363484,
+      "position": 2.52,
       "names": [
         "stow"
       ]
     },
     {
-      "position": 3.5236363636363413,
+      "position": 3.52,
       "names": [
         "prepCubeHigh"
       ]
     },
     {
-      "position": 3.9600000000000355,
+      "position": 3.8818181818181823,
       "names": [
         "placeGamePiece"
       ]
