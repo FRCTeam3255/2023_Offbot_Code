@@ -69,6 +69,6 @@ public class CableCoCuHigh extends SequentialCommandGroup {
         RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.cableCoCu)
             .withTimeout(subDrivetrain.cableCoCu.getTotalTimeSeconds()),
 
-        new Engage(subDrivetrain, subLEDs));
+        new Stow(subWrist, subIntake, subElevator));
   }
 }
