@@ -153,7 +153,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakeDelay = new SN_DoublePreference("intakeDelay", 0);
 
     public static final SN_DoublePreference intakeMidConeDelay = new SN_DoublePreference("intakeMidConeDelay", 0.5);
-    public static final SN_DoublePreference autoPlaceConeDelay = new SN_DoublePreference("autoPlaceConeDelay", 0.4);
+    public static final SN_DoublePreference autoPlaceConeDelay = new SN_DoublePreference("autoPlaceConeDelay", 0.2);
   }
 
   public static final class prefElevator {

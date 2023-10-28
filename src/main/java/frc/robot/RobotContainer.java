@@ -42,7 +42,7 @@ import frc.robot.commands.Stow;
 import frc.robot.commands.YeetGamePiece;
 import frc.robot.commands.Autos.Cable.CableCoCu;
 import frc.robot.commands.Autos.Cable.CableCoCuDock;
-import frc.robot.commands.Autos.Cable.CableCoCuYeetDock;
+import frc.robot.commands.Autos.Cable.CableCoCoCoYeetDock;
 import frc.robot.commands.Autos.Center.CenterCo;
 import frc.robot.commands.Autos.Center.CenterCoDock;
 import frc.robot.commands.Autos.Open.OpenCoCu;
@@ -79,7 +79,7 @@ public class RobotContainer {
     HashMap<String, Command> autoEventMap = new HashMap<>();
     autoEventMap.put("cubeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
-    autoEventMap.put("coneDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
+    autoEventMap.put("coneDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristIntakeAngle.getValue(), prefElevator.elevatorIntakeCubePos.getValue()));
     autoEventMap.put("waitForStow",
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
@@ -95,7 +95,8 @@ public class RobotContainer {
         prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()));
     autoEventMap.put("YEET", new YeetGamePiece(subIntake, subElevator, subWrist));
     autoEventMap.put("placeGamePiece", new PlaceGamePiece(subIntake, subWrist, subElevator, true));
-
+    autoEventMap.put("stow", new Stow(subWrist, subIntake, subElevator));
+    ;
     swerveAutoBuilder = new SwerveAutoBuilder(
         subDrivetrain::getPose,
         subDrivetrain::resetPose,
@@ -243,10 +244,13 @@ public class RobotContainer {
         new CenterCo(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Cable Side
-    autoChooser.addOption("CABLE - 1 CO, 1 CU, Yeet, Engage",
-        new CableCoCuYeetDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
-    autoChooser.addOption("CABLE - 1 CO, 1 CU, Engage",
-        new CableCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    autoChooser.addOption("CABLE - 1 CO High, 1 CO Yeet, Engage",
+        new CableCoCoCoYeetDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    // autoChooser.addOption("CABLE - 1 CO High, 2 CO Yeet, Engage",
+    // new CableCoCoCoYeetDock(subDrivetrain, subIntake, subWrist, subElevator,
+    // subLEDs));
+    // autoChooser.addOption("CABLE - 1 CO, 1 CU, Engage",
+    // new CableCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
     autoChooser.addOption("CABLE - 1 CO, 1 CU",
         new CableCoCu(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
