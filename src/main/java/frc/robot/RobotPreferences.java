@@ -44,7 +44,7 @@ public class RobotPreferences {
     // down.
     public static final SN_DoublePreference triggerValue = new SN_DoublePreference("triggerValue", .2);
 
-    public static final SN_DoublePreference autoThetaP = new SN_DoublePreference("autoThetaP", 0.75);
+    public static final SN_DoublePreference autoThetaP = new SN_DoublePreference("autoThetaP", 1);
     public static final SN_DoublePreference autoThetaI = new SN_DoublePreference("autoThetaI", 0.0);
     public static final SN_DoublePreference autoThetaD = new SN_DoublePreference("autoThetaD", 0.0);
 

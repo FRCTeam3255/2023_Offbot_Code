@@ -83,12 +83,15 @@ public class RobotContainer {
     autoEventMap.put("waitForStow",
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(prefElevator.elevatorStow.getValue(),
             prefElevator.elevatorActualPositionTolerance.getValue())));
-    autoEventMap.put("prepCube", new PrepGamePiece(subElevator, subWrist, subIntake,
+    autoEventMap.put("prepCubeMid", new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreMidConeAngle.getValue(), prefElevator.elevatorMidConeScore.getValue(),
         prefWrist.wristScoreMidCubeAngle.getValue(), prefElevator.elevatorMidCubeScore.getValue()));
     autoEventMap.put("prepCubeHybrid", new PrepGamePiece(subElevator, subWrist, subIntake,
         prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHybridConeScore.getValue(),
         prefWrist.wristScoreHybridCubeAngle.getValue(), prefElevator.elevatorHybridCubeScore.getValue()));
+    autoEventMap.put("prepCubeHigh", new PrepGamePiece(subElevator, subWrist, subIntake,
+        prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
+        prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()));
     autoEventMap.put("YEET", new YeetGamePiece(subIntake, subElevator, subWrist));
 
     swerveAutoBuilder = new SwerveAutoBuilder(

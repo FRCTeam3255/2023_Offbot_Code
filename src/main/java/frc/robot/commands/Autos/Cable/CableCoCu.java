@@ -49,10 +49,12 @@ public class CableCoCu extends SequentialCommandGroup {
         new Stow(subWrist, subIntake, subElevator)
             .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
 
-        // Place cone and stow
+        // // Place cone and stow
         new PrepGamePiece(subElevator, subWrist, subIntake,
-            prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
-            prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()),
+            prefWrist.wristScoreHighConeAngle.getValue(),
+            prefElevator.elevatorHighConeScore.getValue(),
+            prefWrist.wristScoreHighCubeAngle.getValue(),
+            prefElevator.elevatorHighCubeScore.getValue()),
 
         Commands.waitUntil(() -> subElevator.isPrepped()),
 
