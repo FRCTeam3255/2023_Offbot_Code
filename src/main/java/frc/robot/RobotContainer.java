@@ -43,6 +43,7 @@ import frc.robot.commands.YeetGamePiece;
 import frc.robot.commands.Autos.Cable.CableCoCu;
 import frc.robot.commands.Autos.Cable.CableCoCuDock;
 import frc.robot.commands.Autos.Cable.CableCoCoCoYeetDock;
+import frc.robot.commands.Autos.Cable.CableCoCoYeetDock;
 import frc.robot.commands.Autos.Center.CenterCo;
 import frc.robot.commands.Autos.Center.CenterCoDock;
 import frc.robot.commands.Autos.Open.OpenCoCu;
@@ -245,7 +246,7 @@ public class RobotContainer {
 
     // Cable Side
     autoChooser.addOption("CABLE - 1 CO High, 1 CO Yeet, Engage",
-        new CableCoCoCoYeetDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+        new CableCoCoYeetDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
     // autoChooser.addOption("CABLE - 1 CO High, 2 CO Yeet, Engage",
     // new CableCoCoCoYeetDock(subDrivetrain, subIntake, subWrist, subElevator,
     // subLEDs));

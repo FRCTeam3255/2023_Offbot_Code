@@ -294,7 +294,7 @@ public class Drivetrain extends SubsystemBase {
           velocity.getRotation().getRadians());
     }
 
-    SwerveModuleState[] desiredStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleState[] desiredStates = swerveKinematics.toSwerveModuleStates(discretize(chassisSpeeds));
 
     setModuleStates(desiredStates, isDriveOpenLoop);
 
@@ -462,6 +462,38 @@ public class Drivetrain extends SubsystemBase {
 
   public double getNavXRoll() {
     return navX.getRoll();
+  }
+
+  /**
+   * This is the most theoretical thing that is in the code.
+   * It takes our current position and then adds an offset to it, knowing that the
+   * robot's estimated position
+   * is not following the exact position of the robot.
+   * 
+   * @param speeds the speeds about to be inputted into the robot.
+   * @return the same thing as we input.
+   *         Think of this method as an interceptor,
+   *         not changing the parameter but using it for calculations.
+   */
+  /**
+   * Credit: WPIlib 2024 and 4738
+   * Discretizes a continuous-time chassis speed.
+   *
+   * @param vx    Forward velocity.
+   * @param vy    Sideways velocity.
+   * @param omega Angular velocity.
+   */
+  public ChassisSpeeds discretize(ChassisSpeeds speeds) {
+    double dt = 0.02;
+
+    var desiredDeltaPose = new Pose2d(
+        speeds.vxMetersPerSecond * dt,
+        speeds.vyMetersPerSecond * dt,
+        new Rotation2d(speeds.omegaRadiansPerSecond * dt * 4));
+
+    var twist = new Pose2d().log(desiredDeltaPose);
+
+    return new ChassisSpeeds((twist.dx / dt), (twist.dy / dt), (speeds.omegaRadiansPerSecond));
   }
 
   @Override
