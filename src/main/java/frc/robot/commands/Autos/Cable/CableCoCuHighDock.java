@@ -11,6 +11,7 @@ import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.RobotContainer;
+import frc.robot.commands.Engage;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.Stow;
@@ -20,14 +21,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class CableCoCu extends SequentialCommandGroup {
+public class CableCoCuHighDock extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public CableCoCu(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public CableCoCuHighDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -68,6 +69,6 @@ public class CableCoCu extends SequentialCommandGroup {
         RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.cableCoCu)
             .withTimeout(subDrivetrain.cableCoCu.getTotalTimeSeconds()),
 
-        new PlaceGamePiece(subIntake, subWrist, subElevator, true));
+        new Engage(subDrivetrain, subLEDs));
   }
 }

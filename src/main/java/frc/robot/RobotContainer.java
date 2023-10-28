@@ -40,7 +40,7 @@ import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
 import frc.robot.commands.YeetGamePiece;
-import frc.robot.commands.Autos.Cable.CableCoCu;
+import frc.robot.commands.Autos.Cable.CableCoCuHighDock;
 import frc.robot.commands.Autos.Cable.CableCoCuDock;
 import frc.robot.commands.Autos.Cable.CableCoCoCoYeetDock;
 import frc.robot.commands.Autos.Cable.CableCoCoYeetDock;
@@ -247,13 +247,11 @@ public class RobotContainer {
     // Cable Side
     autoChooser.addOption("CABLE - 1 CO High, 1 CO Yeet, Engage",
         new CableCoCoYeetDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
-    // autoChooser.addOption("CABLE - 1 CO High, 2 CO Yeet, Engage",
-    // new CableCoCoCoYeetDock(subDrivetrain, subIntake, subWrist, subElevator,
-    // subLEDs));
-    // autoChooser.addOption("CABLE - 1 CO, 1 CU, Engage",
-    // new CableCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
-    autoChooser.addOption("CABLE - 1 CO, 1 CU",
-        new CableCoCu(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    autoChooser.addOption("CABLE - 1 CO High, 2 CO Yeet, Engage",
+        new CableCoCoCoYeetDock(subDrivetrain, subIntake, subWrist, subElevator,
+            subLEDs));
+    autoChooser.addOption("CABLE - 1 CO High, 1 CU High, Engage",
+        new CableCoCuHighDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     SmartDashboard.putData(autoChooser);
 
