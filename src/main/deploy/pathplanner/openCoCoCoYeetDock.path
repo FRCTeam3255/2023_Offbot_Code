@@ -34,6 +34,7 @@
       "nextControl": {
         "x": 6.735224731267987,
         "y": 4.5529591059182115
+      },
       "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
