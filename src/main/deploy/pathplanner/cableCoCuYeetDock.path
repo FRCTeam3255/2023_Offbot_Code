@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.83,
-        "y": 1.22
+        "y": 0.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.139515780901923,
-        "y": 0.6331237020226774
+        "x": 2.8299999999999996,
+        "y": 0.500000000000001
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -145,5 +145,24 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 1.8272727272727298,
+      "names": [
+        "cubeDeployIntake"
+      ]
+    },
+    {
+      "position": 2.736363636363637,
+      "names": [
+        "waitForStow"
+      ]
+    },
+    {
+      "position": 4.499999999999985,
+      "names": [
+        "YEET"
+      ]
+    }
+  ]
 }
