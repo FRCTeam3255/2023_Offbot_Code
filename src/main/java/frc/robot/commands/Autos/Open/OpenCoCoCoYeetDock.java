@@ -6,29 +6,29 @@ package frc.robot.commands.Autos.Open;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.GamePiece;
 import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
+import frc.robot.RobotContainer;
 import frc.robot.commands.Engage;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
+import frc.robot.commands.Stow;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class OpenCuCuDock extends SequentialCommandGroup {
-
+public class OpenCoCoCoYeetDock extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public OpenCuCuDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public OpenCoCoCoYeetDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -39,30 +39,33 @@ public class OpenCuCuDock extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
-            subDrivetrain.openCuCuDock.getInitialHolonomicPose().getRotation().getDegrees())),
+            subDrivetrain.openCoCoCoYeetDock.getInitialHolonomicPose().getRotation().getDegrees())),
 
-        // Intake cube
-        Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CUBE)),
+        // Intake cone
+        Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
 
-        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeCubeSpeed.getValue()))
+        Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
             .until(() -> subIntake.isGamePieceCollected()).withTimeout(5),
 
-        // Place cube and stow
+        new Stow(subWrist, subIntake, subElevator)
+            .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
+
+        // Place cone and stow
         new PrepGamePiece(subElevator, subWrist, subIntake,
             prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
             prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()),
 
         Commands.waitUntil(() -> subElevator.isPrepped()),
 
-        Commands.waitSeconds(0.2),
+        Commands.waitSeconds(prefIntake.autoPlaceConeDelay.getValue()),
 
         new PlaceGamePiece(subIntake, subWrist, subElevator, false),
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
         // Drive, collect a cube, and go onto the charge station
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCuCuDock)
-            .withTimeout(subDrivetrain.openCuCuDock.getTotalTimeSeconds()),
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCoCoYeetDock)
+            .withTimeout(subDrivetrain.openCoCoCoYeetDock.getTotalTimeSeconds()),
 
         new PlaceGamePiece(subIntake, subWrist, subElevator, true),
 

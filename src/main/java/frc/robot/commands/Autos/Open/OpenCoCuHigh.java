@@ -11,6 +11,7 @@ import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.RobotContainer;
+import frc.robot.commands.Engage;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.Stow;
@@ -20,14 +21,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class OpenCoCu extends SequentialCommandGroup {
+public class OpenCoCuHigh extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public OpenCoCu(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public OpenCoCuHigh(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -49,10 +50,12 @@ public class OpenCoCu extends SequentialCommandGroup {
         new Stow(subWrist, subIntake, subElevator)
             .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
 
-        // Place cone and stow
+        // // Place cone and stow
         new PrepGamePiece(subElevator, subWrist, subIntake,
-            prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
-            prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()),
+            prefWrist.wristScoreHighConeAngle.getValue(),
+            prefElevator.elevatorHighConeScore.getValue(),
+            prefWrist.wristScoreHighCubeAngle.getValue(),
+            prefElevator.elevatorHighCubeScore.getValue()),
 
         Commands.waitUntil(() -> subElevator.isPrepped()),
 
@@ -66,6 +69,6 @@ public class OpenCoCu extends SequentialCommandGroup {
         RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCu)
             .withTimeout(subDrivetrain.openCoCu.getTotalTimeSeconds()),
 
-        new PlaceGamePiece(subIntake, subWrist, subElevator, true));
+        new Stow(subWrist, subIntake, subElevator));
   }
 }

@@ -64,14 +64,14 @@ public class Drivetrain extends SubsystemBase {
 
   // Paths
   public PathPlannerTrajectory testLinePath;
-  public PathPlannerTrajectory openCoCuDock;
-  public PathPlannerTrajectory openCuCuDock;
-  public PathPlannerTrajectory openCoCu;
   public PathPlannerTrajectory centerCoDock;
   public PathPlannerTrajectory cableCoCu;
   public PathPlannerTrajectory cableCoCuDock;
   public PathPlannerTrajectory cableCoCoYeetDock;
   public PathPlannerTrajectory cableCoCoCoYeetDock;
+  public PathPlannerTrajectory openCoCu;
+  public PathPlannerTrajectory openCoCuDock;
+  public PathPlannerTrajectory openCoCoCoYeetDock;
 
   public Double[] columnYCoordinatesBlue = { 0.5, 1.05, 1.63, 2.19, 2.75, 3.31, 3.86, 4.43, 4.98 };
   public Double[] columnYCoordinatesRed = { 4.98, 4.43, 3.86, 3.31, 2.75, 2.19, 1.63, 1.05, 0.5 };
@@ -145,25 +145,12 @@ public class Drivetrain extends SubsystemBase {
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    openCoCuDock = PathPlanner.loadPath("openCoCuDock",
-        new PathConstraints(
-            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
-
-    openCuCuDock = PathPlanner.loadPath("openCuCuDock", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
-
-    openCoCu = PathPlanner.loadPath("openCoCu",
-        new PathConstraints(
-            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
-
     centerCoDock = PathPlanner.loadPath("centerCoDock",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
+    // Cable
     cableCoCuDock = PathPlanner.loadPath("cableCoCuDock",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
@@ -180,6 +167,22 @@ public class Drivetrain extends SubsystemBase {
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
     cableCoCoCoYeetDock = PathPlanner.loadPath("cableCoCoCoYeetDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+
+    // Open
+    openCoCuDock = PathPlanner.loadPath("openCoCuDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+
+    openCoCu = PathPlanner.loadPath("openCoCu",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+
+    openCoCoCoYeetDock = PathPlanner.loadPath("openCoCoCoYeetDock",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));

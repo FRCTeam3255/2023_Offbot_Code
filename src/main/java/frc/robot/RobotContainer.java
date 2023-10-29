@@ -40,15 +40,9 @@ import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
 import frc.robot.commands.YeetGamePiece;
-import frc.robot.commands.Autos.Cable.CableCoCuHigh;
-import frc.robot.commands.Autos.Cable.CableCoCuHighDock;
-import frc.robot.commands.Autos.Cable.CableCoCoCoYeetDock;
-import frc.robot.commands.Autos.Cable.CableCoCoYeetDock;
-import frc.robot.commands.Autos.Center.CenterCo;
-import frc.robot.commands.Autos.Center.CenterCoDock;
-import frc.robot.commands.Autos.Open.OpenCoCu;
-import frc.robot.commands.Autos.Open.OpenCoCuDock;
-import frc.robot.commands.Autos.Open.OpenCuCuDock;
+import frc.robot.commands.Autos.Cable.*;
+import frc.robot.commands.Autos.Center.*;
+import frc.robot.commands.Autos.Open.*;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -231,12 +225,14 @@ public class RobotContainer {
     // For CABLE autos, align with the wall instead (we are too wide)
 
     // Open Side
-    autoChooser.addOption("OPEN - 2 CU, Engage",
-        new OpenCuCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
-    autoChooser.addOption("OPEN - 1 CO, 1 CU, Engage",
-        new OpenCoCuDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
-    autoChooser.addOption("OPEN - 1 CO, 1 CU",
-        new OpenCoCu(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    autoChooser.addOption("OPEN - 1 CO High, 2 CO Yeet, Engage",
+        new OpenCoCoCoYeetDock(subDrivetrain, subIntake, subWrist, subElevator,
+            subLEDs));
+    autoChooser.addOption("OPEN - 1 CO High, 1 CU High",
+        new OpenCoCuHigh(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+
+    autoChooser.addOption("OPEN - 1 CO High, 1 CU High, Engage",
+        new OpenCoCuHigh(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Center
     autoChooser.addOption("CENTER - 1 CO, Mobility, Engage",

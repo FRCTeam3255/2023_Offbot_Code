@@ -21,14 +21,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class OpenCoCuDock extends SequentialCommandGroup {
+public class OpenCoCuHighDock extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public OpenCoCuDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public OpenCoCuHighDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -50,10 +50,12 @@ public class OpenCoCuDock extends SequentialCommandGroup {
         new Stow(subWrist, subIntake, subElevator)
             .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
 
-        // Place cone and stow
+        // // Place cone and stow
         new PrepGamePiece(subElevator, subWrist, subIntake,
-            prefWrist.wristScoreHighConeAngle.getValue(), prefElevator.elevatorHighConeScore.getValue(),
-            prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()),
+            prefWrist.wristScoreHighConeAngle.getValue(),
+            prefElevator.elevatorHighConeScore.getValue(),
+            prefWrist.wristScoreHighCubeAngle.getValue(),
+            prefElevator.elevatorHighCubeScore.getValue()),
 
         Commands.waitUntil(() -> subElevator.isPrepped()),
 
@@ -63,13 +65,9 @@ public class OpenCoCuDock extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        // Drive, collect a cube, and go onto the charge station
+        // Drive, collect a cube, and go to the cube node
         RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCuDock)
             .withTimeout(subDrivetrain.openCoCuDock.getTotalTimeSeconds()),
-
-        new PlaceGamePiece(subIntake, subWrist, subElevator, true),
-
-        Commands.waitUntil(() -> !subElevator.isPrepped()),
 
         new Engage(subDrivetrain, subLEDs));
   }
