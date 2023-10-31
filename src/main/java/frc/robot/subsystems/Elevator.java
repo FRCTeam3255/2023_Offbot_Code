@@ -16,9 +16,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.frcteam3255.utils.SN_Math;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
