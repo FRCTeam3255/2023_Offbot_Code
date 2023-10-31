@@ -459,19 +459,16 @@ public class Drivetrain extends SubsystemBase {
     return navX.getRoll() < -prefDrivetrain.tiltedThreshold.getValue();
   }
 
-  // Copied directly from 4738 🦒 who copied from 6328 🤭
-  public static synchronized double[] composePose3ds(Pose3d... value) {
-    double[] data = new double[value.length * 7];
-    for (int i = 0; i < value.length; i++) {
-      data[i * 7] = value[i].getX();
-      data[i * 7 + 1] = value[i].getY();
-      data[i * 7 + 2] = value[i].getZ();
-      data[i * 7 + 3] = value[i].getRotation().getQuaternion().getW();
-      data[i * 7 + 4] = value[i].getRotation().getQuaternion().getX();
-      data[i * 7 + 5] = value[i].getRotation().getQuaternion().getY();
-      data[i * 7 + 6] = value[i].getRotation().getQuaternion().getZ();
-    }
-    return data;
+  public double getRoll() {
+    return navX.getRoll();
+  }
+
+  public double getPitch() {
+    return navX.getPitch();
+  }
+
+  public double getYaw() {
+    return navX.getYaw();
   }
 
   @Override
@@ -520,15 +517,6 @@ public class Drivetrain extends SubsystemBase {
         swerveModuleStates[i + 1] = modules[i / 2].getState().speedMetersPerSecond;
       }
       SmartDashboard.putNumberArray("Swerve/RealStates", swerveModuleStates);
-
-      SmartDashboard.putNumberArray("RobotPose3d",
-          composePose3ds(
-              new Pose3d(
-                  new Translation3d(
-                      getPose2d().getX(),
-                      getPose2d().getY(),
-                      0),
-                  new Rotation3d(navX.getRoll(), navX.getPitch(), navX.getYaw()))));
     }
   }
 }

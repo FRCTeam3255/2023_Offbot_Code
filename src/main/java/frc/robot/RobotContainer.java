@@ -45,6 +45,7 @@ import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
+import frc.robot.commands.UpdateMechanismPoses;
 import frc.robot.commands.YeetGamePiece;
 import frc.robot.commands.Autos.Cable.CableCoCu;
 import frc.robot.commands.Autos.Cable.CableCoCuDock;
@@ -77,13 +78,6 @@ public class RobotContainer {
   private static DigitalInput pracBotSwitch = new DigitalInput(9);
   private final Trigger teleopTrigger = new Trigger(() -> RobotState.isEnabled() && RobotState.isTeleop());
   public static SwerveAutoBuilder swerveAutoBuilder;
-
-  Mechanism2d elevatorSim;
-  // TODO: IMPLEMENT
-  MechanismRoot2d elevatorSimRoot;
-  MechanismLigament2d elevatorCarriageSim;
-  MechanismLigament2d wristSim;
-  MechanismLigament2d elevatorShelfSim;
 
   public RobotContainer() {
     // Set out log file to be in its own folder
@@ -144,8 +138,7 @@ public class RobotContainer {
             conDriver.btn_B,
             conDriver.btn_A,
             conDriver.btn_X));
-    // subVision.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
-    // subVision));
+    subVision.setDefaultCommand(new UpdateMechanismPoses(subDrivetrain, subElevator, subWrist, subVision));
     subLEDs.setDefaultCommand(new SetLEDs(subLEDs, subDrivetrain, subIntake));
 
     configureBindings();
@@ -154,19 +147,6 @@ public class RobotContainer {
     Timer.delay(2.5);
     resetToAbsolutePositions();
 
-    // TOOD: Make pref
-    elevatorSim = new Mechanism2d(2, 2);
-    // Translate the position of the elevator in robot relative
-    elevatorSimRoot = elevatorSim.getRoot("elevatorSim", 0.5, 0);
-    elevatorCarriageSim = elevatorSimRoot
-        .append(
-            new MechanismLigament2d("elevatorCarriageSim", prefElevator.elevatorCarriageSimLength.getValue(), 54.54, 2,
-                new Color8Bit(Color.kCadetBlue)));
-    elevatorShelfSim = elevatorCarriageSim
-        .append(new MechanismLigament2d("wristSim", 0.3, 304, 2, new Color8Bit(Color.kPurple)));
-    wristSim = elevatorShelfSim
-        .append(new MechanismLigament2d("wristSim", 0.1, 160, 2, new Color8Bit(Color.kAquamarine)));
-    SmartDashboard.putData("Elevator & Arm Sim", elevatorSim);
   }
 
   /**
@@ -176,16 +156,6 @@ public class RobotContainer {
   public void resetToAbsolutePositions() {
     subDrivetrain.resetSteerMotorEncodersToAbsolute();
     subWrist.resetWristEncoderToAbsolute();
-  }
-
-  /**
-   * Update all Mechanism Simulations
-   */
-  public void updateMechanismSims() {
-    elevatorCarriageSim
-        .setLength(prefElevator.elevatorCarriageSimLength.getValue() + subElevator.getElevatorPositionMeters());
-
-    wristSim.setAngle(subWrist.getWristAngle());
   }
 
   private void configureBindings() {
