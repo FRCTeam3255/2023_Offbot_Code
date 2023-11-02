@@ -11,6 +11,7 @@ import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.RobotContainer;
+import frc.robot.commands.Engage;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.Stow;
@@ -20,14 +21,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class OpenCoCu extends SequentialCommandGroup {
+public class OpenCoCoCoYeetDock extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public OpenCoCu(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public OpenCoCoCoYeetDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -38,8 +39,8 @@ public class OpenCoCu extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
-            subDrivetrain.openCoCu.getInitialHolonomicPose().getRotation().getDegrees())),
-        Commands.runOnce(() -> subDrivetrain.resetPose(subDrivetrain.openCoCu.getInitialHolonomicPose())),
+            subDrivetrain.openCoCoCoYeetDock.getInitialHolonomicPose().getRotation().getDegrees())),
+        Commands.runOnce(() -> subDrivetrain.resetPose(subDrivetrain.openCoCoCoYeetDock.getInitialHolonomicPose())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
@@ -63,10 +64,14 @@ public class OpenCoCu extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        // Drive, collect a cube, and go to the cube node
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCu)
-            .withTimeout(subDrivetrain.openCoCu.getTotalTimeSeconds()),
+        // Drive, collect a cube, and go onto the charge station
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCoCoYeetDock)
+            .withTimeout(subDrivetrain.openCoCoCoYeetDock.getTotalTimeSeconds()),
 
-        new PlaceGamePiece(subIntake, subWrist, subElevator, true));
+        new PlaceGamePiece(subIntake, subWrist, subElevator, true),
+
+        Commands.waitUntil(() -> !subElevator.isPrepped()),
+
+        new Engage(subDrivetrain, subLEDs));
   }
 }

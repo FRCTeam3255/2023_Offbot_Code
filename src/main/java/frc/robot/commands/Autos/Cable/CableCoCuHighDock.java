@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Autos.Center;
+package frc.robot.commands.Autos.Cable;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -21,14 +21,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Wrist;
 
-public class CenterCoDock extends SequentialCommandGroup {
+public class CableCoCuHighDock extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Intake subIntake;
   Wrist subWrist;
   Elevator subElevator;
   LEDs subLEDs;
 
-  public CenterCoDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
+  public CableCoCuHighDock(Drivetrain subDrivetrain, Intake subIntake, Wrist subWrist, Elevator subElevator,
       LEDs subLEDs) {
     this.subDrivetrain = subDrivetrain;
     this.subIntake = subIntake;
@@ -39,8 +39,7 @@ public class CenterCoDock extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
-            subDrivetrain.centerCoDock.getInitialHolonomicPose().getRotation().getDegrees())),
-        Commands.runOnce(() -> subDrivetrain.resetPose(subDrivetrain.centerCoDock.getInitialHolonomicPose())),
+            subDrivetrain.cableCoCuDock.getInitialHolonomicPose().getRotation().getDegrees())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
@@ -51,7 +50,7 @@ public class CenterCoDock extends SequentialCommandGroup {
         new Stow(subWrist, subIntake, subElevator)
             .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
 
-        // Place cone and stow
+        // // Place cone and stow
         new PrepGamePiece(subElevator, subWrist, subIntake,
             prefWrist.wristScoreHighConeAngle.getValue(),
             prefElevator.elevatorHighConeScore.getValue(),
@@ -66,9 +65,10 @@ public class CenterCoDock extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> !subElevator.isPrepped()),
 
-        // Drive onto the charge station
-        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.centerCoDock)
-            .withTimeout(subDrivetrain.centerCoDock.getTotalTimeSeconds()),
+        // Drive, collect a cube, and go to the cube node
+        RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.cableCoCuDock)
+            .withTimeout(subDrivetrain.cableCoCuDock.getTotalTimeSeconds()),
+
         new Engage(subDrivetrain, subLEDs));
   }
 }

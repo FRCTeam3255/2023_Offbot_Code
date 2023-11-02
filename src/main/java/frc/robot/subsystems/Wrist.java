@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.frcteam3255.utils.SN_Math;
@@ -28,6 +29,8 @@ public class Wrist extends SubsystemBase {
   double absoluteEncoderOffset;
 
   TalonFXConfiguration config;
+
+  SupplyCurrentLimitConfiguration supplyLimit;
 
   public Wrist() {
     wristMotor = new TalonFX(mapWrist.WRIST_MOTOR_CAN);
@@ -65,12 +68,20 @@ public class Wrist extends SubsystemBase {
     config.motionAcceleration = SN_Math.degreesToFalcon(prefWrist.wristMaxAccel.getValue(),
         constWrist.GEAR_RATIO);
 
+    // https://v5.docs.ctr-electronics.com/en/stable/ch13_MC.html?highlight=Current%20limit#new-api-in-2020
+    supplyLimit = new SupplyCurrentLimitConfiguration(true,
+        constWrist.CURRENT_LIMIT_FLOOR_AMPS,
+        constWrist.CURRENT_LIMIT_CEILING_AMPS,
+        constWrist.CURRENT_LIMIT_AFTER_SEC);
+
     config.slot0.kF = prefWrist.wristF.getValue();
     config.slot0.kP = prefWrist.wristP.getValue();
     config.slot0.kI = prefWrist.wristI.getValue();
     config.slot0.kD = prefWrist.wristD.getValue();
 
     wristMotor.configAllSettings(config);
+
+    wristMotor.configSupplyCurrentLimit(supplyLimit);
   }
 
   public void setWristSpeed(double speed) {
@@ -164,6 +175,7 @@ public class Wrist extends SubsystemBase {
     SmartDashboard.putNumber("Wrist Abs Encoder Get", getWristAbsoluteEncoder());
     SmartDashboard.putBoolean("Wrist Abs Encoder Unplugged?", getWristEncoderUnplugged());
     SmartDashboard.putNumber("Wrist Motor Degrees", getWristAngle().getDegrees());
+    SmartDashboard.putNumber("Wrist Supply Current", wristMotor.getSupplyCurrent());
 
   }
 }

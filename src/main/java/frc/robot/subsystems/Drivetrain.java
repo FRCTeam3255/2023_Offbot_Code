@@ -67,12 +67,15 @@ public class Drivetrain extends SubsystemBase {
 
   // Paths
   public PathPlannerTrajectory testLinePath;
-  public PathPlannerTrajectory openCoCuDock;
-  public PathPlannerTrajectory openCuCuDock;
-  public PathPlannerTrajectory openCoCu;
   public PathPlannerTrajectory centerCoDock;
-  public PathPlannerTrajectory cableCoCuDock;
   public PathPlannerTrajectory cableCoCu;
+  public PathPlannerTrajectory cableCoCuDock;
+  public PathPlannerTrajectory cableCoCoYeetDock;
+  public PathPlannerTrajectory cableCoCoCoYeetDock;
+  public PathPlannerTrajectory openCoCu;
+  public PathPlannerTrajectory openCoCuDock;
+  public PathPlannerTrajectory openCoCoCoYeetDock;
+  public PathPlannerTrajectory just_taxi;
 
   public Double[] columnYCoordinatesBlue = { 0.5, 1.05, 1.63, 2.19, 2.75, 3.31, 3.86, 4.43, 4.98 };
   public Double[] columnYCoordinatesRed = { 4.98, 4.43, 3.86, 3.31, 2.75, 2.19, 1.63, 1.05, 0.5 };
@@ -146,31 +149,49 @@ public class Drivetrain extends SubsystemBase {
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    openCoCuDock = PathPlanner.loadPath("openCoCuDock",
+    centerCoDock = PathPlanner.loadPath("centerCoDock",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    openCuCuDock = PathPlanner.loadPath("openCuCuDock", new PathConstraints(
-        Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-        Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+    // Cable
+    cableCoCuDock = PathPlanner.loadPath("cableCoCuDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue() * 1.3),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue() * 1.3)));
+
+    cableCoCu = PathPlanner.loadPath("cableCoCu",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+
+    cableCoCoYeetDock = PathPlanner.loadPath("cableCoCoYeetDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+
+    cableCoCoCoYeetDock = PathPlanner.loadPath("cableCoCoCoYeetDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue() * 1.3),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue() * 1.3)));
+
+    // Open
+    openCoCuDock = PathPlanner.loadPath("openCoCuDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue() * 1.3),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue() * 1.3)));
 
     openCoCu = PathPlanner.loadPath("openCoCu",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
-    centerCoDock = PathPlanner.loadPath("centerCoDock",
+    openCoCoCoYeetDock = PathPlanner.loadPath("openCoCoCoYeetDock",
         new PathConstraints(
-            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue() * 1.3),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue() * 1.3)));
 
-    cableCoCuDock = PathPlanner.loadPath("cableCoCuDock",
-        new PathConstraints(
-            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
-
-    cableCoCu = PathPlanner.loadPath("cableCoCu",
+    just_taxi = PathPlanner.loadPath("just_taxi",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
@@ -285,7 +306,7 @@ public class Drivetrain extends SubsystemBase {
           velocity.getRotation().getRadians());
     }
 
-    SwerveModuleState[] desiredStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleState[] desiredStates = swerveKinematics.toSwerveModuleStates(discretize(chassisSpeeds));
 
     setModuleStates(desiredStates, isDriveOpenLoop);
 
@@ -451,12 +472,40 @@ public class Drivetrain extends SubsystemBase {
         pose);
   }
 
-  public boolean isTiltedForward() {
-    return navX.getRoll() > prefDrivetrain.tiltedThreshold.getValue();
+  public double getNavXRoll() {
+    return navX.getRoll();
   }
 
-  public boolean isTiltedBackwards() {
-    return navX.getRoll() < -prefDrivetrain.tiltedThreshold.getValue();
+  /**
+   * This is the most theoretical thing that is in the code.
+   * It takes our current position and then adds an offset to it, knowing that the
+   * robot's estimated position
+   * is not following the exact position of the robot.
+   * 
+   * @param speeds the speeds about to be inputted into the robot.
+   * @return the same thing as we input.
+   *         Think of this method as an interceptor,
+   *         not changing the parameter but using it for calculations.
+   */
+  /**
+   * Credit: WPIlib 2024 and 4738
+   * Discretizes a continuous-time chassis speed.
+   *
+   * @param vx    Forward velocity.
+   * @param vy    Sideways velocity.
+   * @param omega Angular velocity.
+   */
+  public ChassisSpeeds discretize(ChassisSpeeds speeds) {
+    double dt = 0.02;
+
+    var desiredDeltaPose = new Pose2d(
+        speeds.vxMetersPerSecond * dt,
+        speeds.vyMetersPerSecond * dt,
+        new Rotation2d(speeds.omegaRadiansPerSecond * dt * 4));
+
+    var twist = new Pose2d().log(desiredDeltaPose);
+
+    return new ChassisSpeeds((twist.dx / dt), (twist.dy / dt), (speeds.omegaRadiansPerSecond));
   }
 
   public double getRoll() {
@@ -484,10 +533,8 @@ public class Drivetrain extends SubsystemBase {
       SmartDashboard.putNumber("Drivetrain Pose Y", Units.metersToInches(getPose2d().getY()));
       SmartDashboard.putNumber("Drivetrain Pose Rotation", getPose2d().getRotation().getDegrees());
 
-      SmartDashboard.putBoolean("is Tilted Forwards", isTiltedForward());
-      SmartDashboard.putBoolean("is Tilted Backwards", isTiltedBackwards());
-
       SmartDashboard.putNumber("Drivetrain Yaw", navX.getRotation2d().getDegrees());
+      SmartDashboard.putNumber("Drivetrain Roll", navX.getRoll());
 
       SmartDashboard.putNumber("Drivetrain Theta Goal", Units.radiansToDegrees(thetaPID.getSetpoint()));
       SmartDashboard.putNumber("Drivetrain Theta Error", Units.radiansToDegrees(thetaPID.getPositionError()));
