@@ -203,7 +203,7 @@ public final class Constants {
 
   public static final class constElevator {
     public static final double CURRENT_LIMIT_FLOOR_AMPS = 1; // Floor: what we limit it to
-    public static final double CURRENT_LIMIT_CEILING_AMPS = 80; // Ceiling: when we begin limiting
+    public static final double CURRENT_LIMIT_CEILING_AMPS = 100; // Ceiling: when we begin limiting
     public static final double CURRENT_LIMIT_AFTER_SEC = 0.01;
 
     public static final double ABSOLUTE_ENCODER_OFFSET = 0.840862;

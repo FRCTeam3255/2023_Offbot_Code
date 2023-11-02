@@ -44,7 +44,7 @@ public class RobotPreferences {
     // down.
     public static final SN_DoublePreference triggerValue = new SN_DoublePreference("triggerValue", .2);
 
-    public static final SN_DoublePreference autoThetaP = new SN_DoublePreference("autoThetaP", 0.75);
+    public static final SN_DoublePreference autoThetaP = new SN_DoublePreference("autoThetaP", 1);
     public static final SN_DoublePreference autoThetaI = new SN_DoublePreference("autoThetaI", 0.0);
     public static final SN_DoublePreference autoThetaD = new SN_DoublePreference("autoThetaD", 0.0);
 
@@ -121,7 +121,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakePlaceConeSpeed = new SN_DoublePreference("intakePlaceConeSpeed",
         -0.7);
     public static final SN_DoublePreference intakePlaceCubeSpeed = new SN_DoublePreference("intakePlaceCubeSpeed",
-        0.6);
+        0.4);
     public static final SN_DoublePreference intakeYeetCubeSpeed = new SN_DoublePreference("intakeYeetCubeSpeed",
         1);
     public static final SN_DoublePreference intakeYeetConeSpeed = new SN_DoublePreference("intakeYeetConeSpeed",
@@ -153,7 +153,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakeDelay = new SN_DoublePreference("intakeDelay", 0);
 
     public static final SN_DoublePreference intakeMidConeDelay = new SN_DoublePreference("intakeMidConeDelay", 0.5);
-    public static final SN_DoublePreference autoPlaceConeDelay = new SN_DoublePreference("autoPlaceConeDelay", 0.4);
+    public static final SN_DoublePreference autoPlaceConeDelay = new SN_DoublePreference("autoPlaceConeDelay", 0.2);
   }
 
   public static final class prefElevator {
