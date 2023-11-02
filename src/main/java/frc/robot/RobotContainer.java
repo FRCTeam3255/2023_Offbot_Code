@@ -232,13 +232,15 @@ public class RobotContainer {
         new OpenCoCuHigh(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     autoChooser.addOption("OPEN - 1 CO High, 1 CU High, Engage",
-        new OpenCoCuHigh(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+        new OpenCoCuHighDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Center
     autoChooser.addOption("CENTER - 1 CO, Mobility, Engage",
         new CenterCoDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
-    autoChooser.addOption("CENTER - 1 CO",
+    autoChooser.addOption("JUST PLACE 1 CO",
         new CenterCo(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+    autoChooser.addOption("JUST PLACE 1 CO AND MOBILITY",
+        new CenterCoMobility(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     // Cable Side
     autoChooser.addOption("CABLE - 1 CO High, 1 CO Yeet, Engage",

@@ -72,6 +72,7 @@ public class Drivetrain extends SubsystemBase {
   public PathPlannerTrajectory openCoCu;
   public PathPlannerTrajectory openCoCuDock;
   public PathPlannerTrajectory openCoCoCoYeetDock;
+  public PathPlannerTrajectory just_taxi;
 
   public Double[] columnYCoordinatesBlue = { 0.5, 1.05, 1.63, 2.19, 2.75, 3.31, 3.86, 4.43, 4.98 };
   public Double[] columnYCoordinatesRed = { 4.98, 4.43, 3.86, 3.31, 2.75, 2.19, 1.63, 1.05, 0.5 };
@@ -168,14 +169,14 @@ public class Drivetrain extends SubsystemBase {
 
     cableCoCoCoYeetDock = PathPlanner.loadPath("cableCoCoCoYeetDock",
         new PathConstraints(
-            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue() * 1.3),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue() * 1.3)));
 
     // Open
     openCoCuDock = PathPlanner.loadPath("openCoCuDock",
         new PathConstraints(
-            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue() * 1.3),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue() * 1.3)));
 
     openCoCu = PathPlanner.loadPath("openCoCu",
         new PathConstraints(
@@ -183,6 +184,11 @@ public class Drivetrain extends SubsystemBase {
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
 
     openCoCoCoYeetDock = PathPlanner.loadPath("openCoCoCoYeetDock",
+        new PathConstraints(
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue() * 1.3),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue() * 1.3)));
+
+    just_taxi = PathPlanner.loadPath("just_taxi",
         new PathConstraints(
             Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
             Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
