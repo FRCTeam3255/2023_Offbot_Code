@@ -121,7 +121,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference intakePlaceConeSpeed = new SN_DoublePreference("intakePlaceConeSpeed",
         -0.7);
     public static final SN_DoublePreference intakePlaceCubeSpeed = new SN_DoublePreference("intakePlaceCubeSpeed",
-        0.6);
+        0.4);
     public static final SN_DoublePreference intakeYeetCubeSpeed = new SN_DoublePreference("intakeYeetCubeSpeed",
         1);
     public static final SN_DoublePreference intakeYeetConeSpeed = new SN_DoublePreference("intakeYeetConeSpeed",

@@ -56,7 +56,7 @@ public class RobotContainer {
   private final SN_XboxController conDriver = new SN_XboxController(mapControllers.DRIVER_USB);
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
 
-  private final Drivetrain subDrivetrain = new Drivetrain();
+  public final Drivetrain subDrivetrain = new Drivetrain();
   private final SuperShuffle subSuperShuffle = new SuperShuffle();
   public static Elevator subElevator = new Elevator();
   public static Intake subIntake = new Intake();
@@ -250,7 +250,7 @@ public class RobotContainer {
         new CableCoCuHigh(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     autoChooser.addOption("CABLE - 1 CO High, 1 CU High, Engage",
-        new CableCoCuHigh(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
+        new CableCoCuHighDock(subDrivetrain, subIntake, subWrist, subElevator, subLEDs));
 
     SmartDashboard.putData(autoChooser);
 

@@ -153,8 +153,8 @@ public class Drivetrain extends SubsystemBase {
     // Cable
     cableCoCuDock = PathPlanner.loadPath("cableCoCuDock",
         new PathConstraints(
-            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue()),
-            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue())));
+            Units.feetToMeters(prefDrivetrain.autoMaxSpeedFeet.getValue() * 1.3),
+            Units.feetToMeters(prefDrivetrain.autoMaxAccelFeet.getValue() * 1.3)));
 
     cableCoCu = PathPlanner.loadPath("cableCoCu",
         new PathConstraints(
