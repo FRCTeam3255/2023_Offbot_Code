@@ -23,9 +23,11 @@ public class UpdateMechanismPoses extends CommandBase {
   Wrist subWrist;
   Vision subVision;
 
-  Pose3d elevatorPose;
+  Pose3d elevatorStagePose;
+  Pose3d elevatorCarriagePose;
   Pose3d wristPose;
   Pose3d drivetrainPose;
+
   Transform3d carriagePosition;
 
   public UpdateMechanismPoses(Drivetrain subDrivetrain, Elevator subElevator, Wrist subWrist, Vision subVision) {
@@ -57,6 +59,15 @@ public class UpdateMechanismPoses extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    drivetrainPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+    elevatorStagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+    elevatorCarriagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+    wristPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+
+    SmartDashboard.putNumberArray("Drivetrain Pose3d", composePose3ds(drivetrainPose));
+    SmartDashboard.putNumberArray("Elevator Stage 2 Pose3d", composePose3ds(elevatorStagePose));
+    SmartDashboard.putNumberArray("Elevator Carriage Pose3d", composePose3ds(elevatorCarriagePose));
+    SmartDashboard.putNumberArray("Wrist Pose3d", composePose3ds(wristPose));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -69,25 +80,11 @@ public class UpdateMechanismPoses extends CommandBase {
             0),
         new Rotation3d(subDrivetrain.getRoll(), subDrivetrain.getPitch(), subDrivetrain.getYaw()));
 
-    elevatorPose = drivetrainPose.transformBy(constElevator.ROBOT_TO_BASE);
-
-    carriagePosition = new Transform3d(
-        new Translation3d(
-            -(Math.cos(constElevator.INTERIOR_ANGLE_RADIANS) * subElevator.getElevatorPositionMeters()),
-            0,
-            (Math.sin(constElevator.INTERIOR_ANGLE_RADIANS) * subElevator.getElevatorPositionMeters())),
-        new Rotation3d(0, 0, 0));
-    elevatorPose = elevatorPose.transformBy(carriagePosition);
-
-    wristPose = elevatorPose.transformBy(new Transform3d(
-        new Translation3d(
-            -constElevator.CARRIAGE_LENGTH,
-            0,
-            0),
-        new Rotation3d(0, subWrist.getWristAngle().getDegrees() + constWrist.REAL_STOW_ANGLE_DEGREES, 0)));
+    // TODO: UPDATE POSES ACCORDINGLY
 
     SmartDashboard.putNumberArray("Drivetrain Pose3d", composePose3ds(drivetrainPose));
-    SmartDashboard.putNumberArray("Elevator Carriage Pose3d", composePose3ds(elevatorPose));
+    SmartDashboard.putNumberArray("Elevator Stage 2 Pose3d", composePose3ds(elevatorStagePose));
+    SmartDashboard.putNumberArray("Elevator Carriage Pose3d", composePose3ds(elevatorCarriagePose));
     SmartDashboard.putNumberArray("Wrist Pose3d", composePose3ds(wristPose));
   }
 

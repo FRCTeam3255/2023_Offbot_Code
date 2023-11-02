@@ -196,7 +196,6 @@ public final class Constants {
 
     public static final double GEAR_RATIO = 40.09;
 
-    public static final double REAL_STOW_ANGLE_DEGREES = 0;
   }
 
   public static final class constElevator {
@@ -212,14 +211,6 @@ public final class Constants {
     public static final double CIRCUMFERENCE = 0.13972;
     public static final double GEAR_RATIO = 2.5;
 
-    public static final double INTERIOR_ANGLE_RADIANS = Math.toRadians(54.54);
-    // y will be 0 because it is centered
-    // TODO: get real values
-    public static final Transform3d ROBOT_TO_BASE = new Transform3d(
-        new Translation3d(0, 0, 0),
-        new Rotation3d(0, 0, 0));
-
-    public static final double CARRIAGE_LENGTH = 0;
   }
 
   public static final class constVision {
