@@ -74,12 +74,7 @@ public class UpdateMechanismPoses extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrainPose = new Pose3d(
-        new Translation3d(
-            subDrivetrain.getPose2d().getX(),
-            subDrivetrain.getPose2d().getY(),
-            0),
-        new Rotation3d(0, 0, subDrivetrain.getPose2d().getRotation().getDegrees()));
+    drivetrainPose = new Pose3d(subDrivetrain.getPose2d());
 
     // TODO: UPDATE POSES ACCORDINGLY
 
