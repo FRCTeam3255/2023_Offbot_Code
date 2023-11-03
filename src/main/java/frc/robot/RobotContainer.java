@@ -165,6 +165,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     // Driver
+    // src\main\documentation\driverControls23.png
 
     // "reset gyro" for field relative but actually resets the orientation at a
     // higher level
@@ -182,6 +183,7 @@ public class RobotContainer {
         .whileTrue(Commands.run(() -> subLEDs.setLEDPattern(constLEDs.DEFENSE_MODE_COLOR)));
 
     // Operator
+    // src\main\documentation\operatorControls23.png
 
     // Intake Cone (RB)
     conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
