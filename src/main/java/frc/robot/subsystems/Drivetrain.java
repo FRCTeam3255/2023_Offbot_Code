@@ -105,6 +105,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     navX = new AHRS();
+    Timer.delay(1);
     navX.reset();
 
     poseEstimator = new SwerveDrivePoseEstimator(
@@ -482,6 +483,22 @@ public class Drivetrain extends SubsystemBase {
     return navX.getRoll();
   }
 
+  public double getRoll() {
+    return navX.getRoll();
+  }
+
+  public double getPitch() {
+    return navX.getPitch();
+  }
+
+  public double getYaw() {
+    return navX.getYaw();
+  }
+
+  public boolean isNavXConnected() {
+    return navX.isConnected();
+  }
+
   /**
    * This is the most theoretical thing that is in the code.
    * It takes our current position and then adds an offset to it, knowing that the
@@ -514,18 +531,6 @@ public class Drivetrain extends SubsystemBase {
     return new ChassisSpeeds((twist.dx / dt), (twist.dy / dt), (speeds.omegaRadiansPerSecond));
   }
 
-  public double getRoll() {
-    return navX.getRoll();
-  }
-
-  public double getPitch() {
-    return navX.getPitch();
-  }
-
-  public double getYaw() {
-    return navX.getYaw();
-  }
-
   @Override
   public void periodic() {
 
@@ -541,6 +546,7 @@ public class Drivetrain extends SubsystemBase {
 
       SmartDashboard.putNumber("Drivetrain Yaw", navX.getRotation2d().getDegrees());
       SmartDashboard.putNumber("Drivetrain Roll", navX.getRoll());
+      SmartDashboard.putBoolean("Drivetrain NavX Connected", isNavXConnected());
 
       SmartDashboard.putNumber("Drivetrain Theta Goal", Units.radiansToDegrees(thetaPID.getSetpoint()));
       SmartDashboard.putNumber("Drivetrain Theta Error", Units.radiansToDegrees(thetaPID.getPositionError()));
