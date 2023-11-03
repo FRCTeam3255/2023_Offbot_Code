@@ -59,7 +59,8 @@ public class UpdateMechanismPoses extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrainPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+    drivetrainPose = new Pose3d(subDrivetrain.getPose2d().getX(), subDrivetrain.getPose2d().getY(), 0,
+        new Rotation3d(0, 0, subDrivetrain.getRotation().getDegrees()));
     elevatorStagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
     elevatorCarriagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
     wristPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
@@ -78,7 +79,7 @@ public class UpdateMechanismPoses extends CommandBase {
             subDrivetrain.getPose2d().getX(),
             subDrivetrain.getPose2d().getY(),
             0),
-        new Rotation3d(subDrivetrain.getRoll(), subDrivetrain.getPitch(), subDrivetrain.getYaw()));
+        new Rotation3d(0, 0, subDrivetrain.getPose2d().getRotation().getDegrees()));
 
     // TODO: UPDATE POSES ACCORDINGLY
 
