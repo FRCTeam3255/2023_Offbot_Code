@@ -40,6 +40,7 @@ public class CableCoCoYeetDock extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.cableCoCoYeetDock.getInitialHolonomicPose().getRotation().getDegrees())),
+        Commands.runOnce(() -> subDrivetrain.resetPose(subDrivetrain.cableCoCoYeetDock.getInitialHolonomicPose())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),

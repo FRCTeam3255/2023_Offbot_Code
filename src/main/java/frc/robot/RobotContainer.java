@@ -10,13 +10,20 @@ import com.frcteam3255.joystick.SN_XboxController;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Intake;
@@ -39,6 +46,7 @@ import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
+import frc.robot.commands.UpdateMechanismPoses;
 import frc.robot.commands.YeetGamePiece;
 import frc.robot.commands.Autos.Cable.*;
 import frc.robot.commands.Autos.Center.*;
@@ -105,7 +113,7 @@ public class RobotContainer {
     autoEventMap.put("stow", new Stow(subWrist, subIntake, subElevator));
     ;
     swerveAutoBuilder = new SwerveAutoBuilder(
-        subDrivetrain::getPose,
+        subDrivetrain::getPose2d,
         subDrivetrain::resetPose,
         subDrivetrain.swerveKinematics,
         new PIDConstants(
@@ -135,8 +143,7 @@ public class RobotContainer {
             conDriver.btn_B,
             conDriver.btn_A,
             conDriver.btn_X));
-    // subVision.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
-    // subVision));
+    subVision.setDefaultCommand(new UpdateMechanismPoses(subDrivetrain, subElevator, subWrist, subVision));
     subLEDs.setDefaultCommand(new SetLEDs(subLEDs, subDrivetrain, subIntake));
 
     configureBindings();
@@ -144,6 +151,7 @@ public class RobotContainer {
 
     Timer.delay(2.5);
     resetToAbsolutePositions();
+
   }
 
   /**

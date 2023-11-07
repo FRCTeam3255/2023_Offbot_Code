@@ -40,6 +40,7 @@ public class CenterCoDock extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.resetRotation()),
         Commands.runOnce(() -> subDrivetrain.setNavXAngleAdjustment(
             subDrivetrain.centerCoDock.getInitialHolonomicPose().getRotation().getDegrees())),
+        Commands.runOnce(() -> subDrivetrain.resetPose(subDrivetrain.centerCoDock.getInitialHolonomicPose())),
 
         // Intake cone
         Commands.runOnce(() -> subIntake.setDesiredGamePiece(GamePiece.CONE)),
