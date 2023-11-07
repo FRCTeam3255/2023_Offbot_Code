@@ -150,14 +150,14 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     setCurrentGamePiece();
 
-    SmartDashboard.putNumber("Intake Game Piece Timer", intakeTimer);
+    SmartDashboard.putNumber("Intake/Game Piece Timer", intakeTimer);
 
-    SmartDashboard.putBoolean("Is Game Piece Collected", isGamePieceCollected());
-    SmartDashboard.putString("Current Game Piece", getCurrentGamePiece().toString());
-    SmartDashboard.putString("Desired Game Piece", getDesiredGamePiece().toString());
+    SmartDashboard.putBoolean("Intake/Is Game Piece Collected", isGamePieceCollected());
+    SmartDashboard.putString("Intake/Current Game Piece", getCurrentGamePiece().toString());
+    SmartDashboard.putString("Intake/Desired Game Piece", getDesiredGamePiece().toString());
 
-    SmartDashboard.putNumber("Intake STATOR AMPS", intakeMotor.getStatorCurrent());
-    SmartDashboard.putNumber("Intake Velocity", intakeMotor.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Intake/Stator Amps", intakeMotor.getStatorCurrent());
+    SmartDashboard.putNumber("Intake/Velocity", intakeMotor.getSelectedSensorVelocity());
 
   }
 }

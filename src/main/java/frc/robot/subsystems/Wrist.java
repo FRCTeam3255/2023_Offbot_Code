@@ -12,11 +12,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.frcteam3255.utils.SN_Math;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.AdvantageScopeUtil;
 import frc.robot.Constants.constWrist;
 import frc.robot.RobotMap.mapWrist;
 import frc.robot.RobotPreferences.prefWrist;
@@ -31,6 +34,8 @@ public class Wrist extends SubsystemBase {
   TalonFXConfiguration config;
 
   SupplyCurrentLimitConfiguration supplyLimit;
+
+  Pose3d wristPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
 
   public Wrist() {
     wristMotor = new TalonFX(mapWrist.WRIST_MOTOR_CAN);
@@ -170,12 +175,12 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Wrist Abs Encoder Raw", absoluteEncoder.get());
-    SmartDashboard.putNumber("Wrist Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Wrist Abs Encoder Get", getWristAbsoluteEncoder());
-    SmartDashboard.putBoolean("Wrist Abs Encoder Unplugged?", getWristEncoderUnplugged());
-    SmartDashboard.putNumber("Wrist Motor Degrees", getWristAngle().getDegrees());
-    SmartDashboard.putNumber("Wrist Supply Current", wristMotor.getSupplyCurrent());
-
+    SmartDashboard.putNumber("Wrist/Abs Encoder Raw", absoluteEncoder.get());
+    SmartDashboard.putNumber("Wrist/Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Wrist/Abs Encoder Get", getWristAbsoluteEncoder());
+    SmartDashboard.putBoolean("Wrist/Abs Encoder Unplugged?", getWristEncoderUnplugged());
+    SmartDashboard.putNumber("Wrist/Motor Degrees", getWristAngle().getDegrees());
+    SmartDashboard.putNumber("Wrist/Supply Current", wristMotor.getSupplyCurrent());
+    SmartDashboard.putNumberArray("Wrist/Pose3d", AdvantageScopeUtil.composePose3ds(wristPose));
   }
 }

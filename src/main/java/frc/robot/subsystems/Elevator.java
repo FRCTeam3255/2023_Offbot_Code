@@ -13,11 +13,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.frcteam3255.utils.SN_Math;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constElevator;
+import frc.robot.AdvantageScopeUtil;
 import frc.robot.Constants.DesiredHeight;
 import frc.robot.RobotMap.mapElevator;
 import frc.robot.RobotPreferences.prefElevator;
@@ -36,6 +39,9 @@ public class Elevator extends SubsystemBase {
   DesiredHeight desiredHeight;
   double desiredPosition;
   boolean isPrepped;
+
+  Pose3d elevatorStagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+  Pose3d elevatorCarriagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
 
   public Elevator() {
     leftMotor = new TalonFX(mapElevator.LEFT_MOTOR_CAN);
@@ -220,14 +226,17 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Elevator Encoder Counts Raw", getElevatorEncoderCounts());
-    SmartDashboard.putNumber("Elevator Position Meters", getElevatorPositionMeters());
+    SmartDashboard.putNumber("Elevator/Encoder Counts Raw", getElevatorEncoderCounts());
+    SmartDashboard.putNumber("Elevator/Position Meters", getElevatorPositionMeters());
 
-    SmartDashboard.putNumber("Elevator Abs Encoder Raw", absoluteEncoder.get());
-    SmartDashboard.putNumber("Elevator Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Elevator Abs Encoder Get", getElevatorAbsoluteEncoder());
-    SmartDashboard.putBoolean("Elevator Abs Encoder Unplugged?", getElevatorEncoderUnplugged());
-    SmartDashboard.putNumber("Elevator Supply Current", leftMotor.getSupplyCurrent());
+    SmartDashboard.putNumber("Elevator/Abs Encoder Raw", absoluteEncoder.get());
+    SmartDashboard.putNumber("Elevator/Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Elevator/Abs Encoder Get", getElevatorAbsoluteEncoder());
+    SmartDashboard.putBoolean("Elevator/Abs Encoder Unplugged?", getElevatorEncoderUnplugged());
+    SmartDashboard.putNumber("Elevator/Supply Current", leftMotor.getSupplyCurrent());
+
+    SmartDashboard.putNumberArray("Elevator/Stage 2 Pose3d", AdvantageScopeUtil.composePose3ds(elevatorStagePose));
+    SmartDashboard.putNumberArray("Elevator/Carriage Pose3d", AdvantageScopeUtil.composePose3ds(elevatorCarriagePose));
 
   }
 }

@@ -46,7 +46,6 @@ import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
-import frc.robot.commands.UpdateMechanismPoses;
 import frc.robot.commands.YeetGamePiece;
 import frc.robot.commands.Autos.Cable.*;
 import frc.robot.commands.Autos.Center.*;
@@ -88,7 +87,7 @@ public class RobotContainer {
     DataLogManager.logNetworkTables(true);
     // Log the DS data and joysticks
     DriverStation.startDataLog(DataLogManager.getLog(), true);
-    DriverStation.silenceJoystickConnectionWarning(true);
+    DriverStation.silenceJoystickConnectionWarning(Constants.SILENCE_JOYSTICK_WARNINGS);
 
     // -- Creating Autos --
     HashMap<String, Command> autoEventMap = new HashMap<>();
@@ -143,7 +142,6 @@ public class RobotContainer {
             conDriver.btn_B,
             conDriver.btn_A,
             conDriver.btn_X));
-    subVision.setDefaultCommand(new UpdateMechanismPoses(subDrivetrain, subElevator, subWrist, subVision));
     subLEDs.setDefaultCommand(new SetLEDs(subLEDs, subDrivetrain, subIntake));
 
     configureBindings();
@@ -166,7 +164,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     // Driver
-    // src\main\documentation\driverControls23.png
+    // assets\driverControls23.png
 
     // "reset gyro" for field relative but actually resets the orientation at a
     // higher level
@@ -184,7 +182,7 @@ public class RobotContainer {
         .whileTrue(Commands.run(() -> subLEDs.setLEDPattern(constLEDs.DEFENSE_MODE_COLOR)));
 
     // Operator
-    // src\main\documentation\operatorControls23.png
+    // assets\operatorControls23.png
 
     // Intake Cone (RB)
     conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,

@@ -20,6 +20,7 @@ import frc.robot.RobotMap.mapDrivetrain;
 public final class Constants {
 
   public static final boolean OUTPUT_DEBUG_VALUES = true;
+  public static final boolean SILENCE_JOYSTICK_WARNINGS = true;
 
   // Order of Subsystems: The order that the robots inputs go, starting from
   // controllers
