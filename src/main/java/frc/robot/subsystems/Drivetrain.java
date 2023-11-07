@@ -4,15 +4,10 @@
 
 package frc.robot.subsystems;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
@@ -27,20 +22,19 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.SN_SwerveModule;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.RobotPreferences.prefVision;
-import frc.robot.commands.IntakeGamePiece;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -99,7 +93,8 @@ public class Drivetrain extends SubsystemBase {
       swerveKinematics = Constants.SWERVE_KINEMATICS;
     }
 
-    navX = new AHRS();
+    navX = new AHRS(SPI.Port.kMXP);
+    Timer.delay(1);
     navX.reset();
 
     poseEstimator = new SwerveDrivePoseEstimator(
@@ -209,7 +204,7 @@ public class Drivetrain extends SubsystemBase {
         Units.feetToMeters(prefDrivetrain.teleTransMaxSpeed.getValue()),
         Units.feetToMeters(prefDrivetrain.teleTransMaxAccel.getValue())));
     xPID.setTolerance(Units.inchesToMeters(prefDrivetrain.teleTransTolerance.getValue()));
-    xPID.reset(getPose().getX());
+    xPID.reset(getPose2d().getX());
 
     yPID.setPID(
         prefDrivetrain.teleTransP.getValue(),
@@ -219,7 +214,7 @@ public class Drivetrain extends SubsystemBase {
         Units.feetToMeters(prefDrivetrain.teleTransMaxSpeed.getValue()),
         Units.feetToMeters(prefDrivetrain.teleTransMaxAccel.getValue())));
     yPID.setTolerance(Units.inchesToMeters(prefDrivetrain.teleThetaTolerance.getValue()));
-    yPID.reset(getPose().getY());
+    yPID.reset(getPose2d().getY());
 
     thetaPID.setPID(
         prefDrivetrain.teleThetaP.getValue(),
@@ -245,8 +240,8 @@ public class Drivetrain extends SubsystemBase {
     // create a velocity Pose2d with the calculated x and y positions, and the
     // positional rotation.
     Pose2d velocity = new Pose2d(
-        xPID.calculate(getPose().getX()),
-        yPID.calculate(getPose().getY()),
+        xPID.calculate(getPose2d().getX()),
+        yPID.calculate(getPose2d().getY()),
         position.getRotation());
 
     // pass the velocity Pose2d to driveAlignAngle(), which will close the loop for
@@ -303,10 +298,14 @@ public class Drivetrain extends SubsystemBase {
           velocity.getRotation().getRadians());
     }
 
-    SwerveModuleState[] desiredStates = swerveKinematics.toSwerveModuleStates(discretize(chassisSpeeds));
+    SwerveModuleState[] desiredStates;
+    if (DriverStation.isAutonomous()) {
+      desiredStates = swerveKinematics.toSwerveModuleStates(discretize(chassisSpeeds));
+    } else {
+      desiredStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
+    }
 
     setModuleStates(desiredStates, isDriveOpenLoop);
-
   }
 
   /**
@@ -375,17 +374,17 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetPID() {
-    xPID.reset(getPose().getX());
-    yPID.reset(getPose().getY());
+    xPID.reset(getPose2d().getX());
+    yPID.reset(getPose2d().getY());
     thetaPID.reset();
   }
 
   /**
-   * Get the current estimated position of the drivetrain.
+   * Get the current estimated 2d position of the drivetrain.
    * 
    * @return Position of drivetrain
    */
-  public Pose2d getPose() {
+  public Pose2d getPose2d() {
     return poseEstimator.getEstimatedPosition();
   }
 
@@ -473,6 +472,22 @@ public class Drivetrain extends SubsystemBase {
     return navX.getRoll();
   }
 
+  public double getRoll() {
+    return navX.getRoll();
+  }
+
+  public double getPitch() {
+    return navX.getPitch();
+  }
+
+  public double getYaw() {
+    return navX.getYaw();
+  }
+
+  public boolean isNavXConnected() {
+    return navX.isConnected();
+  }
+
   /**
    * This is the most theoretical thing that is in the code.
    * It takes our current position and then adds an offset to it, knowing that the
@@ -514,17 +529,18 @@ public class Drivetrain extends SubsystemBase {
 
     if (Constants.OUTPUT_DEBUG_VALUES) {
 
-      SmartDashboard.putNumber("Drivetrain Pose X", Units.metersToInches(getPose().getX()));
-      SmartDashboard.putNumber("Drivetrain Pose Y", Units.metersToInches(getPose().getY()));
-      SmartDashboard.putNumber("Drivetrain Pose Rotation", getPose().getRotation().getDegrees());
+      SmartDashboard.putNumber("Drivetrain Pose X", Units.metersToInches(getPose2d().getX()));
+      SmartDashboard.putNumber("Drivetrain Pose Y", Units.metersToInches(getPose2d().getY()));
+      SmartDashboard.putNumber("Drivetrain Pose Rotation", getPose2d().getRotation().getDegrees());
 
       SmartDashboard.putNumber("Drivetrain Yaw", navX.getRotation2d().getDegrees());
       SmartDashboard.putNumber("Drivetrain Roll", navX.getRoll());
+      SmartDashboard.putBoolean("Drivetrain NavX Connected", isNavXConnected());
 
       SmartDashboard.putNumber("Drivetrain Theta Goal", Units.radiansToDegrees(thetaPID.getSetpoint()));
       SmartDashboard.putNumber("Drivetrain Theta Error", Units.radiansToDegrees(thetaPID.getPositionError()));
 
-      field.setRobotPose(getPose());
+      field.setRobotPose(getPose2d());
       SmartDashboard.putData(field);
 
       for (SN_SwerveModule mod : modules) {
@@ -541,6 +557,14 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Module " + mod.moduleNumber + " Drive Output Percent",
             mod.getDriveMotorOutputPercent());
       }
+
+      // AdvantageScope
+      double[] swerveModuleStates = new double[8];
+      for (int i = 0; i < 8; i += 2) {
+        swerveModuleStates[i] = modules[i / 2].getState().angle.getRadians();
+        swerveModuleStates[i + 1] = modules[i / 2].getState().speedMetersPerSecond;
+      }
+      SmartDashboard.putNumberArray("Swerve/RealStates", swerveModuleStates);
     }
   }
 }

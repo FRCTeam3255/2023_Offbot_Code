@@ -183,7 +183,7 @@ public class RobotPreferences {
         0.08);
     public static final SN_DoublePreference elevatorIntakeCubePos = new SN_DoublePreference("elevatorIntakeCubePos",
         0.08);
-    public static final SN_DoublePreference elevatorShelf = new SN_DoublePreference("elevatorShelf", 1.22);
+    public static final SN_DoublePreference elevatorShelf = new SN_DoublePreference("elevatorShelf", 0.593373);
     public static final SN_DoublePreference elevatorSingle = new SN_DoublePreference("elevatorSingle", 0.096467);
     public static final SN_DoublePreference elevatorStow = new SN_DoublePreference("elevatorStow", 0.15);
 
@@ -205,6 +205,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference elevatorEncoderCountsPerMeter = new SN_DoublePreference(
         "elevatorEncoderCountsPerMeter", 36644.718);
 
+    public static final SN_DoublePreference elevatorCarriageSimLength = new SN_DoublePreference(
+        "elevatorCarriageSimLength", 0.5);
+
   }
 
   public static final class prefWrist {
@@ -224,7 +227,7 @@ public class RobotPreferences {
         2);
 
     public static final SN_DoublePreference wristIntakeAngle = new SN_DoublePreference("wristIntakeAngle", 146);
-    public static final SN_DoublePreference wristShelfAngle = new SN_DoublePreference("wristShelfAngle", 142);
+    public static final SN_DoublePreference wristShelfAngle = new SN_DoublePreference("wristShelfAngle", 97.3);
     public static final SN_DoublePreference wristSingleAngle = new SN_DoublePreference("wristSingleAngle", 81.515321);
 
     public static final SN_DoublePreference wristStowAngle = new SN_DoublePreference("wristStowAngle", 44);

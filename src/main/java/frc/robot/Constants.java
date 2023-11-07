@@ -118,10 +118,10 @@ public final class Constants {
       MODULE_2.position,
       MODULE_3.position);
 
-  public static final double PRAC_FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET = 111.708984;
-  public static final double PRAC_FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET = 340.312500;
+  public static final double PRAC_FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET = 114.521484;
+  public static final double PRAC_FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET = 341.806641;
   public static final double PRAC_BACK_LEFT_ABSOLUTE_ENCODER_OFFSET = 289.511719;
-  public static final double PRAC_BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET = 245.039062;
+  public static final double PRAC_BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET = 245.566406;
 
   // module positions follow the WPILib robot coordinate system
   // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/coordinate-systems.html#robot-coordinate-system
@@ -199,6 +199,7 @@ public final class Constants {
     public static final boolean ABSOLUTE_ENCODER_INVERT = true;
 
     public static final double GEAR_RATIO = 40.09;
+
   }
 
   public static final class constElevator {
@@ -213,6 +214,7 @@ public final class Constants {
 
     public static final double CIRCUMFERENCE = 0.13972;
     public static final double GEAR_RATIO = 2.5;
+
   }
 
   public static final class constVision {
