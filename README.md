@@ -8,5 +8,5 @@ This robot will be competing at the following competitions:
 - [*Beach Blitz*](https://www.thebluealliance.com/event/2023cabl)
 
 ## Controls
-![Driver Controls](src/main/documentation/driverControls23.png)
-![Operator Controls](src/main/documentation/operatorControls23.png)
+![Driver Controls](assets\driverControls23.png)
+![Operator Controls](assets\operatorControls23.png)

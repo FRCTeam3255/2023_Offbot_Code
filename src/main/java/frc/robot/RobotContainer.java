@@ -70,6 +70,18 @@ public class RobotContainer {
   public static SwerveAutoBuilder swerveAutoBuilder;
 
   public RobotContainer() {
+    // Set out log file to be in its own folder
+    if (Robot.isSimulation()) {
+      DataLogManager.start("src/main/AdvantageScope Logs");
+    } else {
+      DataLogManager.start();
+    }
+    // Log data that is being put to shuffleboard
+    DataLogManager.logNetworkTables(true);
+    // Log the DS data and joysticks
+    DriverStation.startDataLog(DataLogManager.getLog(), true);
+    DriverStation.silenceJoystickConnectionWarning(true);
+
     // -- Creating Autos --
     HashMap<String, Command> autoEventMap = new HashMap<>();
     autoEventMap.put("cubeDeployIntake", new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CUBE,
@@ -146,6 +158,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     // Driver
+    // src\main\documentation\driverControls23.png
 
     // "reset gyro" for field relative but actually resets the orientation at a
     // higher level
@@ -163,6 +176,7 @@ public class RobotContainer {
         .whileTrue(Commands.run(() -> subLEDs.setLEDPattern(constLEDs.DEFENSE_MODE_COLOR)));
 
     // Operator
+    // src\main\documentation\operatorControls23.png
 
     // Intake Cone (RB)
     conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
@@ -220,7 +234,7 @@ public class RobotContainer {
     autoChooser.setDefaultOption("null", null);
 
     // Autonomous Alignment:
-    // src\main\documentation\autoalignment.jpg
+    // assets\autoalignment.jpg
     // For CENTER autos, align with the cone node to the OPEN side.
     // For CABLE autos, align with the wall instead (we are too wide)
 
