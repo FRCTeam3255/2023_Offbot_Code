@@ -172,6 +172,15 @@ public class SN_SwerveModule {
   }
 
   /**
+   * Gets if the absolute encoder was plugged in on init. Returns true if it was
+   * unplugged. This will also return true in simulation, because there is no
+   * absolute encoder to get a value from.
+   */
+  public boolean getAbsoluteEncoderUnplugged() {
+    return absoluteEncoder.getAbsolutePosition() == 0.0;
+  }
+
+  /**
    * Reset the steer motor encoder to match the angle of the absolute encoder.
    */
   public void resetSteerMotorEncodersToAbsolute() {
@@ -179,7 +188,11 @@ public class SN_SwerveModule {
         getAbsoluteEncoder().getDegrees(),
         Constants.STEER_GEAR_RATIO);
 
-    steerMotor.setSelectedSensorPosition(absoluteEncoderCount);
+    if (getAbsoluteEncoderUnplugged()) {
+      return;
+    } else {
+      steerMotor.setSelectedSensorPosition(absoluteEncoderCount);
+    }
   }
 
   /**
@@ -255,7 +268,6 @@ public class SN_SwerveModule {
    * @return Position of swerve module
    */
   public SwerveModulePosition getPosition() {
-
     double distance = SN_Math.falconToMeters(
         driveMotor.getSelectedSensorPosition(),
         Constants.WHEEL_CIRCUMFERENCE,

@@ -168,7 +168,9 @@ public class Elevator extends SubsystemBase {
   }
 
   /**
-   * Gets if the absolute encoder is plugged in. Returns true if it is unplugged.
+   * Gets if the absolute encoder was plugged in on init. Returns true if it was
+   * unplugged. This will also return true in simulation, because there is no
+   * absolute encoder to get a value from.
    */
   public boolean getElevatorEncoderUnplugged() {
     return absoluteEncoder.get() == 0.0;

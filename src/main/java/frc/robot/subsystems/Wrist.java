@@ -148,7 +148,9 @@ public class Wrist extends SubsystemBase {
   }
 
   /**
-   * Gets if the absolutes encoder is plugged in. Returns true if it is unplugged.
+   * Gets if the absolute encoder was plugged in on init. Returns true if it was
+   * unplugged. This will also return true in simulation, because there is no
+   * absolute encoder to get a value from.
    */
   public boolean getWristEncoderUnplugged() {
     return absoluteEncoder.get() == 0.0;
@@ -160,7 +162,7 @@ public class Wrist extends SubsystemBase {
   public void resetWristEncoderToAbsolute() {
     if (getWristEncoderUnplugged()) {
       // todo: add default value to reset wrist to
-      return; // ENCODER UNPLUGGED!!!!!
+      return;
     }
 
     wristMotor.setSelectedSensorPosition(

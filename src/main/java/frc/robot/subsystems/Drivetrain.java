@@ -23,7 +23,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -58,7 +57,8 @@ public class Drivetrain extends SubsystemBase {
   private ProfiledPIDController yPID;
   private PIDController thetaPID;
 
-  double[] swerveModuleStates = new double[8];
+  double[] swerveRealStates = new double[8];
+  double[] swerveDesiredStates = new double[8];
 
   public Double[] columnYCoordinatesBlue = { 0.5, 1.05, 1.63, 2.19, 2.75, 3.31, 3.86, 4.43, 4.98 };
   public Double[] columnYCoordinatesRed = { 4.98, 4.43, 3.86, 3.31, 2.75, 2.19, 1.63, 1.05, 0.5 };
@@ -303,11 +303,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     SwerveModuleState[] desiredStates;
-    if (DriverStation.isAutonomous()) {
-      desiredStates = swerveKinematics.toSwerveModuleStates(discretize(chassisSpeeds));
-    } else {
-      desiredStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
-    }
+
+    desiredStates = swerveKinematics.toSwerveModuleStates(discretize(chassisSpeeds));
 
     setModuleStates(desiredStates, isDriveOpenLoop);
   }
@@ -321,6 +318,11 @@ public class Drivetrain extends SubsystemBase {
 
     // desaturateWheelSpeeds() mutates the given array
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.MAX_MODULE_SPEED);
+
+    for (int i = 0; i < 8; i += 2) {
+      swerveDesiredStates[i] = desiredStates[i / 2].angle.getRadians();
+      swerveDesiredStates[i + 1] = desiredStates[i / 2].speedMetersPerSecond;
+    }
 
     for (SN_SwerveModule mod : modules) {
       mod.setDesiredState(desiredStates[mod.moduleNumber], isDriveOpenLoop, false);
@@ -555,6 +557,8 @@ public class Drivetrain extends SubsystemBase {
             Units.metersToFeet(mod.getPosition().distanceMeters));
         SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Angle",
             mod.getState().angle.getDegrees());
+        SmartDashboard.putBoolean("Drivetrain/Module " + mod.moduleNumber + "/Absolute Encoder Unplugged",
+            mod.getAbsoluteEncoderUnplugged());
         SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Absolute Encoder Angle",
             mod.getAbsoluteEncoder().getDegrees());
         SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Raw Absolute Encoder Angle",
@@ -566,10 +570,12 @@ public class Drivetrain extends SubsystemBase {
     }
 
     for (int i = 0; i < 8; i += 2) {
-      swerveModuleStates[i] = modules[i / 2].getState().angle.getRadians();
-      swerveModuleStates[i + 1] = modules[i / 2].getState().speedMetersPerSecond;
+      swerveRealStates[i] = modules[i / 2].getState().angle.getRadians();
+      swerveRealStates[i + 1] = modules[i / 2].getState().speedMetersPerSecond;
     }
-    SmartDashboard.putNumberArray("Drivetrain/RealStates", swerveModuleStates);
+
+    SmartDashboard.putNumberArray("Drivetrain/DesiredStates", swerveDesiredStates);
+    SmartDashboard.putNumberArray("Drivetrain/RealStates", swerveRealStates);
     SmartDashboard.putNumberArray("Drivetrain/Pose3d",
         AdvantageScopeUtil.composePose3ds(new Pose3d(getPose2d())));
   }
