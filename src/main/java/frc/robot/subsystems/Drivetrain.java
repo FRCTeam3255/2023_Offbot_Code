@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.AdvantageScopeUtil;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.SN_SwerveModule;
 import frc.robot.RobotPreferences.prefDrivetrain;
@@ -59,6 +60,11 @@ public class Drivetrain extends SubsystemBase {
 
   double[] swerveRealStates = new double[8];
   double[] swerveDesiredStates = new double[8];
+  double simAngle = 0;
+  SwerveModuleState[] lastDesiredStates;
+  private double timeFromLastUpdate;
+  private double lastSimTime;
+  private Timer simTimer;
 
   public Double[] columnYCoordinatesBlue = { 0.5, 1.05, 1.63, 2.19, 2.75, 3.31, 3.86, 4.43, 4.98 };
   public Double[] columnYCoordinatesRed = { 4.98, 4.43, 3.86, 3.31, 2.75, 2.19, 1.63, 1.05, 0.5 };
@@ -76,6 +82,12 @@ public class Drivetrain extends SubsystemBase {
   public PathPlannerTrajectory just_taxi;
 
   public Drivetrain() {
+    if (Robot.isSimulation()) {
+      simTimer = new Timer();
+      simTimer.start();
+      lastSimTime = simTimer.get();
+      timeFromLastUpdate = 0;
+    }
 
     if (RobotContainer.isPracticeBot()) {
       modules = new SN_SwerveModule[] {
@@ -315,6 +327,7 @@ public class Drivetrain extends SubsystemBase {
    * @param desiredStates Array of desired states
    */
   public void setModuleStates(SwerveModuleState[] desiredStates, boolean isDriveOpenLoop) {
+    lastDesiredStates = desiredStates;
 
     // desaturateWheelSpeeds() mutates the given array
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.MAX_MODULE_SPEED);
@@ -401,7 +414,7 @@ public class Drivetrain extends SubsystemBase {
    * @return Rotation of drivetrain
    */
   public Rotation2d getRotation() {
-    return Rotation2d.fromRadians(MathUtil.angleModulus(navX.getRotation2d().getRadians()));
+    return Rotation2d.fromRadians(MathUtil.angleModulus(getRotation2dYaw().getRadians()));
   }
 
   /**
@@ -441,7 +454,7 @@ public class Drivetrain extends SubsystemBase {
   public void updatePoseEstimator() {
     poseEstimator.updateWithTime(
         Timer.getFPGATimestamp(),
-        navX.getRotation2d(),
+        getRotation2dYaw(),
         getModulePositions());
 
   }
@@ -488,6 +501,16 @@ public class Drivetrain extends SubsystemBase {
 
   public double getYaw() {
     return navX.getYaw();
+  }
+
+  public Rotation2d getRotation2dYaw() {
+    if (Robot.isSimulation() && lastDesiredStates != null) {
+      timeFromLastUpdate = simTimer.get() - lastSimTime;
+      lastSimTime = simTimer.get();
+      simAngle += swerveKinematics.toChassisSpeeds(lastDesiredStates).omegaRadiansPerSecond * timeFromLastUpdate;
+      return new Rotation2d(simAngle);
+    }
+    return navX.getRotation2d();
   }
 
   public boolean isNavXConnected() {
