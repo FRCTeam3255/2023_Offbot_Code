@@ -15,11 +15,14 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.AdvantageScopeUtil;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.constWrist;
 import frc.robot.RobotMap.mapWrist;
 import frc.robot.RobotPreferences.prefWrist;
@@ -36,6 +39,7 @@ public class Wrist extends SubsystemBase {
   SupplyCurrentLimitConfiguration supplyLimit;
 
   Pose3d wristPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+  double desiredAngle = 0;
 
   public Wrist() {
     wristMotor = new TalonFX(mapWrist.WRIST_MOTOR_CAN);
@@ -103,6 +107,7 @@ public class Wrist extends SubsystemBase {
   public void setWristAngle(double angle) {
     angle = MathUtil.clamp(angle, prefWrist.wristMinPos.getValue(),
         prefWrist.wristMaxPos.getValue());
+    desiredAngle = angle;
 
     wristMotor.set(ControlMode.MotionMagic, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
   }
@@ -116,6 +121,9 @@ public class Wrist extends SubsystemBase {
    * @return The angle of the wrist motor, as a Rotation2d
    */
   public Rotation2d getWristAngle() {
+    if (Robot.isSimulation()) {
+      return Rotation2d.fromDegrees(desiredAngle);
+    }
     return Rotation2d
         .fromDegrees(SN_Math.falconToDegrees(wristMotor.getSelectedSensorPosition(), constWrist.GEAR_RATIO));
   }
@@ -128,6 +136,9 @@ public class Wrist extends SubsystemBase {
    * 
    */
   public boolean isWristAtPosition(double desiredPosition) {
+    if (Robot.isSimulation()) {
+      return true;
+    }
     return prefWrist.wristPositionTolerance.getValue() >= Math.abs(getWristAngle().getDegrees() - desiredPosition);
   }
 
@@ -174,8 +185,15 @@ public class Wrist extends SubsystemBase {
     wristMotor.neutralOutput();
   }
 
+  // Must be run every loop in order for logging to function
+  public void updatePose3ds(Pose3d elevatorCarriagePose) {
+    wristPose = new Pose3d(new Translation3d(), new Rotation3d(0, getWristAngle().getDegrees(), 0)); // TODO: FIX
+  }
+
   @Override
   public void periodic() {
+    updatePose3ds(RobotContainer.subElevator.getElevatorCarriagePose());
+
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Wrist/Abs Encoder Raw", absoluteEncoder.get());
     SmartDashboard.putNumber("Wrist/Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());

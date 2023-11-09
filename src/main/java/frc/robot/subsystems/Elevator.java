@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constElevator;
 import frc.robot.AdvantageScopeUtil;
+import frc.robot.Robot;
 import frc.robot.Constants.DesiredHeight;
 import frc.robot.RobotMap.mapElevator;
 import frc.robot.RobotPreferences.prefElevator;
@@ -128,6 +129,8 @@ public class Elevator extends SubsystemBase {
         prefElevator.elevatorMinPos.getValue(),
         prefElevator.elevatorMaxPos.getValue()), constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
 
+    desiredPosition = position;
+
     leftMotor.set(ControlMode.MotionMagic, position);
     rightMotor.set(ControlMode.MotionMagic, position);
   }
@@ -142,6 +145,9 @@ public class Elevator extends SubsystemBase {
    * 
    */
   public boolean isElevatorAtPosition(double desiredPosition, double tolerance) {
+    if (Robot.isSimulation()) {
+      return true;
+    }
     return tolerance >= Math.abs(getElevatorPositionMeters() - desiredPosition);
   }
 
@@ -201,6 +207,9 @@ public class Elevator extends SubsystemBase {
    * 
    */
   public double getElevatorPositionMeters() {
+    if (Robot.isSimulation()) {
+      return desiredPosition / prefElevator.elevatorEncoderCountsPerMeter.getValue();
+    }
     return getElevatorEncoderCounts() / prefElevator.elevatorEncoderCountsPerMeter.getValue();
   }
 
@@ -225,8 +234,22 @@ public class Elevator extends SubsystemBase {
     return isPrepped;
   }
 
+  // Must be run every loop in order for logging to function
+  public void updatePose3ds() {
+    elevatorCarriagePose = new Pose3d(
+        -Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters(), 0,
+        Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters(),
+        new Rotation3d(0, 0, 0));
+  }
+
+  public Pose3d getElevatorCarriagePose() {
+    return elevatorCarriagePose;
+  }
+
   @Override
   public void periodic() {
+    updatePose3ds();
+
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Elevator/Encoder Counts Raw", getElevatorEncoderCounts());
     SmartDashboard.putNumber("Elevator/Position Meters", getElevatorPositionMeters());
@@ -238,7 +261,8 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Elevator/Supply Current", leftMotor.getSupplyCurrent());
 
     SmartDashboard.putNumberArray("Elevator/Stage 2 Pose3d", AdvantageScopeUtil.composePose3ds(elevatorStagePose));
-    SmartDashboard.putNumberArray("Elevator/Carriage Pose3d", AdvantageScopeUtil.composePose3ds(elevatorCarriagePose));
+    SmartDashboard.putNumberArray("Elevator/Carriage Pose3d",
+        AdvantageScopeUtil.composePose3ds(getElevatorCarriagePose()));
 
   }
 }

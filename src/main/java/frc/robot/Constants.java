@@ -215,6 +215,7 @@ public final class Constants {
 
     public static final double CIRCUMFERENCE = 0.13972;
     public static final double GEAR_RATIO = 2.5;
+    public static final double ANGLE_TO_BASE_DEGREES = 54.54;
 
   }
 
