@@ -79,7 +79,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Set out log file to be in its own folder
     if (Robot.isSimulation()) {
-      DataLogManager.start("src/main/AdvantageScope Logs");
+      DataLogManager.start("src/main");
     } else {
       DataLogManager.start();
     }
@@ -110,7 +110,7 @@ public class RobotContainer {
     autoEventMap.put("YEET", new YeetGamePiece(subIntake, subElevator, subWrist));
     autoEventMap.put("placeGamePiece", new PlaceGamePiece(subIntake, subWrist, subElevator, true));
     autoEventMap.put("stow", new Stow(subWrist, subIntake, subElevator));
-    ;
+
     swerveAutoBuilder = new SwerveAutoBuilder(
         subDrivetrain::getPose2d,
         subDrivetrain::resetPose,
