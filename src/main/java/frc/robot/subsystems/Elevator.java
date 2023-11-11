@@ -240,6 +240,10 @@ public class Elevator extends SubsystemBase {
         -Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters(), 0,
         Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters(),
         new Rotation3d(0, 0, 0));
+    elevatorStagePose = new Pose3d(
+        (-Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters()) * 0.5, 0,
+        (Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters()) * 0.5,
+        new Rotation3d(0, 0, 0));
   }
 
   public Pose3d getElevatorCarriagePose() {
