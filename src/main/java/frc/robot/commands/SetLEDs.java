@@ -6,12 +6,8 @@ package frc.robot.commands;
 
 import com.frcteam3255.components.SN_Blinkin.PatternType;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.constLEDs;
-import frc.robot.RobotPreferences.prefLEDs;
 import frc.robot.RobotPreferences.prefVision;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
