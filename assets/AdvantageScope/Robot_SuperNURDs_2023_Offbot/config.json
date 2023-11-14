@@ -1,20 +1,20 @@
 {
-  "name": "3255 2023 Offseason Robot",
-  "sourceUrl": "",
+  "name": "SuperNURDs 2023 Offbot",
+  "sourceUrl": "" ,
   "rotations": [
-    {
-      "axis": "x",
-      "degrees": 90
-    },
     {
       "axis": "z",
       "degrees": 90
+    },
+    {
+      "axis": "y",
+      "degrees": 180
     }
   ],
   "position": [
     0,
     0,
-    0.04
+    0
   ],
   "cameras": [
   ],
@@ -22,56 +22,58 @@
     {
       "zeroedRotations": [
         {
-          "axis": "z",
-          "degrees": 0
-        },
-        {
           "axis": "x",
-          "degrees": 0
+          "degrees": 324.4
         },
         {
           "axis": "y",
-          "degrees": 0
+          "degrees": 180
+        },
+        {
+          "axis": "z",
+          "degrees": 270
         }
       ],
       "zeroedPosition": [
-        0,
-        0,
-        0
+        -0.357,
+        -0.26,
+        -0.35
       ]
     },
     {
       "zeroedRotations": [
         {
           "axis": "x",
-          "degrees": 0
-        },
-        {
-          "axis": "z",
-          "degrees": 0
+          "degrees": 180
         },
         {
           "axis": "y",
           "degrees": 0
+        },
+        {
+          "axis": "z",
+          "degrees": 90
         }
       ],
       "zeroedPosition": [
-        0, 0, 0
+        0.542,
+        0.542,
+        -0.978
       ]
     },
     {
       "zeroedRotations": [
         {
-          "axis": "z",
-          "degrees": 0
-        },
-        {
           "axis": "x",
-          "degrees": 0
+          "degrees": -153
         },
         {
           "axis": "y",
-          "degrees": 0
+          "degrees": 180
+        },
+        {
+          "axis": "z",
+          "degrees":  90
         }
       ],
       "zeroedPosition": [

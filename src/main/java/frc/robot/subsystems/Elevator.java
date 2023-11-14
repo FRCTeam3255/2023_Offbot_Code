@@ -43,6 +43,8 @@ public class Elevator extends SubsystemBase {
 
   Pose3d elevatorStagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
   Pose3d elevatorCarriagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+  Pose3d desiredElevatorStagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+  Pose3d desiredElevatorCarriagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
 
   public Elevator() {
     leftMotor = new TalonFX(mapElevator.LEFT_MOTOR_CAN);
@@ -201,16 +203,23 @@ public class Elevator extends SubsystemBase {
   }
 
   /**
-   * Returns the position of the elevator, relative to itself, in meters.
+   * Returns the real position of the elevator, relative to itself, in meters.
    * 
    * @return Elevator position
    * 
    */
   public double getElevatorPositionMeters() {
-    if (Robot.isSimulation()) {
-      return desiredPosition / prefElevator.elevatorEncoderCountsPerMeter.getValue();
-    }
     return getElevatorEncoderCounts() / prefElevator.elevatorEncoderCountsPerMeter.getValue();
+  }
+
+  /**
+   * Returns the desired position of the elevator, relative to itself, in meters.
+   * 
+   * @return Elevator position
+   * 
+   */
+  public double getDesiredElevatorPositionMeters() {
+    return desiredPosition / prefElevator.elevatorEncoderCountsPerMeter.getValue();
   }
 
   public void neutralElevatorOutputs() {
@@ -236,18 +245,31 @@ public class Elevator extends SubsystemBase {
 
   // Must be run every loop in order for logging to function
   public void updatePose3ds() {
+    elevatorStagePose = new Pose3d(
+        (-Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters()) * 0.5, 0,
+        (Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters()) * 0.5,
+        new Rotation3d(0, 0, 0));
     elevatorCarriagePose = new Pose3d(
         -Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters(), 0,
         Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters(),
         new Rotation3d(0, 0, 0));
-    elevatorStagePose = new Pose3d(
-        (-Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters()) * 0.5, 0,
-        (Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters()) * 0.5,
+
+    desiredElevatorStagePose = new Pose3d(
+        (-Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getDesiredElevatorPositionMeters()) * 0.5, 0,
+        (Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getDesiredElevatorPositionMeters()) * 0.5,
+        new Rotation3d(0, 0, 0));
+    desiredElevatorCarriagePose = new Pose3d(
+        -Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getDesiredElevatorPositionMeters(), 0,
+        Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getDesiredElevatorPositionMeters(),
         new Rotation3d(0, 0, 0));
   }
 
   public Pose3d getElevatorCarriagePose() {
     return elevatorCarriagePose;
+  }
+
+  public Pose3d getDesiredElevatorCarriagePose() {
+    return desiredElevatorCarriagePose;
   }
 
   @Override
@@ -264,9 +286,14 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putBoolean("Elevator/Abs Encoder Unplugged?", getElevatorEncoderUnplugged());
     SmartDashboard.putNumber("Elevator/Supply Current", leftMotor.getSupplyCurrent());
 
-    SmartDashboard.putNumberArray("Elevator/Stage 2 Pose3d", AdvantageScopeUtil.composePose3ds(elevatorStagePose));
+    SmartDashboard.putNumberArray("Elevator/Stage Pose3d", AdvantageScopeUtil.composePose3ds(elevatorStagePose));
     SmartDashboard.putNumberArray("Elevator/Carriage Pose3d",
         AdvantageScopeUtil.composePose3ds(getElevatorCarriagePose()));
+
+    SmartDashboard.putNumberArray("Elevator/Desired Stage Pose3d",
+        AdvantageScopeUtil.composePose3ds(desiredElevatorStagePose));
+    SmartDashboard.putNumberArray("Elevator/Desired Carriage Pose3d",
+        AdvantageScopeUtil.composePose3ds(getDesiredElevatorCarriagePose()));
 
   }
 }

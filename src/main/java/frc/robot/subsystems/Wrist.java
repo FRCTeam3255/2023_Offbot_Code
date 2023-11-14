@@ -15,7 +15,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,6 +38,7 @@ public class Wrist extends SubsystemBase {
 
   SupplyCurrentLimitConfiguration supplyLimit;
 
+  Pose3d desiredWristPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
   Pose3d wristPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
   double desiredAngle = 0;
 
@@ -118,14 +119,18 @@ public class Wrist extends SubsystemBase {
   }
 
   /**
-   * @return The angle of the wrist motor, as a Rotation2d
+   * @return The real angle of the wrist motor, as a Rotation2d
    */
   public Rotation2d getWristAngle() {
-    if (Robot.isSimulation()) {
-      return Rotation2d.fromDegrees(desiredAngle);
-    }
     return Rotation2d
         .fromDegrees(SN_Math.falconToDegrees(wristMotor.getSelectedSensorPosition(), constWrist.GEAR_RATIO));
+  }
+
+  /**
+   * @return The desired angle of the wrist motor, as a Rotation2d
+   */
+  public Rotation2d getDesiredWristAngle() {
+    return Rotation2d.fromDegrees(desiredAngle);
   }
 
   /**
@@ -186,13 +191,17 @@ public class Wrist extends SubsystemBase {
   }
 
   // Must be run every loop in order for logging to function
-  public void updatePose3ds(Pose3d elevatorCarriagePose) {
-    wristPose = new Pose3d(new Translation3d(), new Rotation3d(0, getWristAngle().getDegrees(), 0)); // TODO: FIX
+  public void updatePose3ds(Pose3d elevatorCarriagePose, Pose3d desiredElevatorCarriagePose) {
+    wristPose = elevatorCarriagePose.transformBy(new Transform3d(new Pose3d(),
+        new Pose3d(-0.298, 0.005, 0.218, new Rotation3d(0, -getWristAngle().getRadians(), 0))));
+    desiredWristPose = desiredElevatorCarriagePose.transformBy(new Transform3d(new Pose3d(),
+        new Pose3d(-0.298, 0.005, 0.218, new Rotation3d(0, -getDesiredWristAngle().getRadians(), 0))));
   }
 
   @Override
   public void periodic() {
-    updatePose3ds(RobotContainer.subElevator.getElevatorCarriagePose());
+    updatePose3ds(RobotContainer.subElevator.getElevatorCarriagePose(),
+        RobotContainer.subElevator.getDesiredElevatorCarriagePose());
 
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Wrist/Abs Encoder Raw", absoluteEncoder.get());
@@ -202,5 +211,6 @@ public class Wrist extends SubsystemBase {
     SmartDashboard.putNumber("Wrist/Motor Degrees", getWristAngle().getDegrees());
     SmartDashboard.putNumber("Wrist/Supply Current", wristMotor.getSupplyCurrent());
     SmartDashboard.putNumberArray("Wrist/Pose3d", AdvantageScopeUtil.composePose3ds(wristPose));
+    SmartDashboard.putNumberArray("Wrist/Desired Pose3d", AdvantageScopeUtil.composePose3ds(desiredWristPose));
   }
 }
