@@ -115,7 +115,7 @@ public class Drivetrain extends SubsystemBase {
 
     poseEstimator = new SwerveDrivePoseEstimator(
         swerveKinematics,
-        navX.getRotation2d(),
+        getRotation2dYaw(),
         getModulePositions(),
         new Pose2d(),
         VecBuilder.fill(
@@ -482,7 +482,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void resetPose(Pose2d pose) {
     poseEstimator.resetPosition(
-        navX.getRotation2d(),
+        getRotation2dYaw(),
         getModulePositions(),
         pose);
   }
@@ -562,8 +562,8 @@ public class Drivetrain extends SubsystemBase {
       SmartDashboard.putNumber("Drivetrain/Pose Y", Units.metersToInches(getPose2d().getY()));
       SmartDashboard.putNumber("Drivetrain/Pose Rotation", getPose2d().getRotation().getDegrees());
 
-      SmartDashboard.putNumber("Drivetrain/Yaw", navX.getRotation2d().getDegrees());
-      SmartDashboard.putNumber("Drivetrain/Roll", navX.getRoll());
+      SmartDashboard.putNumber("Drivetrain/Yaw", getRotation2dYaw().getDegrees());
+      SmartDashboard.putNumber("Drivetrain/Roll", getRoll());
       SmartDashboard.putBoolean("Drivetrain/NavX Connected", isNavXConnected());
 
       SmartDashboard.putNumber("Drivetrain/Theta Goal", Units.radiansToDegrees(thetaPID.getSetpoint()));
