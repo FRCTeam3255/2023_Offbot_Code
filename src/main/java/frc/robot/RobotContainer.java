@@ -61,7 +61,7 @@ public class RobotContainer {
   public static Intake subIntake = new Intake();
   public static Wrist subWrist = new Wrist();
   private final Vision subVision = new Vision();
-  private final LEDs subLEDs = new LEDs();
+  public static LEDs subLEDs = new LEDs();
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
   private static DigitalInput pracBotSwitch = new DigitalInput(9);
@@ -171,7 +171,7 @@ public class RobotContainer {
 
     conDriver.btn_RightBumper
         .whileTrue(Commands.run(() -> subDrivetrain.setDefenseMode(), subDrivetrain))
-        .whileTrue(Commands.run(() -> subLEDs.setLEDPattern(constLEDs.DEFENSE_MODE_COLOR)));
+        .whileTrue(Commands.run(() -> subLEDs.setLEDs(constLEDs.DEFENSE_MODE_COLOR)));
 
     // Operator
     // assets\operatorControls23.png

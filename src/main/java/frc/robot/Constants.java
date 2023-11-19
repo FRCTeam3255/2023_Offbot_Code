@@ -235,16 +235,29 @@ public final class Constants {
   }
 
   public static final class constLEDs {
-    public static final PatternType HAS_CUBE_COLOR = SN_Blinkin.PatternType.Violet;
-    public static final PatternType HAS_CONE_COLOR = SN_Blinkin.PatternType.Yellow;
-    public static final PatternType INTAKING_CUBE_COLOR = SN_Blinkin.PatternType.StrobeBlue;
-    public static final PatternType INTAKING_CONE_COLOR = SN_Blinkin.PatternType.StrobeGold;
+    // public static final PatternType HAS_CUBE_COLOR =
+    // SN_Blinkin.PatternType.Violet;
+    public static final int[] HAS_CUBE_COLOR = { 175, 18, 236 };
+    // public static final PatternType HAS_CONE_COLOR =
+    // SN_Blinkin.PatternType.Yellow;
+    public static final int[] HAS_CONE_COLOR = { 236, 196, 18 };
 
-    public static final PatternType FAILURE_COLOR = PatternType.Red;
+    // public static final PatternType INTAKING_CUBE_COLOR =
+    // SN_Blinkin.PatternType.StrobeBlue;
+    // public static final PatternType INTAKING_CONE_COLOR =
+    // SN_Blinkin.PatternType.StrobeGold;
+    public static final int[] INTAKING_CUBE_COLOR = { 175, 18, 236 };
+    public static final int[] INTAKING_CONE_COLOR = { 236, 196, 18 };
 
-    public static final PatternType DEFAULT_COLOR = PatternType.Black;
+    // public static final PatternType FAILURE_COLOR = PatternType.Red;
+    public static final int[] FAILURE_COLOR = { 255, 0, 0 };
 
-    public static final PatternType DEFENSE_MODE_COLOR = PatternType.RainbowRainbowPalette;
+    // public static final PatternType DEFAULT_COLOR = PatternType.Black;
+    public static final int[] DEFAULT_COLOR = { 0, 0, 0 };
+
+    // public static final PatternType DEFENSE_MODE_COLOR =
+    // PatternType.RainbowRainbowPalette;
+    public static final int[] DEFENSE_MODE_COLOR = { 255, 255, 255 };
 
     public static final PatternType CHARGE_STATION_ALIGNED_COLOR = PatternType.BPMLavaPalette;
     public static final PatternType GRID_ALIGNED_COLOR = PatternType.StrobeGold;

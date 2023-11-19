@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.led.CANdle;
 import com.frcteam3255.components.SN_Blinkin;
 import com.frcteam3255.components.SN_Blinkin.PatternType;
 
@@ -13,13 +14,15 @@ import frc.robot.RobotMap.mapLEDs;
 public class LEDs extends SubsystemBase {
 
   SN_Blinkin ledController;
+  CANdle candle;
 
   public LEDs() {
     ledController = new SN_Blinkin(mapLEDs.BLINKIN_PWM);
+    candle = new CANdle(0);
   }
 
-  public void setLEDPattern(PatternType pattern) {
-    ledController.setPattern(pattern);
+  public void setLEDs(int[] rgb) {
+    candle.setLEDs(rgb[0], rgb[1], rgb[2]);
   }
 
   @Override

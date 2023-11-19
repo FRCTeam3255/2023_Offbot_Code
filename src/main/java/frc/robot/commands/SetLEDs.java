@@ -18,7 +18,7 @@ public class SetLEDs extends CommandBase {
   Drivetrain subDrivetrain;
   Intake subIntake;
 
-  PatternType desiredPattern;
+  int[] desiredPattern = { 0, 0, 0 };
 
   Double chargeStationCenterX;
   Double chargeStationCenterToleranceX;
@@ -36,8 +36,6 @@ public class SetLEDs extends CommandBase {
     chargeStationCenterToleranceX = prefVision.chargeStationCenterToleranceX.getValue();
     chargeStationCenterY = prefVision.chargeStationCenterY.getValue();
     chargeStationCenterToleranceY = prefVision.chargeStationCenterToleranceY.getValue();
-
-    desiredPattern = PatternType.Black;
 
     addRequirements(subLEDs);
   }
@@ -96,7 +94,7 @@ public class SetLEDs extends CommandBase {
     // }
     // }
 
-    subLEDs.setLEDPattern(desiredPattern);
+    subLEDs.setLEDs(desiredPattern);
   }
 
   @Override
