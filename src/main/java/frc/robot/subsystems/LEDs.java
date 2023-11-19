@@ -35,8 +35,10 @@ public class LEDs extends SubsystemBase {
   }
 
   /**
-   * Sets the LEDs to an animation. Animation types can be found through the
-   * <a href="url">CTRE javadocs.</a>
+   * Sets the LEDs to an animation. Animation types can be found in
+   * <a href=
+   * "https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/led/Animation.html">CTRE's
+   * javadocs.</a>
    *
    * 
    * @param animation The desired animation to display
