@@ -4,25 +4,45 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
-import com.frcteam3255.components.SN_Blinkin;
-import com.frcteam3255.components.SN_Blinkin.PatternType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.constLEDs;
 import frc.robot.RobotMap.mapLEDs;
 
 public class LEDs extends SubsystemBase {
 
-  SN_Blinkin ledController;
-  CANdle candle;
+  CANdle CANdle;
 
   public LEDs() {
-    ledController = new SN_Blinkin(mapLEDs.BLINKIN_PWM);
-    candle = new CANdle(0);
+    CANdle = new CANdle(mapLEDs.CANDLE_CAN);
+    configure();
   }
 
-  public void setLEDs(int[] rgb) {
-    candle.setLEDs(rgb[0], rgb[1], rgb[2]);
+  public void configure() {
+    CANdle.configFactoryDefault();
+    CANdle.configBrightnessScalar(constLEDs.LED_BRIGHTNESS);
+  }
+
+  /**
+   * Sets the LEDs to an array of RGB values
+   *
+   * @param rgb The desired array of RGB values. {r, g, b}
+   */
+  public void setLEDsToRGB(int[] rgb) {
+    CANdle.setLEDs(rgb[0], rgb[1], rgb[2]);
+  }
+
+  /**
+   * Sets the LEDs to an animation. Animation types can be found through the
+   * <a href="url">CTRE javadocs.</a>
+   *
+   * 
+   * @param animation The desired animation to display
+   */
+  public void setLEDsToAnimation(Animation animation) {
+    CANdle.animate(animation);
   }
 
   @Override

@@ -171,7 +171,7 @@ public class RobotContainer {
 
     conDriver.btn_RightBumper
         .whileTrue(Commands.run(() -> subDrivetrain.setDefenseMode(), subDrivetrain))
-        .whileTrue(Commands.run(() -> subLEDs.setLEDs(constLEDs.DEFENSE_MODE_COLOR)));
+        .whileTrue(Commands.run(() -> subLEDs.setLEDsToAnimation(constLEDs.DEFENSE_MODE_ANIMATION)));
 
     // Operator
     // assets\operatorControls23.png

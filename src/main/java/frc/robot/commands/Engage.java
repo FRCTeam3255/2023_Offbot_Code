@@ -51,11 +51,11 @@ public class Engage extends CommandBase {
 
     if (rollPID.atSetpoint()) {
       subDrivetrain.setDefenseMode();
-      subLEDs.setLEDs(constLEDs.DEFENSE_MODE_COLOR);
+      subLEDs.setLEDsToAnimation(constLEDs.DEFENSE_MODE_ANIMATION);
     } else {
       subDrivetrain.drive(new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0,
           new Rotation2d()), isDriveOpenLoop);
-      subLEDs.setLEDs(constLEDs.DEFAULT_COLOR);
+      subLEDs.setLEDsToRGB(constLEDs.DEFAULT_COLOR);
 
     }
   }

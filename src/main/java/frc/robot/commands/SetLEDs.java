@@ -94,7 +94,7 @@ public class SetLEDs extends CommandBase {
     // }
     // }
 
-    subLEDs.setLEDs(desiredPattern);
+    subLEDs.setLEDsToRGB(desiredPattern);
   }
 
   @Override

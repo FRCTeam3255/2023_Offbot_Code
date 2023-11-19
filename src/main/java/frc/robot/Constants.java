@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.frcteam3255.components.SN_Blinkin;
 import com.frcteam3255.components.SN_Blinkin.PatternType;
@@ -235,32 +237,22 @@ public final class Constants {
   }
 
   public static final class constLEDs {
-    // public static final PatternType HAS_CUBE_COLOR =
-    // SN_Blinkin.PatternType.Violet;
+    public static final int LED_NUMBER = 100; // TODO: Get actual value
+    public static final int LED_BRIGHTNESS = 1;
+
     public static final int[] HAS_CUBE_COLOR = { 175, 18, 236 };
-    // public static final PatternType HAS_CONE_COLOR =
-    // SN_Blinkin.PatternType.Yellow;
     public static final int[] HAS_CONE_COLOR = { 236, 196, 18 };
 
-    // public static final PatternType INTAKING_CUBE_COLOR =
-    // SN_Blinkin.PatternType.StrobeBlue;
-    // public static final PatternType INTAKING_CONE_COLOR =
-    // SN_Blinkin.PatternType.StrobeGold;
-    public static final int[] INTAKING_CUBE_COLOR = { 175, 18, 236 };
-    public static final int[] INTAKING_CONE_COLOR = { 236, 196, 18 };
+    public static final StrobeAnimation INTAKING_CUBE_COLOR = new StrobeAnimation(175, 18, 236);
+    public static final StrobeAnimation INTAKING_CONE_COLOR = new StrobeAnimation(236, 196, 18);
 
-    // public static final PatternType FAILURE_COLOR = PatternType.Red;
     public static final int[] FAILURE_COLOR = { 255, 0, 0 };
 
-    // public static final PatternType DEFAULT_COLOR = PatternType.Black;
     public static final int[] DEFAULT_COLOR = { 0, 0, 0 };
 
-    // public static final PatternType DEFENSE_MODE_COLOR =
-    // PatternType.RainbowRainbowPalette;
-    public static final int[] DEFENSE_MODE_COLOR = { 255, 255, 255 };
-
-    public static final PatternType CHARGE_STATION_ALIGNED_COLOR = PatternType.BPMLavaPalette;
-    public static final PatternType GRID_ALIGNED_COLOR = PatternType.StrobeGold;
+    // TODO: Get a good speed param
+    public static final RainbowAnimation DEFENSE_MODE_ANIMATION = new RainbowAnimation(LED_BRIGHTNESS, 0.5,
+        LED_NUMBER);
   }
 
   public enum GamePiece {
