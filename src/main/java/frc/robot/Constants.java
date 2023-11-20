@@ -24,6 +24,16 @@ public final class Constants {
   public static final boolean OUTPUT_DEBUG_VALUES = true;
   public static final boolean SILENCE_JOYSTICK_WARNINGS = true;
 
+  // TODO: Update with Actual ports
+  public static final String[] PDH_DEVICES = {
+      "Swerve FR Drive", "Swerve FR Steer",
+      null, null, null, null, null, null,
+      "Swerve FL Drive", "Swerve FL Steer",
+      "Swerve BL Drive", "Swerve BL Steer",
+      null, null, null, null, null, null,
+      "Swerve BR Drive", "Swerve BR Steer",
+      null, null, null, null };
+
   // Order of Subsystems: The order that the robots inputs go, starting from
   // controllers
 

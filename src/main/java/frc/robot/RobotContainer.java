@@ -13,8 +13,10 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -67,6 +69,7 @@ public class RobotContainer {
   private static DigitalInput pracBotSwitch = new DigitalInput(9);
   private final Trigger teleopTrigger = new Trigger(() -> RobotState.isEnabled() && RobotState.isTeleop());
   public static SwerveAutoBuilder swerveAutoBuilder;
+  private static PowerDistribution PDH = new PowerDistribution(1, ModuleType.kRev);
 
   public RobotContainer() {
     // Set out log file to be in its own folder
@@ -151,6 +154,34 @@ public class RobotContainer {
   public void resetToAbsolutePositions() {
     subDrivetrain.resetSteerMotorEncodersToAbsolute();
     subWrist.resetWristEncoderToAbsolute();
+  }
+
+  /**
+   * Enable or disable whether the switchable channel on the PDH is supplied
+   * power.
+   * 
+   * @param isPowered Whether the channel receives power or not
+   */
+  public void setSwitchableChannelPower(boolean isPowered) {
+    PDH.setSwitchableChannel(isPowered);
+  }
+
+  /**
+   * Updates the values supplied to the PDH to SmartDashboard. Should be called
+   * periodically.
+   */
+  public static void logPDHValues() {
+    SmartDashboard.putNumber("PDH/Input Voltage", PDH.getVoltage());
+    SmartDashboard.putBoolean("PDH/Is Switchable Channel Powered", PDH.getSwitchableChannel());
+    SmartDashboard.putNumber("PDH/Total Current", PDH.getTotalCurrent());
+    SmartDashboard.putNumber("PDH/Total Power", PDH.getTotalPower());
+    SmartDashboard.putNumber("PDH/Total Energy", PDH.getTotalEnergy());
+
+    for (int i = 0; i < Constants.PDH_DEVICES.length; i++) {
+      if (Constants.PDH_DEVICES[i] != null) {
+        SmartDashboard.putNumber("PDH/" + Constants.PDH_DEVICES[i] + " Current", PDH.getCurrent(i));
+      }
+    }
   }
 
   private void configureBindings() {
