@@ -13,11 +13,15 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.frcteam3255.utils.SN_Math;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constElevator;
+import frc.robot.AdvantageScopeUtil;
+import frc.robot.Robot;
 import frc.robot.Constants.DesiredHeight;
 import frc.robot.RobotMap.mapElevator;
 import frc.robot.RobotPreferences.prefElevator;
@@ -36,6 +40,11 @@ public class Elevator extends SubsystemBase {
   DesiredHeight desiredHeight;
   double desiredPosition;
   boolean isPrepped;
+
+  Pose3d elevatorStagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+  Pose3d elevatorCarriagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+  Pose3d desiredElevatorStagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+  Pose3d desiredElevatorCarriagePose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
 
   public Elevator() {
     leftMotor = new TalonFX(mapElevator.LEFT_MOTOR_CAN);
@@ -122,6 +131,8 @@ public class Elevator extends SubsystemBase {
         prefElevator.elevatorMinPos.getValue(),
         prefElevator.elevatorMaxPos.getValue()), constElevator.CIRCUMFERENCE, constElevator.GEAR_RATIO);
 
+    desiredPosition = position;
+
     leftMotor.set(ControlMode.MotionMagic, position);
     rightMotor.set(ControlMode.MotionMagic, position);
   }
@@ -136,6 +147,9 @@ public class Elevator extends SubsystemBase {
    * 
    */
   public boolean isElevatorAtPosition(double desiredPosition, double tolerance) {
+    if (Robot.isSimulation()) {
+      return true;
+    }
     return tolerance >= Math.abs(getElevatorPositionMeters() - desiredPosition);
   }
 
@@ -162,7 +176,9 @@ public class Elevator extends SubsystemBase {
   }
 
   /**
-   * Gets if the absolute encoder is plugged in. Returns true if it is unplugged.
+   * Gets if the absolute encoder was plugged in on init. Returns true if it was
+   * unplugged. This will also return true in simulation, because there is no
+   * absolute encoder to get a value from.
    */
   public boolean getElevatorEncoderUnplugged() {
     return absoluteEncoder.get() == 0.0;
@@ -187,13 +203,23 @@ public class Elevator extends SubsystemBase {
   }
 
   /**
-   * Returns the position of the elevator, relative to itself, in meters.
+   * Returns the real position of the elevator, relative to itself, in meters.
    * 
    * @return Elevator position
    * 
    */
   public double getElevatorPositionMeters() {
     return getElevatorEncoderCounts() / prefElevator.elevatorEncoderCountsPerMeter.getValue();
+  }
+
+  /**
+   * Returns the desired position of the elevator, relative to itself, in meters.
+   * 
+   * @return Elevator position
+   * 
+   */
+  public double getDesiredElevatorPositionMeters() {
+    return desiredPosition / prefElevator.elevatorEncoderCountsPerMeter.getValue();
   }
 
   public void neutralElevatorOutputs() {
@@ -217,17 +243,57 @@ public class Elevator extends SubsystemBase {
     return isPrepped;
   }
 
+  // Must be run every loop in order for logging to function
+  public void updatePose3ds() {
+    elevatorStagePose = new Pose3d(
+        (-Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters()) * 0.5, 0,
+        (Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters()) * 0.5,
+        new Rotation3d(0, 0, 0));
+    elevatorCarriagePose = new Pose3d(
+        -Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters(), 0,
+        Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getElevatorPositionMeters(),
+        new Rotation3d(0, 0, 0));
+
+    desiredElevatorStagePose = new Pose3d(
+        (-Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getDesiredElevatorPositionMeters()) * 0.5, 0,
+        (Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getDesiredElevatorPositionMeters()) * 0.5,
+        new Rotation3d(0, 0, 0));
+    desiredElevatorCarriagePose = new Pose3d(
+        -Math.cos(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getDesiredElevatorPositionMeters(), 0,
+        Math.sin(Math.toRadians(constElevator.ANGLE_TO_BASE_DEGREES)) * getDesiredElevatorPositionMeters(),
+        new Rotation3d(0, 0, 0));
+  }
+
+  public Pose3d getElevatorCarriagePose() {
+    return elevatorCarriagePose;
+  }
+
+  public Pose3d getDesiredElevatorCarriagePose() {
+    return desiredElevatorCarriagePose;
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Elevator Encoder Counts Raw", getElevatorEncoderCounts());
-    SmartDashboard.putNumber("Elevator Position Meters", getElevatorPositionMeters());
+    updatePose3ds();
 
-    SmartDashboard.putNumber("Elevator Abs Encoder Raw", absoluteEncoder.get());
-    SmartDashboard.putNumber("Elevator Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Elevator Abs Encoder Get", getElevatorAbsoluteEncoder());
-    SmartDashboard.putBoolean("Elevator Abs Encoder Unplugged?", getElevatorEncoderUnplugged());
-    SmartDashboard.putNumber("Elevator Supply Current", leftMotor.getSupplyCurrent());
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Elevator/Encoder Counts Raw", getElevatorEncoderCounts());
+    SmartDashboard.putNumber("Elevator/Position Meters", getElevatorPositionMeters());
+
+    SmartDashboard.putNumber("Elevator/Abs Encoder Raw", absoluteEncoder.get());
+    SmartDashboard.putNumber("Elevator/Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Elevator/Abs Encoder Get", getElevatorAbsoluteEncoder());
+    SmartDashboard.putBoolean("Elevator/Abs Encoder Unplugged?", getElevatorEncoderUnplugged());
+    SmartDashboard.putNumber("Elevator/Supply Current", leftMotor.getSupplyCurrent());
+
+    SmartDashboard.putNumberArray("Elevator/Stage Pose3d", AdvantageScopeUtil.composePose3ds(elevatorStagePose));
+    SmartDashboard.putNumberArray("Elevator/Carriage Pose3d",
+        AdvantageScopeUtil.composePose3ds(getElevatorCarriagePose()));
+
+    SmartDashboard.putNumberArray("Elevator/Desired Stage Pose3d",
+        AdvantageScopeUtil.composePose3ds(desiredElevatorStagePose));
+    SmartDashboard.putNumberArray("Elevator/Desired Carriage Pose3d",
+        AdvantageScopeUtil.composePose3ds(getDesiredElevatorCarriagePose()));
 
   }
 }

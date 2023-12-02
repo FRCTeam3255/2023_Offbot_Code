@@ -47,7 +47,7 @@ public class CenterCoMobility extends SequentialCommandGroup {
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
             .until(() -> subIntake.isGamePieceCollected()).withTimeout(5),
 
-        new Stow(subWrist, subIntake, subElevator)
+        new Stow(subWrist, subIntake, subElevator, subLEDs)
             .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
 
         // Place cone and stow

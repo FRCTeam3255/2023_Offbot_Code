@@ -1,0 +1,11 @@
+Note to future NURDs!
+Please do not do CAD files like this! I was a blissfully unaware individual who didn't know how CAD worked. Here is my advice for those who must follow in my footsteps. To get all of the components, I just deleted parts off of the top assembly until I had what I needed.
+Reference: https://github.com/Mechanical-Advantage/AdvantageScope/blob/main/docs/CUSTOM-ASSETS.md , https://github.com/Mechanical-Advantage/AdvantageScope/blob/main/docs/GLTF-CONVERT.md
+
+1 - Divide the CAD - Break apart the CAD files of the robot as needed. model.glb should contain all stationary/non-moving parts of the robot. Every other model after that should be something you want to move as one component. You cannot divide up what parts of your component move after you export. We don't normally divide our subsystems up in this way, so I referenced the top assembly. If a component happens to be already divided properly, you can just use that. 
+
+2 -⚠THE IMPORTANT STEP I MISSED⚠ - Move the origin of the part to the center of movement for the component. For example, the wrist for this robot (model_2.glb on the 2023 Offbot) had the origin mated to be concentric with the tube it rotates about, and then was dragged to be approximately centered (I was too dumb to figure out how to mate it to the center that way). If you do not do this, the part will not rotate correctly. 
+
+3 - Export as .glb - Follow the rest of the Mechanical Advantage instructions. Export as a STEP file. Install the CAD Assistant. You may be saying, "I don't want a virus! I'll do it in Blender!" Trust me. It is not worth it doing it in Blender. Its not a virus and its literally 2 buttons. Then, make all of your files match the format/naming described in their GitHub documentation.
+
+4 - Tuning the .json - You will know if you did everything right if when you import the part into AdvantageScope and give the Drivetrain an empty Pose3d, all of your components are on the origin. If you need a visual reference, open this model (2023 offseason robot) with just an empty Pose3d for the Drivetrain base. The Drivetrain and Wrist are correct; everything else is not. The json movements are only applied AFTER you give the component a Pose3d. So, you can tune the config.json by giving every component an empty Pose3d and then messing around with values.

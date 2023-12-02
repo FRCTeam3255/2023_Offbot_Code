@@ -12,11 +12,17 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.frcteam3255.utils.SN_Math;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.AdvantageScopeUtil;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.constWrist;
 import frc.robot.RobotMap.mapWrist;
 import frc.robot.RobotPreferences.prefWrist;
@@ -31,6 +37,10 @@ public class Wrist extends SubsystemBase {
   TalonFXConfiguration config;
 
   SupplyCurrentLimitConfiguration supplyLimit;
+
+  Pose3d desiredWristPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+  Pose3d wristPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+  double desiredAngle = 0;
 
   public Wrist() {
     wristMotor = new TalonFX(mapWrist.WRIST_MOTOR_CAN);
@@ -98,6 +108,7 @@ public class Wrist extends SubsystemBase {
   public void setWristAngle(double angle) {
     angle = MathUtil.clamp(angle, prefWrist.wristMinPos.getValue(),
         prefWrist.wristMaxPos.getValue());
+    desiredAngle = angle;
 
     wristMotor.set(ControlMode.MotionMagic, SN_Math.degreesToFalcon(angle, constWrist.GEAR_RATIO));
   }
@@ -108,11 +119,18 @@ public class Wrist extends SubsystemBase {
   }
 
   /**
-   * @return The angle of the wrist motor, as a Rotation2d
+   * @return The real angle of the wrist motor, as a Rotation2d
    */
   public Rotation2d getWristAngle() {
     return Rotation2d
         .fromDegrees(SN_Math.falconToDegrees(wristMotor.getSelectedSensorPosition(), constWrist.GEAR_RATIO));
+  }
+
+  /**
+   * @return The desired angle of the wrist motor, as a Rotation2d
+   */
+  public Rotation2d getDesiredWristAngle() {
+    return Rotation2d.fromDegrees(desiredAngle);
   }
 
   /**
@@ -123,6 +141,9 @@ public class Wrist extends SubsystemBase {
    * 
    */
   public boolean isWristAtPosition(double desiredPosition) {
+    if (Robot.isSimulation()) {
+      return true;
+    }
     return prefWrist.wristPositionTolerance.getValue() >= Math.abs(getWristAngle().getDegrees() - desiredPosition);
   }
 
@@ -143,7 +164,9 @@ public class Wrist extends SubsystemBase {
   }
 
   /**
-   * Gets if the absolutes encoder is plugged in. Returns true if it is unplugged.
+   * Gets if the absolute encoder was plugged in on init. Returns true if it was
+   * unplugged. This will also return true in simulation, because there is no
+   * absolute encoder to get a value from.
    */
   public boolean getWristEncoderUnplugged() {
     return absoluteEncoder.get() == 0.0;
@@ -155,7 +178,7 @@ public class Wrist extends SubsystemBase {
   public void resetWristEncoderToAbsolute() {
     if (getWristEncoderUnplugged()) {
       // todo: add default value to reset wrist to
-      return; // ENCODER UNPLUGGED!!!!!
+      return;
     }
 
     wristMotor.setSelectedSensorPosition(
@@ -167,15 +190,27 @@ public class Wrist extends SubsystemBase {
     wristMotor.neutralOutput();
   }
 
+  // Must be run every loop in order for logging to function
+  public void updatePose3ds(Pose3d elevatorCarriagePose, Pose3d desiredElevatorCarriagePose) {
+    wristPose = elevatorCarriagePose.transformBy(new Transform3d(new Pose3d(),
+        new Pose3d(-0.298, 0.005, 0.218, new Rotation3d(0, -getWristAngle().getRadians(), 0))));
+    desiredWristPose = desiredElevatorCarriagePose.transformBy(new Transform3d(new Pose3d(),
+        new Pose3d(-0.298, 0.005, 0.218, new Rotation3d(0, -getDesiredWristAngle().getRadians(), 0))));
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Wrist Abs Encoder Raw", absoluteEncoder.get());
-    SmartDashboard.putNumber("Wrist Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Wrist Abs Encoder Get", getWristAbsoluteEncoder());
-    SmartDashboard.putBoolean("Wrist Abs Encoder Unplugged?", getWristEncoderUnplugged());
-    SmartDashboard.putNumber("Wrist Motor Degrees", getWristAngle().getDegrees());
-    SmartDashboard.putNumber("Wrist Supply Current", wristMotor.getSupplyCurrent());
+    updatePose3ds(RobotContainer.subElevator.getElevatorCarriagePose(),
+        RobotContainer.subElevator.getDesiredElevatorCarriagePose());
 
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Wrist/Abs Encoder Raw", absoluteEncoder.get());
+    SmartDashboard.putNumber("Wrist/Abs Encoder Abs", absoluteEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Wrist/Abs Encoder Get", getWristAbsoluteEncoder());
+    SmartDashboard.putBoolean("Wrist/Abs Encoder Unplugged?", getWristEncoderUnplugged());
+    SmartDashboard.putNumber("Wrist/Motor Degrees", getWristAngle().getDegrees());
+    SmartDashboard.putNumber("Wrist/Supply Current", wristMotor.getSupplyCurrent());
+    SmartDashboard.putNumberArray("Wrist/Pose3d", AdvantageScopeUtil.composePose3ds(wristPose));
+    SmartDashboard.putNumberArray("Wrist/Desired Pose3d", AdvantageScopeUtil.composePose3ds(desiredWristPose));
   }
 }

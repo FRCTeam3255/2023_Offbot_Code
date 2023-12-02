@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.frcteam3255.components.SN_Blinkin;
 import com.frcteam3255.components.SN_Blinkin.PatternType;
@@ -20,6 +22,17 @@ import frc.robot.RobotMap.mapDrivetrain;
 public final class Constants {
 
   public static final boolean OUTPUT_DEBUG_VALUES = true;
+  public static final boolean SILENCE_JOYSTICK_WARNINGS = true;
+
+  // TODO: Update with Actual ports
+  public static final String[] PDH_DEVICES = {
+      "Swerve FR Drive", "Swerve FR Steer",
+      null, null, null, null, null, null,
+      "Swerve FL Drive", "Swerve FL Steer",
+      "Swerve BL Drive", "Swerve BL Steer",
+      null, null, null, null, null, null,
+      "Swerve BR Drive", "Swerve BR Steer",
+      null, null, null, null };
 
   // Order of Subsystems: The order that the robots inputs go, starting from
   // controllers
@@ -214,6 +227,7 @@ public final class Constants {
 
     public static final double CIRCUMFERENCE = 0.13972;
     public static final double GEAR_RATIO = 2.5;
+    public static final double ANGLE_TO_BASE_DEGREES = 54.54;
 
   }
 
@@ -233,19 +247,21 @@ public final class Constants {
   }
 
   public static final class constLEDs {
-    public static final PatternType HAS_CUBE_COLOR = SN_Blinkin.PatternType.Violet;
-    public static final PatternType HAS_CONE_COLOR = SN_Blinkin.PatternType.Yellow;
-    public static final PatternType INTAKING_CUBE_COLOR = SN_Blinkin.PatternType.StrobeBlue;
-    public static final PatternType INTAKING_CONE_COLOR = SN_Blinkin.PatternType.StrobeGold;
+    public static final int LED_NUMBER = 150; // TODO: Get actual value
+    public static final int LED_BRIGHTNESS = 1;
 
-    public static final PatternType FAILURE_COLOR = PatternType.Red;
+    public static final int[] HAS_CUBE_COLOR = { 175, 18, 236 };
+    public static final int[] HAS_CONE_COLOR = { 255, 238, 30 };
 
-    public static final PatternType DEFAULT_COLOR = PatternType.Black;
+    public static final StrobeAnimation INTAKING_CUBE_COLOR = new StrobeAnimation(175, 18, 236, 0, 0.1, LED_NUMBER);
+    public static final StrobeAnimation INTAKING_CONE_COLOR = new StrobeAnimation(255, 238, 30, 0, 0.1, LED_NUMBER);
 
-    public static final PatternType DEFENSE_MODE_COLOR = PatternType.RainbowRainbowPalette;
+    public static final int[] FAILURE_COLOR = { 255, 0, 0 };
 
-    public static final PatternType CHARGE_STATION_ALIGNED_COLOR = PatternType.BPMLavaPalette;
-    public static final PatternType GRID_ALIGNED_COLOR = PatternType.StrobeGold;
+    public static final int[] DEFAULT_COLOR = { 0, 0, 0 };
+
+    public static final RainbowAnimation DEFENSE_MODE_ANIMATION = new RainbowAnimation(LED_BRIGHTNESS, 0.8,
+        LED_NUMBER);
   }
 
   public enum GamePiece {

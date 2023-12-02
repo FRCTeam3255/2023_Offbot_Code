@@ -13,17 +13,14 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Intake;
@@ -38,15 +35,12 @@ import frc.robot.RobotMap.mapControllers;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefWrist;
-import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
-import frc.robot.commands.Engage;
 import frc.robot.commands.IntakeGamePiece;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.SetLEDs;
 import frc.robot.commands.Stow;
-import frc.robot.commands.UpdateMechanismPoses;
 import frc.robot.commands.YeetGamePiece;
 import frc.robot.commands.Autos.Cable.*;
 import frc.robot.commands.Autos.Center.*;
@@ -54,7 +48,6 @@ import frc.robot.commands.Autos.Open.*;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
@@ -70,17 +63,18 @@ public class RobotContainer {
   public static Intake subIntake = new Intake();
   public static Wrist subWrist = new Wrist();
   private final Vision subVision = new Vision();
-  private final LEDs subLEDs = new LEDs();
+  public static LEDs subLEDs = new LEDs();
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
   private static DigitalInput pracBotSwitch = new DigitalInput(9);
   private final Trigger teleopTrigger = new Trigger(() -> RobotState.isEnabled() && RobotState.isTeleop());
   public static SwerveAutoBuilder swerveAutoBuilder;
+  private static PowerDistribution PDH = new PowerDistribution(1, ModuleType.kRev);
 
   public RobotContainer() {
     // Set out log file to be in its own folder
     if (Robot.isSimulation()) {
-      DataLogManager.start("src/main/AdvantageScope Logs");
+      DataLogManager.start("src/main");
     } else {
       DataLogManager.start();
     }
@@ -88,6 +82,7 @@ public class RobotContainer {
     DataLogManager.logNetworkTables(true);
     // Log the DS data and joysticks
     DriverStation.startDataLog(DataLogManager.getLog(), true);
+    DriverStation.silenceJoystickConnectionWarning(Constants.SILENCE_JOYSTICK_WARNINGS);
 
     // -- Creating Autos --
     HashMap<String, Command> autoEventMap = new HashMap<>();
@@ -109,8 +104,8 @@ public class RobotContainer {
         prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()));
     autoEventMap.put("YEET", new YeetGamePiece(subIntake, subElevator, subWrist));
     autoEventMap.put("placeGamePiece", new PlaceGamePiece(subIntake, subWrist, subElevator, true));
-    autoEventMap.put("stow", new Stow(subWrist, subIntake, subElevator));
-    ;
+    autoEventMap.put("stow", new Stow(subWrist, subIntake, subElevator, subLEDs));
+
     swerveAutoBuilder = new SwerveAutoBuilder(
         subDrivetrain::getPose2d,
         subDrivetrain::resetPose,
@@ -142,7 +137,6 @@ public class RobotContainer {
             conDriver.btn_B,
             conDriver.btn_A,
             conDriver.btn_X));
-    subVision.setDefaultCommand(new UpdateMechanismPoses(subDrivetrain, subElevator, subWrist, subVision));
     subLEDs.setDefaultCommand(new SetLEDs(subLEDs, subDrivetrain, subIntake));
 
     configureBindings();
@@ -162,10 +156,38 @@ public class RobotContainer {
     subWrist.resetWristEncoderToAbsolute();
   }
 
+  /**
+   * Enable or disable whether the switchable channel on the PDH is supplied
+   * power.
+   * 
+   * @param isPowered Whether the channel receives power or not
+   */
+  public void setSwitchableChannelPower(boolean isPowered) {
+    PDH.setSwitchableChannel(isPowered);
+  }
+
+  /**
+   * Updates the values supplied to the PDH to SmartDashboard. Should be called
+   * periodically.
+   */
+  public static void logPDHValues() {
+    SmartDashboard.putNumber("PDH/Input Voltage", PDH.getVoltage());
+    SmartDashboard.putBoolean("PDH/Is Switchable Channel Powered", PDH.getSwitchableChannel());
+    SmartDashboard.putNumber("PDH/Total Current", PDH.getTotalCurrent());
+    SmartDashboard.putNumber("PDH/Total Power", PDH.getTotalPower());
+    SmartDashboard.putNumber("PDH/Total Energy", PDH.getTotalEnergy());
+
+    for (int i = 0; i < Constants.PDH_DEVICES.length; i++) {
+      if (Constants.PDH_DEVICES[i] != null) {
+        SmartDashboard.putNumber("PDH/" + Constants.PDH_DEVICES[i] + " Current", PDH.getCurrent(i));
+      }
+    }
+  }
+
   private void configureBindings() {
 
     // Driver
-    // src\main\documentation\driverControls23.png
+    // assets\driverControls23.png
 
     // "reset gyro" for field relative but actually resets the orientation at a
     // higher level
@@ -180,10 +202,11 @@ public class RobotContainer {
 
     conDriver.btn_RightBumper
         .whileTrue(Commands.run(() -> subDrivetrain.setDefenseMode(), subDrivetrain))
-        .whileTrue(Commands.run(() -> subLEDs.setLEDPattern(constLEDs.DEFENSE_MODE_COLOR)));
+        .onTrue(Commands.runOnce(() -> subLEDs.setLEDsToAnimation(constLEDs.DEFENSE_MODE_ANIMATION)))
+        .onFalse(Commands.runOnce(() -> subLEDs.clearAnimation()));
 
     // Operator
-    // src\main\documentation\operatorControls23.png
+    // assets\operatorControls23.png
 
     // Intake Cone (RB)
     conOperator.btn_RightBumper.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
@@ -229,7 +252,7 @@ public class RobotContainer {
     conOperator.btn_B.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
 
-    conOperator.btn_A.onTrue(new Stow(subWrist, subIntake, subElevator));
+    conOperator.btn_A.onTrue(new Stow(subWrist, subIntake, subElevator, subLEDs));
     conOperator.btn_Back.onTrue(Commands.runOnce(() -> subElevator.resetElevatorToZero()));
   }
 
@@ -241,7 +264,7 @@ public class RobotContainer {
     autoChooser.setDefaultOption("null", null);
 
     // Autonomous Alignment:
-    // src\main\documentation\autoalignment.jpg
+    // assets\autoalignment.jpg
     // For CENTER autos, align with the cone node to the OPEN side.
     // For CABLE autos, align with the wall instead (we are too wide)
 

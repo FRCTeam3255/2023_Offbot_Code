@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
@@ -52,11 +51,11 @@ public class Engage extends CommandBase {
 
     if (rollPID.atSetpoint()) {
       subDrivetrain.setDefenseMode();
-      subLEDs.setLEDPattern(constLEDs.DEFENSE_MODE_COLOR);
+      subLEDs.setLEDsToAnimation(constLEDs.DEFENSE_MODE_ANIMATION);
     } else {
       subDrivetrain.drive(new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0,
           new Rotation2d()), isDriveOpenLoop);
-      subLEDs.setLEDPattern(constLEDs.DEFAULT_COLOR);
+      subLEDs.setLEDs(constLEDs.DEFAULT_COLOR);
 
     }
   }

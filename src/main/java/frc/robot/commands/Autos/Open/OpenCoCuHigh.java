@@ -11,7 +11,6 @@ import frc.robot.RobotPreferences.prefElevator;
 import frc.robot.RobotPreferences.prefIntake;
 import frc.robot.RobotPreferences.prefWrist;
 import frc.robot.RobotContainer;
-import frc.robot.commands.Engage;
 import frc.robot.commands.PlaceGamePiece;
 import frc.robot.commands.PrepGamePiece;
 import frc.robot.commands.Stow;
@@ -48,7 +47,7 @@ public class OpenCoCuHigh extends SequentialCommandGroup {
         Commands.runOnce(() -> subIntake.setIntakeMotorSpeed(prefIntake.intakeConeSpeed.getValue()))
             .until(() -> subIntake.isGamePieceCollected()).withTimeout(5),
 
-        new Stow(subWrist, subIntake, subElevator)
+        new Stow(subWrist, subIntake, subElevator, subLEDs)
             .until(() -> subWrist.isWristAtAngle(prefWrist.wristStowAngle.getValue())).withTimeout(5),
 
         // // Place cone and stow
@@ -70,6 +69,6 @@ public class OpenCoCuHigh extends SequentialCommandGroup {
         RobotContainer.swerveAutoBuilder.fullAuto(subDrivetrain.openCoCu)
             .withTimeout(subDrivetrain.openCoCu.getTotalTimeSeconds()),
 
-        new Stow(subWrist, subIntake, subElevator));
+        new Stow(subWrist, subIntake, subElevator, subLEDs));
   }
 }

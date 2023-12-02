@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotMap.mapDrivetrain;
 import frc.robot.RobotPreferences.prefDrivetrain;
 
@@ -29,6 +30,12 @@ public class SN_SwerveModule {
 
   private TalonFX driveMotor;
   private TalonFX steerMotor;
+
+  private SwerveModuleState lastDesiredSwerveModuleState = new SwerveModuleState(0, new Rotation2d(0));
+  private double desiredDrivePosition;
+  private double timeFromLastUpdate;
+  private double lastSimTime;
+  private Timer simTimer;
 
   private CANCoder absoluteEncoder;
   private double absoluteEncoderOffset;
@@ -47,6 +54,13 @@ public class SN_SwerveModule {
    * @param moduleConstants Constants required to create a swerve module
    */
   public SN_SwerveModule(SN_SwerveModuleConstants moduleConstants) {
+    if (Robot.isSimulation()) {
+      simTimer = new Timer();
+      simTimer.start();
+      lastSimTime = simTimer.get();
+      timeFromLastUpdate = 0;
+    }
+
     moduleNumber = moduleConstants.number;
 
     driveMotor = new TalonFX(moduleConstants.driveMotorID, mapDrivetrain.CAN_BUS);
@@ -127,6 +141,7 @@ public class SN_SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState, boolean isDriveOpenLoop, boolean steerWhenStill) {
     SwerveModuleState state = CTREModuleState.optimize(desiredState, getState().angle);
+    lastDesiredSwerveModuleState = state;
 
     if (isDriveOpenLoop) {
 
@@ -172,6 +187,15 @@ public class SN_SwerveModule {
   }
 
   /**
+   * Gets if the absolute encoder was plugged in on init. Returns true if it was
+   * unplugged. This will also return true in simulation, because there is no
+   * absolute encoder to get a value from.
+   */
+  public boolean getAbsoluteEncoderUnplugged() {
+    return absoluteEncoder.getAbsolutePosition() == 0.0;
+  }
+
+  /**
    * Reset the steer motor encoder to match the angle of the absolute encoder.
    */
   public void resetSteerMotorEncodersToAbsolute() {
@@ -179,7 +203,11 @@ public class SN_SwerveModule {
         getAbsoluteEncoder().getDegrees(),
         Constants.STEER_GEAR_RATIO);
 
-    steerMotor.setSelectedSensorPosition(absoluteEncoderCount);
+    if (getAbsoluteEncoderUnplugged()) {
+      return;
+    } else {
+      steerMotor.setSelectedSensorPosition(absoluteEncoderCount);
+    }
   }
 
   /**
@@ -255,6 +283,13 @@ public class SN_SwerveModule {
    * @return Position of swerve module
    */
   public SwerveModulePosition getPosition() {
+    if (Robot.isSimulation()) {
+      timeFromLastUpdate = simTimer.get() - lastSimTime;
+      lastSimTime = simTimer.get();
+      desiredDrivePosition += (lastDesiredSwerveModuleState.speedMetersPerSecond * timeFromLastUpdate);
+
+      return new SwerveModulePosition(desiredDrivePosition, lastDesiredSwerveModuleState.angle);
+    }
 
     double distance = SN_Math.falconToMeters(
         driveMotor.getSelectedSensorPosition(),

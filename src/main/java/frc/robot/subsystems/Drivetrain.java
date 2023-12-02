@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -22,7 +23,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -30,7 +30,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.AdvantageScopeUtil;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.SN_SwerveModule;
 import frc.robot.RobotPreferences.prefDrivetrain;
@@ -56,6 +58,17 @@ public class Drivetrain extends SubsystemBase {
   private ProfiledPIDController yPID;
   private PIDController thetaPID;
 
+  double[] swerveRealStates = new double[8];
+  double[] swerveDesiredStates = new double[8];
+  double simAngle = 0;
+  SwerveModuleState[] lastDesiredStates;
+  private double timeFromLastUpdate;
+  private double lastSimTime;
+  private Timer simTimer;
+
+  public Double[] columnYCoordinatesBlue = { 0.5, 1.05, 1.63, 2.19, 2.75, 3.31, 3.86, 4.43, 4.98 };
+  public Double[] columnYCoordinatesRed = { 4.98, 4.43, 3.86, 3.31, 2.75, 2.19, 1.63, 1.05, 0.5 };
+
   // Paths
   public PathPlannerTrajectory testLinePath;
   public PathPlannerTrajectory centerCoDock;
@@ -68,10 +81,13 @@ public class Drivetrain extends SubsystemBase {
   public PathPlannerTrajectory openCoCoCoYeetDock;
   public PathPlannerTrajectory just_taxi;
 
-  public Double[] columnYCoordinatesBlue = { 0.5, 1.05, 1.63, 2.19, 2.75, 3.31, 3.86, 4.43, 4.98 };
-  public Double[] columnYCoordinatesRed = { 4.98, 4.43, 3.86, 3.31, 2.75, 2.19, 1.63, 1.05, 0.5 };
-
   public Drivetrain() {
+    if (Robot.isSimulation()) {
+      simTimer = new Timer();
+      simTimer.start();
+      lastSimTime = simTimer.get();
+      timeFromLastUpdate = 0;
+    }
 
     if (RobotContainer.isPracticeBot()) {
       modules = new SN_SwerveModule[] {
@@ -99,7 +115,7 @@ public class Drivetrain extends SubsystemBase {
 
     poseEstimator = new SwerveDrivePoseEstimator(
         swerveKinematics,
-        navX.getRotation2d(),
+        getRotation2dYaw(),
         getModulePositions(),
         new Pose2d(),
         VecBuilder.fill(
@@ -299,11 +315,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     SwerveModuleState[] desiredStates;
-    if (DriverStation.isAutonomous()) {
-      desiredStates = swerveKinematics.toSwerveModuleStates(discretize(chassisSpeeds));
-    } else {
-      desiredStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
-    }
+
+    desiredStates = swerveKinematics.toSwerveModuleStates(discretize(chassisSpeeds));
 
     setModuleStates(desiredStates, isDriveOpenLoop);
   }
@@ -314,9 +327,15 @@ public class Drivetrain extends SubsystemBase {
    * @param desiredStates Array of desired states
    */
   public void setModuleStates(SwerveModuleState[] desiredStates, boolean isDriveOpenLoop) {
+    lastDesiredStates = desiredStates;
 
     // desaturateWheelSpeeds() mutates the given array
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.MAX_MODULE_SPEED);
+
+    for (int i = 0; i < 8; i += 2) {
+      swerveDesiredStates[i] = desiredStates[i / 2].angle.getRadians();
+      swerveDesiredStates[i + 1] = desiredStates[i / 2].speedMetersPerSecond;
+    }
 
     for (SN_SwerveModule mod : modules) {
       mod.setDesiredState(desiredStates[mod.moduleNumber], isDriveOpenLoop, false);
@@ -395,7 +414,7 @@ public class Drivetrain extends SubsystemBase {
    * @return Rotation of drivetrain
    */
   public Rotation2d getRotation() {
-    return Rotation2d.fromRadians(MathUtil.angleModulus(navX.getRotation2d().getRadians()));
+    return Rotation2d.fromRadians(MathUtil.angleModulus(getRotation2dYaw().getRadians()));
   }
 
   /**
@@ -435,7 +454,7 @@ public class Drivetrain extends SubsystemBase {
   public void updatePoseEstimator() {
     poseEstimator.updateWithTime(
         Timer.getFPGATimestamp(),
-        navX.getRotation2d(),
+        getRotation2dYaw(),
         getModulePositions());
 
   }
@@ -463,7 +482,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void resetPose(Pose2d pose) {
     poseEstimator.resetPosition(
-        navX.getRotation2d(),
+        getRotation2dYaw(),
         getModulePositions(),
         pose);
   }
@@ -482,6 +501,16 @@ public class Drivetrain extends SubsystemBase {
 
   public double getYaw() {
     return navX.getYaw();
+  }
+
+  public Rotation2d getRotation2dYaw() {
+    if (Robot.isSimulation() && lastDesiredStates != null) {
+      timeFromLastUpdate = simTimer.get() - lastSimTime;
+      lastSimTime = simTimer.get();
+      simAngle += swerveKinematics.toChassisSpeeds(lastDesiredStates).omegaRadiansPerSecond * timeFromLastUpdate;
+      return new Rotation2d(simAngle);
+    }
+    return navX.getRotation2d();
   }
 
   public boolean isNavXConnected() {
@@ -525,46 +554,52 @@ public class Drivetrain extends SubsystemBase {
 
     updatePoseEstimator();
 
-    SmartDashboard.putBoolean("Drivetrain Field Relative", isFieldRelative);
+    SmartDashboard.putBoolean("Drivetrain/Field Relative", isFieldRelative);
 
     if (Constants.OUTPUT_DEBUG_VALUES) {
 
-      SmartDashboard.putNumber("Drivetrain Pose X", Units.metersToInches(getPose2d().getX()));
-      SmartDashboard.putNumber("Drivetrain Pose Y", Units.metersToInches(getPose2d().getY()));
-      SmartDashboard.putNumber("Drivetrain Pose Rotation", getPose2d().getRotation().getDegrees());
+      SmartDashboard.putNumber("Drivetrain/Pose X", Units.metersToInches(getPose2d().getX()));
+      SmartDashboard.putNumber("Drivetrain/Pose Y", Units.metersToInches(getPose2d().getY()));
+      SmartDashboard.putNumber("Drivetrain/Pose Rotation", getPose2d().getRotation().getDegrees());
 
-      SmartDashboard.putNumber("Drivetrain Yaw", navX.getRotation2d().getDegrees());
-      SmartDashboard.putNumber("Drivetrain Roll", navX.getRoll());
-      SmartDashboard.putBoolean("Drivetrain NavX Connected", isNavXConnected());
+      SmartDashboard.putNumber("Drivetrain/Yaw", getRotation2dYaw().getDegrees());
+      SmartDashboard.putNumber("Drivetrain/Roll", getRoll());
+      SmartDashboard.putBoolean("Drivetrain/NavX Connected", isNavXConnected());
 
-      SmartDashboard.putNumber("Drivetrain Theta Goal", Units.radiansToDegrees(thetaPID.getSetpoint()));
-      SmartDashboard.putNumber("Drivetrain Theta Error", Units.radiansToDegrees(thetaPID.getPositionError()));
+      SmartDashboard.putNumber("Drivetrain/Theta Goal", Units.radiansToDegrees(thetaPID.getSetpoint()));
+      SmartDashboard.putNumber("Drivetrain/Theta Error",
+          Units.radiansToDegrees(thetaPID.getPositionError()));
 
       field.setRobotPose(getPose2d());
       SmartDashboard.putData(field);
 
       for (SN_SwerveModule mod : modules) {
-        SmartDashboard.putNumber("Module " + mod.moduleNumber + " Speed",
+        SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Speed",
             Units.metersToFeet(mod.getState().speedMetersPerSecond));
-        SmartDashboard.putNumber("Module " + mod.moduleNumber + " Distance",
+        SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Distance",
             Units.metersToFeet(mod.getPosition().distanceMeters));
-        SmartDashboard.putNumber("Module " + mod.moduleNumber + " Angle",
+        SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Angle",
             mod.getState().angle.getDegrees());
-        SmartDashboard.putNumber("Module " + mod.moduleNumber + " Absolute Encoder Angle",
+        SmartDashboard.putBoolean("Drivetrain/Module " + mod.moduleNumber + "/Absolute Encoder Unplugged",
+            mod.getAbsoluteEncoderUnplugged());
+        SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Absolute Encoder Angle",
             mod.getAbsoluteEncoder().getDegrees());
-        SmartDashboard.putNumber("Module " + mod.moduleNumber + " Raw Absolute Encoder Angle",
+        SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Raw Absolute Encoder Angle",
             mod.getRawAbsoluteEncoder());
-        SmartDashboard.putNumber("Module " + mod.moduleNumber + " Drive Output Percent",
+        SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Drive Output Percent",
             mod.getDriveMotorOutputPercent());
       }
 
-      // AdvantageScope
-      double[] swerveModuleStates = new double[8];
-      for (int i = 0; i < 8; i += 2) {
-        swerveModuleStates[i] = modules[i / 2].getState().angle.getRadians();
-        swerveModuleStates[i + 1] = modules[i / 2].getState().speedMetersPerSecond;
-      }
-      SmartDashboard.putNumberArray("Swerve/RealStates", swerveModuleStates);
     }
+
+    for (int i = 0; i < 8; i += 2) {
+      swerveRealStates[i] = modules[i / 2].getState().angle.getRadians();
+      swerveRealStates[i + 1] = modules[i / 2].getState().speedMetersPerSecond;
+    }
+
+    SmartDashboard.putNumberArray("Drivetrain/DesiredStates", swerveDesiredStates);
+    SmartDashboard.putNumberArray("Drivetrain/RealStates", swerveRealStates);
+    SmartDashboard.putNumberArray("Drivetrain/Pose3d",
+        AdvantageScopeUtil.composePose3ds(new Pose3d(getPose2d())));
   }
 }
