@@ -247,21 +247,20 @@ public final class Constants {
   }
 
   public static final class constLEDs {
-    public static final int LED_NUMBER = 100; // TODO: Get actual value
+    public static final int LED_NUMBER = 150; // TODO: Get actual value
     public static final int LED_BRIGHTNESS = 1;
 
     public static final int[] HAS_CUBE_COLOR = { 175, 18, 236 };
-    public static final int[] HAS_CONE_COLOR = { 236, 196, 18 };
+    public static final int[] HAS_CONE_COLOR = { 255, 238, 30 };
 
-    public static final StrobeAnimation INTAKING_CUBE_COLOR = new StrobeAnimation(175, 18, 236);
-    public static final StrobeAnimation INTAKING_CONE_COLOR = new StrobeAnimation(236, 196, 18);
+    public static final StrobeAnimation INTAKING_CUBE_COLOR = new StrobeAnimation(175, 18, 236, 0, 0.1, LED_NUMBER);
+    public static final StrobeAnimation INTAKING_CONE_COLOR = new StrobeAnimation(255, 238, 30, 0, 0.1, LED_NUMBER);
 
     public static final int[] FAILURE_COLOR = { 255, 0, 0 };
 
     public static final int[] DEFAULT_COLOR = { 0, 0, 0 };
 
-    // TODO: Get a good speed param
-    public static final RainbowAnimation DEFENSE_MODE_ANIMATION = new RainbowAnimation(LED_BRIGHTNESS, 0.5,
+    public static final RainbowAnimation DEFENSE_MODE_ANIMATION = new RainbowAnimation(LED_BRIGHTNESS, 0.8,
         LED_NUMBER);
   }
 

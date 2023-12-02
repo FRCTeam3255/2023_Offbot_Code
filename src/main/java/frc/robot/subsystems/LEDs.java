@@ -30,7 +30,7 @@ public class LEDs extends SubsystemBase {
    *
    * @param rgb The desired array of RGB values. {r, g, b}
    */
-  public void setLEDsToRGB(int[] rgb) {
+  public void setLEDs(int[] rgb) {
     CANdle.setLEDs(rgb[0], rgb[1], rgb[2]);
   }
 
@@ -44,7 +44,11 @@ public class LEDs extends SubsystemBase {
    * @param animation The desired animation to display
    */
   public void setLEDsToAnimation(Animation animation) {
-    CANdle.animate(animation);
+    CANdle.animate(animation, 0);
+  }
+
+  public void clearAnimation() {
+    CANdle.clearAnimation(0);
   }
 
   @Override

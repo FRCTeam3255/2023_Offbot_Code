@@ -55,7 +55,7 @@ public class Engage extends CommandBase {
     } else {
       subDrivetrain.drive(new Pose2d(Units.metersToFeet(desiredSpeedFeet), 0,
           new Rotation2d()), isDriveOpenLoop);
-      subLEDs.setLEDsToRGB(constLEDs.DEFAULT_COLOR);
+      subLEDs.setLEDs(constLEDs.DEFAULT_COLOR);
 
     }
   }

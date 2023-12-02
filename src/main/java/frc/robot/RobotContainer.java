@@ -104,7 +104,7 @@ public class RobotContainer {
         prefWrist.wristScoreHighCubeAngle.getValue(), prefElevator.elevatorHighCubeScore.getValue()));
     autoEventMap.put("YEET", new YeetGamePiece(subIntake, subElevator, subWrist));
     autoEventMap.put("placeGamePiece", new PlaceGamePiece(subIntake, subWrist, subElevator, true));
-    autoEventMap.put("stow", new Stow(subWrist, subIntake, subElevator));
+    autoEventMap.put("stow", new Stow(subWrist, subIntake, subElevator, subLEDs));
 
     swerveAutoBuilder = new SwerveAutoBuilder(
         subDrivetrain::getPose2d,
@@ -202,7 +202,8 @@ public class RobotContainer {
 
     conDriver.btn_RightBumper
         .whileTrue(Commands.run(() -> subDrivetrain.setDefenseMode(), subDrivetrain))
-        .whileTrue(Commands.run(() -> subLEDs.setLEDsToAnimation(constLEDs.DEFENSE_MODE_ANIMATION)));
+        .onTrue(Commands.runOnce(() -> subLEDs.setLEDsToAnimation(constLEDs.DEFENSE_MODE_ANIMATION)))
+        .onFalse(Commands.runOnce(() -> subLEDs.clearAnimation()));
 
     // Operator
     // assets\operatorControls23.png
@@ -251,7 +252,7 @@ public class RobotContainer {
     conOperator.btn_B.onTrue(new IntakeGamePiece(subWrist, subIntake, subElevator, subLEDs, GamePiece.CONE,
         prefWrist.wristSingleAngle.getValue(), prefElevator.elevatorSingle.getValue()));
 
-    conOperator.btn_A.onTrue(new Stow(subWrist, subIntake, subElevator));
+    conOperator.btn_A.onTrue(new Stow(subWrist, subIntake, subElevator, subLEDs));
     conOperator.btn_Back.onTrue(Commands.runOnce(() -> subElevator.resetElevatorToZero()));
   }
 

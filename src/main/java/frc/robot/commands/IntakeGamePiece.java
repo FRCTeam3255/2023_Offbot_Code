@@ -65,9 +65,10 @@ public class IntakeGamePiece extends SequentialCommandGroup {
 
         Commands.waitUntil(() -> subIntake.isGamePieceCollected()),
 
-        Commands.runOnce(() -> subLEDs.setLEDsToRGB(constLEDs.HAS_CUBE_COLOR))
+        Commands.runOnce(() -> subLEDs.clearAnimation()),
+        Commands.runOnce(() -> subLEDs.setLEDs(constLEDs.HAS_CUBE_COLOR))
             .unless(() -> !gamepiece.equals(GamePiece.CUBE)),
-        Commands.runOnce(() -> subLEDs.setLEDsToRGB(constLEDs.HAS_CONE_COLOR))
+        Commands.runOnce(() -> subLEDs.setLEDs(constLEDs.HAS_CONE_COLOR))
             .unless(() -> gamepiece.equals(GamePiece.CUBE)),
 
         Commands.waitSeconds(prefIntake.intakeDelay.getValue()),
